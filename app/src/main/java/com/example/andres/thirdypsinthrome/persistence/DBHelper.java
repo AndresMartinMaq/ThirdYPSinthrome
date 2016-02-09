@@ -9,7 +9,7 @@ import com.example.andres.thirdypsinthrome.persistence.DBContract.*;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    //Upong changing the database schema, you must increment the database version manually here.
+    //Upon changing the database schema, you must increment the database version manually here.
     private static final int DATABASE_VERSION = 1;
     static final String DATABASE_NAME = "sinthromeProject.db";
 

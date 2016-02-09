@@ -4,17 +4,7 @@ import android.provider.BaseColumns;
 
 public class DBContract {
 
-    /*To conform with the definition of SQL DATE, the millisecond values
-    wrapped by a java.sql.Date instance must be 'normalized' by setting
-    the hours, minutes, seconds, and milliseconds to zero in the particular
-    time zone with which the instance is associated (java documentation).*/
-    public static java.sql.Date utilToSQLDate(java.util.Date utilDate){
-        return new java.sql.Date(utilDate.getTime());
-    }
-    //Returns sql timestamp, since sql date only includes day and not time within that day
-    public static java.sql.Timestamp utilDateToTimestamp(java.util.Date utilDate){
-        return new java.sql.Timestamp(utilDate.getTime());
-    }
+    
 
     //Maybe shouldn't be used, as this could better be used as user preferences?
     public static final class UserTable implements BaseColumns{
@@ -22,12 +12,14 @@ public class DBContract {
 
         public static final String COL_TARGET_INR_MIN = "target_inr_min";
         public static final String COL_TARGET_INR_MAX = "target_inr_max";
+        //This med time will be stored as a String HH:MM.
         public static final String COL_MED_TIME = "med_taking_time";
     }
 
     public static final class DosageTable implements BaseColumns{
         public static final String TABLE_NAME = "dosage";
 
+        //These dates will be stored as Unix epoch integers.
         public static final String COL_START = "start_date";
         public static final String COL_END = "end_date";
         public static final String COL_LEVEL = "level";//Only needed if automatic dosage calculation is being done
