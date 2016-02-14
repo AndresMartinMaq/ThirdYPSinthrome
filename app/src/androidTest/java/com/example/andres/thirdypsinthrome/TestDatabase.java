@@ -90,4 +90,50 @@ public class TestDatabase extends AndroidTestCase{
         assertEquals(1, cursor.getInt(cursor.getColumnIndex(DBContract.MedicineTable.COL_MILLIGRAMS_PER_TABLET)));
         assertFalse(cursor.moveToNext());
     }
+
+    //Test to ensure insertion works as expected on tables with foreign keys, and that these correctly link records.
+    public void testInsertForeignKeys(){
+        DBHelper dbHelper = new DBHelper(mContext, "testSinthromeDatabase.db");
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        //Create and insert medicine values.
+        ContentValues medValues = new ContentValues();
+        medValues.put(DBContract.MedicineTable.COL_COMMERCIAL_NAME, "Sinthrome");
+        medValues.put(DBContract.MedicineTable.COL_MILLIGRAMS_PER_TABLET, 4);
+        long insertedRowID = db.insert(DBContract.MedicineTable.TABLE_NAME, null, medValues);
+        assertTrue(insertedRowID != -1);
+
+        //Retrieve this medicine's id
+        Cursor cursor = db.rawQuery("SELECT " + DBContract.MedicineTable._ID + " FROM " + DBContract.MedicineTable.TABLE_NAME + "" +
+                " WHERE " + DBContract.MedicineTable.COL_COMMERCIAL_NAME + " = 'Sinthrome' ;", null);
+        cursor.moveToFirst();
+        //Integer sinthromeID = cursor.getInt(cursor.getColumnIndex(DBContract.MedicineTable._ID));
+        Integer sinthromeID = cursor.getInt(0);
+
+        //DosageAdjustment create and instert values (has a Medicine id foreign key).
+        ContentValues dosageAdjValues = new ContentValues();
+        dosageAdjValues.put(DBContract.DosageAdjustmentTable.COL_MEDICINE_FK, sinthromeID);
+        dosageAdjValues.put(DBContract.DosageAdjustmentTable.COL_INCR_OR_DECR, 0);
+        dosageAdjValues.put(DBContract.DosageAdjustmentTable.COL_LEVEL, 9);
+        dosageAdjValues.put(DBContract.DosageAdjustmentTable.COL_DAY1, 1);
+        dosageAdjValues.put(DBContract.DosageAdjustmentTable.COL_DAY2, 1.5);
+        dosageAdjValues.put(DBContract.DosageAdjustmentTable.COL_DAY3, 1);
+        dosageAdjValues.put(DBContract.DosageAdjustmentTable.COL_DAY4, 0.5);
+
+        insertedRowID = db.insert(DBContract.DosageAdjustmentTable.TABLE_NAME, null, dosageAdjValues);
+        Log.d(TAG, "Dosage Adjustment table insterted row id: " + insertedRowID);
+        assertTrue(insertedRowID != -1);
+        //Get the stored Foreign Key value
+        String[] columnName = {DBContract.DosageAdjustmentTable.COL_MEDICINE_FK};
+        cursor = db.query(DBContract.DosageAdjustmentTable.TABLE_NAME,columnName,null,null,null,null,null);
+        cursor.moveToFirst();
+        Integer medicineID = cursor.getInt(0);
+        //Retrieve commercial name using this Foregin Key value
+        cursor = db.rawQuery("SELECT " + DBContract.MedicineTable.COL_COMMERCIAL_NAME + " FROM " + DBContract.MedicineTable.TABLE_NAME + "" +
+                " WHERE " + DBContract.MedicineTable._ID + " = "+medicineID+" ;", null);
+        cursor.moveToFirst();
+        String commercialName = cursor.getString(0);
+        //Check it is the same as was inserted at the beginning.
+        assertEquals("Sinthrome", commercialName);
+    }
 }
