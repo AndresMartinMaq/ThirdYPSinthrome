@@ -94,6 +94,17 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        /*In this method it should be specified what to do with irreplaceable data when the DB is changed
+        * (this would be most of our data, as we mostly use completely user generated data, an exception being
+        * the Medicine table).
+        * ALTER TABLE could be used, or the old data could be copied into a new DB.
+        * This is currently out of this project's scope. */
+        db.execSQL("DROP TABLE IF EXISTS " + DosageAdjustmentTable.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DayTable.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + INRBacklogTable.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DosageTable.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + MedicineTable.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + UserTable.TABLE_NAME);
+        onCreate(db);
     }
 }
