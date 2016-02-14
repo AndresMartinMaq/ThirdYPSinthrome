@@ -58,7 +58,7 @@ public class DBHelper extends SQLiteOpenHelper {
         //Medicine table
         final String sqlSmtMedicine = "CREATE TABLE " + MedicineTable.TABLE_NAME + " (" +
                 MedicineTable._ID + " INTEGER PRIMARY KEY," +
-                MedicineTable.COL_COMMERCIAL_NAME + " TEXT NOT NULL, " +
+                MedicineTable.COL_COMMERCIAL_NAME + " TEXT UNIQUE NOT NULL, " +
                 MedicineTable.COL_MILLIGRAMS_PER_TABLET + " REAL NOT NULL);";
 
         //DosageAdjustment table
