@@ -2,4 +2,10 @@
     <string name="app_name">Project Sinthrome</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <!-- Main Activity-->
+    <string name="bttn_my_dosage">My Dosage</string>
+    <string name="bttn_my_treatment">My Treatment</string>
+    <string name="bttn_cit_science">Citizen Science</string>
+    <string name="bttn_hist_and_stats">History &amp; Statistics</string>
 </resources>
