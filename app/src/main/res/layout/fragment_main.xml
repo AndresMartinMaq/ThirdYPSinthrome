@@ -9,12 +9,40 @@
     android:weightSum="2"
     android:orientation="vertical">
 
-        <Button android:text="One"
+        <TableLayout
             android:layout_width="fill_parent"
             android:layout_weight="0.85"
             android:layout_height="0dp"
-            android:background="@color/accent_material_dark" />
-        <ScrollView
+            android:background="@color/accent_material_dark"
+            android:gravity="center"
+            android:measureWithLargestChild="false">
+
+            <TableRow>
+                <TextView android:text=" "
+                    android:layout_width="fill_parent" />
+                <TextView
+                    android:id="@+id/txtv_main_date"
+                    android:text="Today, 45th of January"
+                    android:textSize="@dimen/abc_text_size_headline_material"
+                    android:gravity="center_horizontal" />
+            </TableRow>
+
+            <TableRow>
+                <TextView android:text=" "
+                    android:layout_width="fill_parent" />
+                <TextView
+                    android:id="@+id/txtv_main_quantity"
+                    android:text="99.95"
+                    android:textSize="@dimen/abc_text_size_display_3_material"
+                    android:gravity="end" />
+                <TextView
+                    android:id="@+id/txtv_main_units"
+                    android:text="mg*"/>
+            </TableRow>
+
+        </TableLayout>
+
+    <ScrollView
             android:id="@+id/main_buttons_scrollview"
             android:background="@color/material_grey_100"
             android:layout_width="match_parent"
