@@ -64,25 +64,29 @@
                     android:id="@+id/bttn_my_dosage"
                     android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    style="@style/Buttons_Font" />
                 <Button
                     android:text="@string/bttn_my_treatment"
                     android:id="@+id/bttn_my_treatment"
                     android:layout_marginTop="5dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    style="@style/Buttons_Font" />
                 <Button
                     android:text="@string/bttn_cit_science"
                     android:id="@+id/bttn_cit_science"
                     android:layout_marginTop="5dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    style="@style/Buttons_Font" />
                 <Button
                     android:text="@string/bttn_hist_and_stats"
                     android:id="@+id/bttn_hist_and_stats"
                     android:layout_marginTop="5dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    style="@style/Buttons_Font" />
             </LinearLayout>
         </ScrollView>
 
