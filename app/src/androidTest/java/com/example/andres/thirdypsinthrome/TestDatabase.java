@@ -34,6 +34,9 @@ public class TestDatabase extends AndroidTestCase{
         do {
             Log.d(TAG, "Tables found are named = "+c.getString(0));
         } while( c.moveToNext() );
+
+        c.close();
+        db.close();
     }
 
     public void testInsertions(){
@@ -89,6 +92,9 @@ public class TestDatabase extends AndroidTestCase{
         assertEquals("Warfarin", cursor.getString(cursor.getColumnIndex(DBContract.MedicineTable.COL_COMMERCIAL_NAME)));
         assertEquals(1, cursor.getInt(cursor.getColumnIndex(DBContract.MedicineTable.COL_MILLIGRAMS_PER_TABLET)));
         assertFalse(cursor.moveToNext());
+
+        cursor.close();
+        db.close();
     }
 
     //Test to ensure insertion works as expected on tables with foreign keys, and that these correctly link records.
@@ -135,5 +141,8 @@ public class TestDatabase extends AndroidTestCase{
         String commercialName = cursor.getString(0);
         //Check it is the same as was inserted at the beginning.
         assertEquals("Sinthrome", commercialName);
+
+        cursor.close();
+        db.close();
     }
 }
