@@ -1,3 +1,4 @@
+<!-- android:layout_toRightOf is needed for backwrds compatibility with API 17-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,38 +10,42 @@
     android:weightSum="2"
     android:orientation="vertical">
 
-        <TableLayout
-            android:layout_width="fill_parent"
-            android:layout_weight="0.85"
-            android:layout_height="0dp"
-            android:background="@color/accent_material_dark"
-            android:gravity="center"
-            android:measureWithLargestChild="false">
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_weight="0.85"
+        android:layout_height="0dp"
+        android:background="@color/accent_material_dark"
+        android:gravity="center"
+        android:measureWithLargestChild="false">
 
-            <TableRow>
-                <TextView android:text=" "
-                    android:layout_width="fill_parent" />
-                <TextView
-                    android:id="@+id/txtv_main_date"
-                    android:text="Today, 45th of January"
-                    android:textSize="@dimen/abc_text_size_headline_material"
-                    android:gravity="center_horizontal" />
-            </TableRow>
+        <TextView
+            android:id="@+id/txtv_main_quantity"
+            android:text="99.95"
+            android:textSize="@dimen/abc_text_size_display_3_material"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="bottom|center_horizontal" />
+        <TextView
+            android:id="@+id/txtv_main_date"
+            android:text="Today, 45th of January"
+            android:textSize="@dimen/abc_text_size_headline_material"
+            android:layout_above="@id/txtv_main_quantity"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/txtv_main_units"
+            android:text="mg*"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="fill"
+            android:layout_alignBottom="@+id/txtv_main_quantity"
+            android:layout_toRightOf="@+id/txtv_main_quantity"
+            android:layout_toEndOf="@+id/txtv_main_quantity" />
 
-            <TableRow>
-                <TextView android:text=" "
-                    android:layout_width="fill_parent" />
-                <TextView
-                    android:id="@+id/txtv_main_quantity"
-                    android:text="99.95"
-                    android:textSize="@dimen/abc_text_size_display_3_material"
-                    android:gravity="end" />
-                <TextView
-                    android:id="@+id/txtv_main_units"
-                    android:text="mg*"/>
-            </TableRow>
-
-        </TableLayout>
+    </RelativeLayout>
 
     <ScrollView
             android:id="@+id/main_buttons_scrollview"
