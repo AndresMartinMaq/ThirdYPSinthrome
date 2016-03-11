@@ -9,4 +9,9 @@
     <string name="bttn_cit_science">Citizen Science</string>
     <string name="bttn_hist_and_stats">History &amp; Statistics</string>
     <string name="title_activity_welcome">Welcome to Project Sinthrome</string>
+
+    <!-- Welcome Activity-->
+    <string name="welcome">Welcome to \n Project Sinthrome</string>
+    <string name="welcome_txt">Please accompany us through the initial setup</string>
+    <string name="bttn_begin">Begin</string>
 </resources>
