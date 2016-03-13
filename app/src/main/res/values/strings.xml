@@ -14,4 +14,16 @@
     <string name="welcome">Welcome to \n Project Sinthrome</string>
     <string name="welcome_txt">Please accompany us through the initial setup</string>
     <string name="bttn_begin">Begin</string>
+
+    <!-- Settings Activity-->
+    <string name="pref_mininr_key">mininr</string>
+    <string name="pref_mininr_title">Minimum INR</string>
+    <string name="pref_maxinr_key">maxinr</string>
+    <string name="pref_maxinr_title">Maximum INR</string>
+    <string name="pref_med_time_key">medTime</string>
+    <string name="pref_med_time_title">Time of medicine intake</string>
+    <string name="pref_med_name_key">medName</string>
+    <string name="pref_med_name_title">Medicine Name</string>
+    <string name="pref_mg_per_tablet_key">mgPerTablet</string>
+    <string name="pref_mg_per_tablet_title">Milligrams per medicine tablet</string>
 </resources>
