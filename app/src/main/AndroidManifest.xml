@@ -21,8 +21,16 @@
             android:label="@string/title_activity_welcome" >
         </activity>
         <activity
-            android:name=".InitSettingsActivity"
-            android:label="@string/title_activity_init_settings"
+            android:name=".SettingsActivity"
+            android:label="Title"
+            android:parentActivityName=".WelcomeActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.andres.thirdypsinthrome.WelcomeActivity" />
+        </activity>
+        <activity
+            android:name=".SettingsActivity1"
+            android:label="@string/title_activity_settings1"
             android:parentActivityName=".WelcomeActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

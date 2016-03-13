@@ -14,6 +14,8 @@ import android.preference.PreferenceManager;
 public class SettingsActivity extends PreferenceActivity
         implements Preference.OnPreferenceChangeListener {
 
+    //TODO consider enhancing ui using spinners and such personalised Preference xml units.
+    //TODO put titles for INR and Medicine and such.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,11 +24,11 @@ public class SettingsActivity extends PreferenceActivity
 
         // For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
         // updated when the preference changes.
-        /*bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_mininr_key)));
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_mininr_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_maxinr_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_med_name_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_med_time_key)));
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_mg_per_tablet_key)));*/
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_mg_per_tablet_key)));
     }
 
     /**
