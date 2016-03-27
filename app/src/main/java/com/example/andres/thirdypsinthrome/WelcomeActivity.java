@@ -1,5 +1,8 @@
 package com.example.andres.thirdypsinthrome;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,21 +13,15 @@ public class WelcomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_welcome);
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        //If it is the first time opening the app, go through the welcome and setup. Otherwise, go to main activity.
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if (prefs.getBoolean("first_time_opened", true)){
+            setContentView(R.layout.activity_welcome);
+            //TODO, after initial setup, set "first_time_opened" to false.
+        } else {
+            startActivity(new Intent(this, MainActivity.class));
         }
-
-        return super.onOptionsItemSelected(item);
     }
+
 }

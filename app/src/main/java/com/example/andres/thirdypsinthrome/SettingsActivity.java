@@ -1,10 +1,14 @@
 package com.example.andres.thirdypsinthrome;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Debug;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings.
@@ -29,6 +33,26 @@ public class SettingsActivity extends PreferenceActivity
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_med_name_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_med_time_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_mg_per_tablet_key)));
+
+        //For when this is the initial setup.
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Log.d("TESTT", "1");
+        if (prefs.getBoolean("first_time_opened", true)) {
+            Log.d("TESTT", "2");
+            //"continue" button.
+            Preference button = findPreference("prefs_continue_bttn");
+            button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    //Record initial setup has been done.
+                    //prefs.edit().putBoolean("my_first_time", false).commit();
+                    Log.d("TESTT", "Would have sset myfirsttime to false");
+                    //Launch Main activity.
+                    startActivity(new Intent(SettingsActivity.this, MainActivity.class));
+                    return true;
+                }
+            });
+        }
     }
 
     /**

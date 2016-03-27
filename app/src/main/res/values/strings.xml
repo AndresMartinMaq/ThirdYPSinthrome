@@ -17,6 +17,7 @@
     <string name="bttn_begin">Begin</string>
 
     <!-- Settings Activity-->
+    <string name="pref_catg_INR">Your Target Range</string>
     <string name="pref_mininr_key">mininr</string>
     <string name="pref_mininr_title">Minimum INR</string>
     <string name="pref_maxinr_key">maxinr</string>
@@ -26,6 +27,7 @@
     <string name="pref_med_time_title">Time of medicine intake</string>
     <string name="pref_med_time_default">18:30</string>
 
+    <string name="pref_catg_med">Your Medication</string>
     <string name="pref_med_name_key">medName</string>
     <string name="pref_med_name_title">Medicine Name</string>
     <string name="pref_mg_per_tablet_key">mgPerTablet</string>
