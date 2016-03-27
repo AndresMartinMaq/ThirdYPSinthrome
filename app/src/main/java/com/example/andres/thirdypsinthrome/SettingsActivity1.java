@@ -21,6 +21,7 @@ import android.support.v4.app.NavUtils;
 
 import java.util.List;
 
+//I DONT USE THIS
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On

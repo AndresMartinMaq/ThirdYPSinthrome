@@ -1,14 +1,13 @@
 package com.example.andres.thirdypsinthrome;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
-/**
- * A placeholder fragment containing a simple view.
- */
 public class WelcomeActivityFragment extends Fragment {
 
     public WelcomeActivityFragment() {
@@ -17,6 +16,19 @@ public class WelcomeActivityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_welcome, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_welcome, container, false);
+
+        //Set onclicklistener to make the button take you to settings.
+        Button button = (Button)view.findViewById(R.id.bttn_begin);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), SettingsActivity.class));
+            }
+        });
+
+
+        return view;
     }
 }

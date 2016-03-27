@@ -9,7 +9,7 @@
     <string name="bttn_my_treatment">My Treatment</string>
     <string name="bttn_cit_science">Citizen Science</string>
     <string name="bttn_hist_and_stats">History &amp; Statistics</string>
-    <string name="title_activity_welcome">Welcome to Project Sinthrome</string>
+    <string name="title_activity_welcome">Welcome</string>
 
     <!-- Welcome Activity-->
     <string name="welcome">Welcome to \n Project Sinthrome</string>
