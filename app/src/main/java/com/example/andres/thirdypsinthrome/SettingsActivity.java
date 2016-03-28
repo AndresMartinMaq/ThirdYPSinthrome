@@ -9,6 +9,10 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewManager;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings.
@@ -19,7 +23,6 @@ public class SettingsActivity extends PreferenceActivity
         implements Preference.OnPreferenceChangeListener {
 
     //TODO consider enhancing ui using spinners and such personalised Preference xml units.
-    //TODO put titles for INR and Medicine and such.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,23 +39,42 @@ public class SettingsActivity extends PreferenceActivity
 
         //For when this is the initial setup.
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        Log.d("TESTT", "1");
         if (prefs.getBoolean("first_time_opened", true)) {
-            Log.d("TESTT", "2");
+            prefs.edit().putBoolean("first_time_opened", false).commit();
             //"continue" button.
+            //The following doesn't work, onPreferenceClick isnt called when the layout of a button is on top.
+            /*
             Preference button = findPreference("prefs_continue_bttn");
             button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     //Record initial setup has been done.
                     //prefs.edit().putBoolean("my_first_time", false).commit();
-                    Log.d("TESTT", "Would have sset myfirsttime to false");
+                    Log.d("TESTT", "Would have set myfirsttime to false");
                     //Launch Main activity.
                     startActivity(new Intent(SettingsActivity.this, MainActivity.class));
                     return true;
                 }
-            });
+            });*/
+            //The following doesn't work, cant mind the button.
+            /*Button btt = (Button) findViewById(R.id.bttn_continue);
+            btt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("TESTT", "This worked");
+                }
+            });*/
+        } else {
+            //Remove continue button.
+            Preference continueButton = findPreference("prefs_continue_bttn");
+            //TODO minor, consider changing all this stuff to instead add the continue button if first time, using newPreference.setLayoutResource.
+            getPreferenceScreen().removePreference(continueButton);
         }
+    }
+
+    //To be called by the continue button in the initial setting up of these settings.
+    public void openMain(View v) {
+        startActivity(new Intent(SettingsActivity.this, MainActivity.class));
     }
 
     /**
