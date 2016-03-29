@@ -18,7 +18,7 @@ public class WelcomeActivity extends AppCompatActivity {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if (prefs.getBoolean("first_time_opened", true)){
             setContentView(R.layout.activity_welcome);
-            //TODO, after initial setup, set "first_time_opened" to false.
+            //after initial setup, "first_time_opened" will be false.
         } else {
             startActivity(new Intent(this, MainActivity.class));
         }

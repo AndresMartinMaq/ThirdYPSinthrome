@@ -19,6 +19,7 @@
             android:label="@string/title_activity_welcome" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -29,6 +30,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.andres.thirdypsinthrome.WelcomeActivity" />
+        </activity>
+        <activity
+            android:name=".Dosages"
+            android:label="@string/title_activity_dosages"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.andres.thirdypsinthrome.MainActivity" />
         </activity>
     </application>
 
