@@ -11,8 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 public class Dosages extends AppCompatActivity {
 
     @Override
@@ -58,7 +56,7 @@ public class Dosages extends AppCompatActivity {
             date1.setText("22 February");
 
             ImageView img1 = (ImageView) item1.findViewById(R.id.dsg_item_icon);
-            img1.setImageResource(R.mipmap.tick);
+            img1.setImageResource(R.drawable.tick);
             return view;
         }
     }
