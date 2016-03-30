@@ -39,6 +39,8 @@
     <string name="dosages_end_date">31st of February</string>
     <string name="dosages_str_new">A new INR value or predetermined dosage will be requiered.</string>
 
-<!-- TODO: Remove or change this placeholder text -->
+    <!-- EnterDosage-->
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="edit_start_date">Edit start date</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

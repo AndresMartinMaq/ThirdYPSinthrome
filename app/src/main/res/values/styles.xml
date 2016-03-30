@@ -5,8 +5,18 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/sinthrome_blue_green</item>
         <item name="colorPrimaryDark">@color/sinthrome_blue_green_2</item>
+        <item name="android:dialogTheme">@style/MyDialogTheme</item>
+        <item name="android:datePickerStyle">@style/SpinnerDatePicker</item>
     </style>
     <style name="Buttons_Font" parent="@android:style/TextAppearance.Medium">
         <item name="android:textSize">20sp</item>
+    </style>
+
+    <!-- DatePickerDialog, this will make datepicker show spinner and not calendar -->
+    <style name="MyDialogTheme" parent="android:Theme.Material.Dialog">
+        <item name="android:datePickerStyle">@style/SpinnerDatePicker</item>
+    </style>
+    <style name="SpinnerDatePicker" parent="android:Widget.Material.DatePicker">
+        <item name="android:datePickerMode">spinner</item>
     </style>
 </resources>

@@ -9,12 +9,10 @@
     android:orientation="vertical"
     tools:context="com.example.andres.thirdypsinthrome.Dosages.EnterDoseFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Edit start date"
+        android:text="@string/edit_start_date"
         android:id="@+id/bttn_edit_startdate"
         android:onClick="showDatePickerDialog"/>
 

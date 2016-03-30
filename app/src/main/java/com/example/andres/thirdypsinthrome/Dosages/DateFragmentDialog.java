@@ -6,6 +6,8 @@ import android.app.DialogFragment;
 import android.os.Bundle;
 import android.widget.DatePicker;
 
+import com.example.andres.thirdypsinthrome.R;
+
 import java.util.Calendar;
 
 public class DateFragmentDialog extends DialogFragment
@@ -19,8 +21,12 @@ public class DateFragmentDialog extends DialogFragment
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
 
-        // Create a new instance of DatePickerDialog and return it
-        return new DatePickerDialog(getActivity(), this, year, month, day);
+        //DatePickerDialog dialog = new DatePickerDialog(getActivity(), R.style.DateSpinnerTheme, this, year, month, day);
+        DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, year, month, day);
+        dialog.getDatePicker().setCalendarViewShown(false);//These 2 don't actually work by themselves, as the app theme overrides them.
+        dialog.getDatePicker().setSpinnersShown(true);
+
+        return dialog;
     }
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
