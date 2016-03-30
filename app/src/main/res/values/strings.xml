@@ -34,7 +34,7 @@
     <string name="pref_mg_per_tablet_title">Milligrams per medicine tablet</string>
     <string name="title_activity_dosages">My Dosages</string>
 
-    <!-- Dosages Activity-->
+    <!-- DosageActivity Activity-->
     <string name="dosages_str">The current dosage ends on</string>
     <string name="dosages_end_date">31st of February</string>
     <string name="dosages_str_new">A new INR value or predetermined dosage will be requiered.</string>

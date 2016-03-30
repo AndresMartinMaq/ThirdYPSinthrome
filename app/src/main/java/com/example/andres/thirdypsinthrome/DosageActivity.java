@@ -1,6 +1,5 @@
 package com.example.andres.thirdypsinthrome;
 
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -15,7 +14,10 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class Dosages extends AppCompatActivity {
+import com.example.andres.thirdypsinthrome.Dosages.DateFragmentDialog;
+import com.example.andres.thirdypsinthrome.Dosages.EnterDoseFragment;
+
+public class DosageActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +57,7 @@ public class Dosages extends AppCompatActivity {
     }
 
     public void buttonPressed(View v) {
-        Log.d("Dosages", "ButtonPressed on Dosages called.");
+        Log.d("DosageActivity", "ButtonPressed on DosageActivity called.");
         int id = v.getId();
 
         if (id == R.id.btt_enter_dosage) {
@@ -69,6 +71,11 @@ public class Dosages extends AppCompatActivity {
             transaction.addToBackStack(null);
             transaction.commit();
         }
+    }
+
+    public void showDatePickerDialog(View v) {
+        DateFragmentDialog newFragment = new DateFragmentDialog();
+        newFragment.show(getFragmentManager(), "datePicker");
     }
 
     public static class DosagesFragment extends Fragment {

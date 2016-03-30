@@ -32,7 +32,7 @@
                 android:value="com.example.andres.thirdypsinthrome.WelcomeActivity" />
         </activity>
         <activity
-            android:name=".Dosages"
+            android:name=".DosageActivity"
             android:label="@string/title_activity_dosages"
             android:parentActivityName=".MainActivity" >
             <meta-data

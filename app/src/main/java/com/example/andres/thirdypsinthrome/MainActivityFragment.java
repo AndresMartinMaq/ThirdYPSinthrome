@@ -21,7 +21,7 @@ public class MainActivityFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), Dosages.class));
+                startActivity(new Intent(getActivity(), DosageActivity.class));
             }
         });
 

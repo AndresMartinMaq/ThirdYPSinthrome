@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         int id = v.getId();
 
         if (id == R.id.bttn_my_dosage) {
-            startActivity(new Intent(this, Dosages.class));
+            startActivity(new Intent(this, DosageActivity.class));
         }else
         if (id == R.id.bttn_my_treatment) {
             startActivity(new Intent(this, SettingsActivity.class));
