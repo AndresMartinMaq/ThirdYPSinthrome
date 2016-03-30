@@ -3,12 +3,15 @@ package com.example.andres.thirdypsinthrome;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class Dosages extends AppCompatActivity {
@@ -36,7 +39,7 @@ public class Dosages extends AppCompatActivity {
     }
 
 
-     public static class DosagesFragment extends Fragment {
+    public static class DosagesFragment extends Fragment {
 
         public DosagesFragment() {
         }
@@ -44,7 +47,7 @@ public class Dosages extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View view = inflater.inflate(R.layout.fragment_dosages, container, false);
+            final View view = inflater.inflate(R.layout.fragment_dosages, container, false);
 
             View item1 = view.findViewById(R.id.dsg_item1);
             View item2 = view.findViewById(R.id.dsg_item2);
@@ -57,7 +60,26 @@ public class Dosages extends AppCompatActivity {
 
             ImageView img1 = (ImageView) item1.findViewById(R.id.dsg_item_icon);
             img1.setImageResource(R.drawable.tick);
+
+            //To set the scrollView to scroll to the middle of an item
+            final HorizontalScrollView hsv = (HorizontalScrollView) view.findViewById(R.id.horizontalScrollView);
+            centerScrollViewOn(item3, hsv, view.findViewById(R.id.scrollingLinearLayout));
+
             return view;
         }
+
+        //To set the scrollView to scroll to the middle of an item
+        public void centerScrollViewOn(final View item, final HorizontalScrollView hsv, View insideLinearLayout){
+            //This next line makes it scroll right just until the item is fully visible.
+            hsv.requestChildFocus(insideLinearLayout, item);
+            //This will center the item.
+            hsv.post(new Runnable() {
+                public void run() {
+                    int extraScrollX = item.getWidth() / 2;
+                    hsv.scrollTo(hsv.getScrollX() + (hsv.getWidth()/2)-extraScrollX, 0);
+                }
+            });
+        }
+
     }
 }
