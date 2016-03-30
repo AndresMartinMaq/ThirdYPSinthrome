@@ -1,6 +1,8 @@
 package com.example.andres.thirdypsinthrome;
 
+
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class Dosages extends AppCompatActivity {
@@ -20,6 +21,21 @@ public class Dosages extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dosages);
+
+        //Set Fragment up
+        if (findViewById(R.id.dose_fragment_holder) != null) {
+
+            //If we're being restored from a previous state,
+            // then we don't need to do anything and should return or else
+            // we could end up with overlapping fragments.
+            if (savedInstanceState != null) {return;}
+
+            DosagesFragment firstFragment = new DosagesFragment();
+            // Add the fragment to the 'dose_fragment_holder' FrameLayout
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.dose_fragment_holder, firstFragment).commit();
+        }
+
     }
 
     @Override
@@ -38,6 +54,22 @@ public class Dosages extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void buttonPressed(View v) {
+        Log.d("Dosages", "ButtonPressed on Dosages called.");
+        int id = v.getId();
+
+        if (id == R.id.btt_enter_dosage) {
+            // Create a new Fragment to be placed in the activity layout
+            EnterDoseFragment enterDoseFragment = new EnterDoseFragment();
+
+            // Replace whatever is in the fragment_container view with this fragment,
+            // and add the transaction to the back stack so the user can navigate back
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.dose_fragment_holder, enterDoseFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
+    }
 
     public static class DosagesFragment extends Fragment {
 
@@ -62,8 +94,7 @@ public class Dosages extends AppCompatActivity {
             img1.setImageResource(R.drawable.tick);
 
             //To set the scrollView to scroll to the middle of an item
-            final HorizontalScrollView hsv = (HorizontalScrollView) view.findViewById(R.id.horizontalScrollView);
-            centerScrollViewOn(item3, hsv, view.findViewById(R.id.scrollingLinearLayout));
+            centerScrollViewOn(item3, (HorizontalScrollView) view.findViewById(R.id.horizontalScrollView), view.findViewById(R.id.scrollingLinearLayout));
 
             return view;
         }

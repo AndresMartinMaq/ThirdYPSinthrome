@@ -125,6 +125,7 @@
         android:layout_height="wrap_content"
         android:text="Enter new Dosage"
         android:id="@+id/btt_enter_dosage"
+        android:onClick="buttonPressed"
         android:layout_marginBottom="20dp" />
 
 </LinearLayout>
