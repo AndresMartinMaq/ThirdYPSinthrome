@@ -22,8 +22,6 @@ import com.example.andres.thirdypsinthrome.Dosages.EnterDoseFragment;
 
 public class DosageActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
 
-    public EnterDoseFragment enterDoseFragment;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +65,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
 
         if (id == R.id.btt_enter_dosage) {
             // Create a new Fragment to be placed in the activity layout
-            enterDoseFragment = new EnterDoseFragment();
+            EnterDoseFragment enterDoseFragment = new EnterDoseFragment();
 
             // Replace whatever is in the fragment_container view with this fragment,
             // and add the transaction to the back stack so the user can navigate back
@@ -83,11 +81,11 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
         newFragment.show(getFragmentManager(), "datePicker");
     }
 
-    //For EnterDosage Fragment.
+    //Used by DateFragmentDialog to comm with EnterDosage Fragment to update the latter's ui.
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-        EnterDoseFragment enterDoseFragment1 = (EnterDoseFragment) getSupportFragmentManager().findFragmentById(R.id.dose_fragment_holder);
-        //enterDoseFragment.showDate(year, monthOfYear, dayOfMonth);
-        enterDoseFragment1.showDate(year, monthOfYear, dayOfMonth);
+        EnterDoseFragment enterDoseFragment =
+                (EnterDoseFragment) getSupportFragmentManager().findFragmentById(R.id.dose_fragment_holder);
+        enterDoseFragment.showDate(year, monthOfYear, dayOfMonth);
     }
 
     //---------------------------------------------------------------------------------

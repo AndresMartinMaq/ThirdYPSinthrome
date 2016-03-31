@@ -53,12 +53,6 @@ public class EnterDoseFragment extends Fragment {
         return view;
     }
 
-    //Needed so if this fragment is destroyed and recreated, the activity doesnt have null in its enterDoseFragment field.
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        ((DosageActivity) activity).enterDoseFragment = this;
-    }
-
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         savedInstanceState.putString("selectedDate", selectedDateStr);
