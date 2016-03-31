@@ -1,6 +1,7 @@
 package com.example.andres.thirdypsinthrome;
 
 import android.app.DatePickerDialog;
+import android.app.FragmentManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -21,7 +22,7 @@ import com.example.andres.thirdypsinthrome.Dosages.EnterDoseFragment;
 
 public class DosageActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
 
-    EnterDoseFragment enterDoseFragment;
+    public EnterDoseFragment enterDoseFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,9 +83,11 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
         newFragment.show(getFragmentManager(), "datePicker");
     }
 
-    @Override
+    //For EnterDosage Fragment.
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-        enterDoseFragment.showDate(year, monthOfYear, dayOfMonth);
+        EnterDoseFragment enterDoseFragment1 = (EnterDoseFragment) getSupportFragmentManager().findFragmentById(R.id.dose_fragment_holder);
+        //enterDoseFragment.showDate(year, monthOfYear, dayOfMonth);
+        enterDoseFragment1.showDate(year, monthOfYear, dayOfMonth);
     }
 
     //---------------------------------------------------------------------------------

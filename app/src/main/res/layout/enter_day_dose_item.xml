@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:inputType="numberDecimal"
         android:ems="10"
-        android:id="@+id/editText" />
+        android:id="@+id/entered_day_intake" />
 
     <TextView
         android:layout_width="wrap_content"
