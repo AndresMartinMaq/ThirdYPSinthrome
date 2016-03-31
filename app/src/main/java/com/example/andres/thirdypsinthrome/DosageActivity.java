@@ -1,5 +1,6 @@
 package com.example.andres.thirdypsinthrome;
 
+import android.app.DatePickerDialog;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,7 +19,9 @@ import android.widget.TextView;
 import com.example.andres.thirdypsinthrome.Dosages.DateFragmentDialog;
 import com.example.andres.thirdypsinthrome.Dosages.EnterDoseFragment;
 
-public class DosageActivity extends AppCompatActivity {
+public class DosageActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
+
+    EnterDoseFragment enterDoseFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +66,7 @@ public class DosageActivity extends AppCompatActivity {
 
         if (id == R.id.btt_enter_dosage) {
             // Create a new Fragment to be placed in the activity layout
-            EnterDoseFragment enterDoseFragment = new EnterDoseFragment();
+            enterDoseFragment = new EnterDoseFragment();
 
             // Replace whatever is in the fragment_container view with this fragment,
             // and add the transaction to the back stack so the user can navigate back
@@ -78,6 +82,12 @@ public class DosageActivity extends AppCompatActivity {
         newFragment.show(getFragmentManager(), "datePicker");
     }
 
+    @Override
+    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+        enterDoseFragment.showDate(year, monthOfYear, dayOfMonth);
+    }
+
+    //---------------------------------------------------------------------------------
     public static class DosagesFragment extends Fragment {
 
         public DosagesFragment() {
