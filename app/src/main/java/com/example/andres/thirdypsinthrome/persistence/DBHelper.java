@@ -1,10 +1,12 @@
 package com.example.andres.thirdypsinthrome.persistence;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.andres.thirdypsinthrome.MyUtils;
 import com.example.andres.thirdypsinthrome.persistence.DBContract.*;
 
 //NOTE: as SQLite doesn't have date or time data types, time is stored as string HH:MM
@@ -15,6 +17,12 @@ public class DBHelper extends SQLiteOpenHelper {
     //Upon changing the database schema, you must increment the database version manually here.
     private static final int DATABASE_VERSION = 1;
     static final String DATABASE_NAME = "sinthromeProject.db";
+    private static DBHelper instance;
+
+    public static synchronized DBHelper dbHelperInst(Context context) {
+        if (instance == null) {instance = new DBHelper(context);}
+        return instance;
+    }
 
     //Constructors
     public DBHelper(Context context) {
@@ -41,7 +49,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 DosageTable.COL_USER_FK + " INTEGER NOT NULL, " +
                 DosageTable.COL_START + " INTEGER NOT NULL, " +
                 DosageTable.COL_END + " INTEGER NOT NULL, " +
-                DosageTable.COL_LEVEL + " INTEGER NOT NULL, " +
+                DosageTable.COL_LEVEL + " INTEGER, " +
                 " FOREIGN KEY (" + DosageTable.COL_USER_FK + ") REFERENCES " + UserTable.TABLE_NAME + " (" + UserTable._ID + "));";
 
         //Day table
@@ -106,5 +114,31 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + MedicineTable.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + UserTable.TABLE_NAME);
         onCreate(db);
+    }
+
+    //Takes dates in epoch seconds.
+    public void addDosageManually(int userID, int startDate, int endDate, double[] intakes){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        //Put values for Dosage
+        ContentValues values = new ContentValues();
+        values.put(DosageTable.COL_USER_FK, userID);
+        values.put(DosageTable.COL_START, startDate);
+        Log.d("DBTEST", "Inside addDosageManually, startDate inserted was "+startDate);
+        values.put(DosageTable.COL_END, endDate);
+        long insertedRowID = db.insert(DBContract.DosageTable.TABLE_NAME, null, values);
+        //Put values for the Dosage's Days.
+        for (int i = 0; i < intakes.length; i++) {
+            values = new ContentValues();
+            values.put(DayTable.COL_DOSAGE_FK, insertedRowID);//The just created Dosage id is a FK for these days.
+            values.put(DayTable.COL_DATE, MyUtils.addDays(startDate, i));
+            values.put(DayTable.COL_MILLIGRAMS, intakes[i]);
+
+            db.insert(DayTable.TABLE_NAME, null, values);
+        }
+    }
+
+    public void addDosageAutomatically(int userID, int startDate, int newLevel){
+    //TODO
     }
 }

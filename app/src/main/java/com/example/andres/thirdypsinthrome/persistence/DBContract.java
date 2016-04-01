@@ -21,7 +21,7 @@ public class DBContract {
         public static final String TABLE_NAME = "dosage";
         public static final String COL_USER_FK = "user_id";
 
-        //These dates will be stored as Unix epoch integers.
+        //These dates will be stored as Unix epoch integer seconds.
         public static final String COL_START = "start_date";
         public static final String COL_END = "end_date";
         public static final String COL_LEVEL = "level";//Only needed if automatic dosage calculation is being done
@@ -32,7 +32,7 @@ public class DBContract {
         public static final String COL_DOSAGE_FK = "dosage_id";
 
         public static final String COL_DATE = "date";
-        public static final String COL_USER_ID = "user";    //This is unnecessary if we have a FK to dosage
+        //public static final String COL_USER_ID = "user";    //This is unnecessary if we have a FK to dosage
         public static final String COL_MILLIGRAMS = "milligrams";
         public static final String COL_TAKEN = "med_taking_time";    //boolean, encoded as integer 0 or 1
         public static final String COL_DEVIATION = "dev_minutes";   //Integer number of minutes.

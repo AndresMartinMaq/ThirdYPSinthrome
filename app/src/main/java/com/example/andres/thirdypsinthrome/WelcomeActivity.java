@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.andres.thirdypsinthrome.persistence.DBHelper;
+
 public class WelcomeActivity extends AppCompatActivity {
 
     @Override

@@ -10,6 +10,8 @@ import com.example.andres.thirdypsinthrome.persistence.DBContract;
 import com.example.andres.thirdypsinthrome.persistence.DBHelper;
 
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 
 public class TestDatabase extends AndroidTestCase{
@@ -141,6 +143,52 @@ public class TestDatabase extends AndroidTestCase{
         String commercialName = cursor.getString(0);
         //Check it is the same as was inserted at the beginning.
         assertEquals("Sinthrome", commercialName);
+
+        cursor.close();
+        db.close();
+    }
+
+    //Method for manually adding a dosage.
+    public void testAddDosageMethod(){
+        int startDate = (int) (new Date(2014 - 1900, 2, 2).getTime() / 1000);
+        Log.d(TAG, "currentDate in mills long: "+new Date().getTime());
+        Log.d(TAG, "startDate in mills long: "+new Date(2014-1900, 2, 2).getTime());
+        Log.d(TAG, "startDate in secs int: "+startDate);
+        int endDate = (int) new Date(2014, 2, 8).getTime();
+        double[] intakes = {3d, 3.5, 3, 2.5, 2, 2.5, 3};
+
+        SQLiteDatabase db = DBHelper.dbHelperInst(mContext).getWritableDatabase();
+
+        //User creation, required?
+        ContentValues userValues = new ContentValues();
+        userValues.put(DBContract.UserTable.COL_TARGET_INR_MIN, 2.5d);
+        userValues.put(DBContract.UserTable.COL_TARGET_INR_MAX, 3.5d);
+        long insertedRowID = db.insert(DBContract.UserTable.TABLE_NAME, null, userValues);
+        assertTrue(insertedRowID != -1);
+
+        //Method to be tested
+        DBHelper.dbHelperInst(mContext).addDosageManually(0, startDate, endDate, intakes);
+
+        //Dosage Table
+        Cursor cursor = db.rawQuery("SELECT * FROM " + DBContract.DosageTable.TABLE_NAME + ";", null);
+        assertTrue(cursor.moveToFirst());
+        Log.d(TAG, "Just before assert found"+cursor.getString(cursor.getColumnIndex(DBContract.DosageTable.COL_START)));
+        assertEquals(startDate, cursor.getInt(cursor.getColumnIndex(DBContract.DosageTable.COL_START)));
+
+        //Query, Day Table
+        cursor = db.rawQuery("SELECT * FROM " + DBContract.DayTable.TABLE_NAME + ";", null);
+        assertNotNull(cursor);
+        //Test Day Values
+        assertTrue(cursor.moveToFirst());
+        assertEquals(startDate, cursor.getInt(cursor.getColumnIndex(DBContract.DayTable.COL_DATE)));
+        assertEquals(3d, cursor.getDouble(cursor.getColumnIndex(DBContract.DayTable.COL_MILLIGRAMS)));
+        assertTrue(cursor.moveToNext());
+        assertTrue(cursor.moveToNext());
+        assertTrue(cursor.moveToNext());
+        assertEquals(MyUtils.addDays(startDate, 4), cursor.getInt(cursor.getColumnIndex(DBContract.DayTable.COL_DATE)));
+        assertEquals(2.5, cursor.getDouble(cursor.getColumnIndex(DBContract.DayTable.COL_MILLIGRAMS)));
+
+
 
         cursor.close();
         db.close();
