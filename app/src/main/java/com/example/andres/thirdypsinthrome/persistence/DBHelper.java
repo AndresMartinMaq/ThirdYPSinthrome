@@ -2,11 +2,14 @@ package com.example.andres.thirdypsinthrome.persistence;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.example.andres.thirdypsinthrome.MyUtils;
+import com.example.andres.thirdypsinthrome.R;
 import com.example.andres.thirdypsinthrome.persistence.DBContract.*;
 
 //NOTE: as SQLite doesn't have date or time data types, time is stored as string HH:MM
@@ -114,6 +117,28 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + MedicineTable.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + UserTable.TABLE_NAME);
         onCreate(db);
+    }
+
+    //To Register the app's user on the initial setup
+    public void registerUser(Context context){
+        SQLiteDatabase db = this.getWritableDatabase();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+        //Get the values from SharedPreferences
+        double minINR = prefs.getFloat(context.getString(R.string.pref_mininr_key), 0f);
+        double maxINR = prefs.getFloat(context.getString(R.string.pref_maxinr_key), 10f);
+        
+
+        //Put Values in ConventValues
+        ContentValues userValues = new ContentValues();
+        userValues.put(DBContract.UserTable.COL_TARGET_INR_MIN, 2.5d);
+        userValues.put(DBContract.UserTable.COL_TARGET_INR_MAX, 3.5d);
+
+        //Insert in db
+
+        //Keep record of userID
+
+        prefs.edit().putInt("db_userID", userID).commit();
     }
 
     //Takes dates in epoch seconds.

@@ -12,6 +12,7 @@ import com.example.andres.thirdypsinthrome.persistence.DBHelper;
 
 public class WelcomeActivity extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

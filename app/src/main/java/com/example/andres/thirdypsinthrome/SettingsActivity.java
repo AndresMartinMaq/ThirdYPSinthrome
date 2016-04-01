@@ -40,30 +40,6 @@ public class SettingsActivity extends PreferenceActivity
         //For when this is the initial setup.
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if (prefs.getBoolean("first_time_opened", true)) {
-            prefs.edit().putBoolean("first_time_opened", false).commit();
-            //"continue" button.
-            //The following doesn't work, onPreferenceClick isnt called when the layout of a button is on top.
-            /*
-            Preference button = findPreference("prefs_continue_bttn");
-            button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    //Record initial setup has been done.
-                    //prefs.edit().putBoolean("my_first_time", false).commit();
-                    Log.d("TESTT", "Would have set myfirsttime to false");
-                    //Launch Main activity.
-                    startActivity(new Intent(SettingsActivity.this, MainActivity.class));
-                    return true;
-                }
-            });*/
-            //The following doesn't work, cant mind the button.
-            /*Button btt = (Button) findViewById(R.id.bttn_continue);
-            btt.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d("TESTT", "This worked");
-                }
-            });*/
         } else {
             //Remove continue button.
             Preference continueButton = findPreference("prefs_continue_bttn");
@@ -74,6 +50,9 @@ public class SettingsActivity extends PreferenceActivity
 
     //To be called by the continue button in the initial setting up of these settings.
     public void openMain(View v) {
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs.edit().putBoolean("first_time_opened", false).commit();
+
         startActivity(new Intent(SettingsActivity.this, MainActivity.class));
     }
 
