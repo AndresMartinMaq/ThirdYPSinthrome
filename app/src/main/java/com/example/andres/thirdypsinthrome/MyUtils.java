@@ -31,18 +31,17 @@ public class MyUtils {
     }
 
     //@return The unix epoch date in seconds with a number of added days.
-    public static long addDays(int dateInSeconds, int daysToAdd){
+    public static int addDays(int dateInSeconds, int daysToAdd){
         //Alternatively, could add a multiple of 86400 (secs in a day).
         //Log.d("UtilsTag", "Received dateInSeconds = "+dateInSeconds);
         Date date = new Date(dateInSeconds*1000l);
-        //Log.d("UtilsTag", "Date object date = "+date);
         Calendar c = Calendar.getInstance();
         c.setTime(date);
         c.add(Calendar.DATE, daysToAdd);
 
         long l = c.getTimeInMillis() / 1000;
         int newDateInSecs = (int) l;
-        if ((newDateInSecs - l) != 0){ Log.d("UtilsTag", "Date not correctly cast from long to int");}
+        if ((newDateInSecs - l) != 0){ throw new ClassCastException("Date not correctly cast from long to int");}
         //Log.d("UtilsTag", "Returning newDateInSeconds = "+newDateInSecs);
         return newDateInSecs;
     }

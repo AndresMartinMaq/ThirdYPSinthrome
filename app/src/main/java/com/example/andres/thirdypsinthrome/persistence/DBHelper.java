@@ -124,7 +124,6 @@ public class DBHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(DosageTable.COL_USER_FK, userID);
         values.put(DosageTable.COL_START, startDate);
-        Log.d("DBTEST", "Inside addDosageManually, startDate inserted was "+startDate);
         values.put(DosageTable.COL_END, endDate);
         long insertedRowID = db.insert(DBContract.DosageTable.TABLE_NAME, null, values);
         //Put values for the Dosage's Days.

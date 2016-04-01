@@ -150,14 +150,15 @@ public class TestDatabase extends AndroidTestCase{
 
     //Method for manually adding a dosage.
     public void testAddDosageMethod(){
-        int startDate = (int) (new Date(2014 - 1900, 2, 2).getTime() / 1000);
-        Log.d(TAG, "currentDate in mills long: "+new Date().getTime());
-        Log.d(TAG, "startDate in mills long: "+new Date(2014-1900, 2, 2).getTime());
-        Log.d(TAG, "startDate in secs int: "+startDate);
-        int endDate = (int) new Date(2014, 2, 8).getTime();
-        double[] intakes = {3d, 3.5, 3, 2.5, 2, 2.5, 3};
+        //SQLiteDatabase db = DBHelper.dbHelperInst(mContext).getWritableDatabase(); Do NOT test with this directly.
+        DBHelper dbHelper = new DBHelper(mContext, "testSinthromeDatabase.db");
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        SQLiteDatabase db = DBHelper.dbHelperInst(mContext).getWritableDatabase();
+        int startDate = (int) (new Date(2014 - 1900, 2, 2).getTime() / 1000);
+        Log.d(TAG, "startDate in secs int: " + startDate);
+        double[] intakes = {3d, 3.5, 3, 2.5, 2, 2.5, 3};
+        int endDate = MyUtils.addDays(startDate, intakes.length);
+        Log.d(TAG, "endDate in secs int: " + endDate);
 
         //User creation, required?
         ContentValues userValues = new ContentValues();
@@ -167,12 +168,11 @@ public class TestDatabase extends AndroidTestCase{
         assertTrue(insertedRowID != -1);
 
         //Method to be tested
-        DBHelper.dbHelperInst(mContext).addDosageManually(0, startDate, endDate, intakes);
+        dbHelper.addDosageManually(0, startDate, endDate, intakes);
 
         //Dosage Table
         Cursor cursor = db.rawQuery("SELECT * FROM " + DBContract.DosageTable.TABLE_NAME + ";", null);
         assertTrue(cursor.moveToFirst());
-        Log.d(TAG, "Just before assert found"+cursor.getString(cursor.getColumnIndex(DBContract.DosageTable.COL_START)));
         assertEquals(startDate, cursor.getInt(cursor.getColumnIndex(DBContract.DosageTable.COL_START)));
 
         //Query, Day Table
@@ -185,10 +185,8 @@ public class TestDatabase extends AndroidTestCase{
         assertTrue(cursor.moveToNext());
         assertTrue(cursor.moveToNext());
         assertTrue(cursor.moveToNext());
-        assertEquals(MyUtils.addDays(startDate, 4), cursor.getInt(cursor.getColumnIndex(DBContract.DayTable.COL_DATE)));
+        assertEquals(MyUtils.addDays(startDate, 3), cursor.getInt(cursor.getColumnIndex(DBContract.DayTable.COL_DATE)));
         assertEquals(2.5, cursor.getDouble(cursor.getColumnIndex(DBContract.DayTable.COL_MILLIGRAMS)));
-
-
 
         cursor.close();
         db.close();
