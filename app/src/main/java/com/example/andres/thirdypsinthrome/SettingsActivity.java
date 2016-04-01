@@ -14,6 +14,8 @@ import android.view.ViewManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.example.andres.thirdypsinthrome.persistence.DBHelper;
+
 /**
  * A {@link PreferenceActivity} that presents a set of application settings.
  * See <a href="http://developer.android.com/design/patterns/settings.html">
@@ -50,10 +52,16 @@ public class SettingsActivity extends PreferenceActivity
 
     //To be called by the continue button in the initial setting up of these settings.
     public void openMain(View v) {
+        //Set "first time opened" to false.
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        prefs.edit().putBoolean("first_time_opened", false).commit();
-
-        startActivity(new Intent(SettingsActivity.this, MainActivity.class));
+        prefs.edit().putBoolean("first_time_opened", false).apply();
+        //Register the user's data in the database and open the main activity.
+        try {
+            DBHelper.dbHelperInst(getApplicationContext()).registerUser(getApplicationContext());
+            startActivity(new Intent(SettingsActivity.this, MainActivity.class));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**

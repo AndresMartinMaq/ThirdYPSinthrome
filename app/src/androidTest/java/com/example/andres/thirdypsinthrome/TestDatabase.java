@@ -1,8 +1,11 @@
 package com.example.andres.thirdypsinthrome;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.preference.PreferenceManager;
 import android.test.AndroidTestCase;
 import android.util.Log;
 
@@ -190,5 +193,52 @@ public class TestDatabase extends AndroidTestCase{
 
         cursor.close();
         db.close();
+    }
+
+    //Test for DBHelper's registering user (done in first app opening) and add medicine (which may be used when registering user).
+    @SuppressLint("CommitPrefEdits")
+    public void testRegisterUser(){
+        DBHelper dbHelper = new DBHelper(mContext, "testSinthromeDatabase.db");
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        //Case: when medicine is unknown.
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        float minINR = 2.5f;
+        float maxINR = 3.5f;
+        String medTime = "16:20";
+        String medName = "Puredrugs";
+        float mgPerTablet = 1f;
+
+        prefs.edit().putFloat(mContext.getString(R.string.pref_mininr_key), minINR).commit();
+        prefs.edit().putFloat(mContext.getString(R.string.pref_maxinr_key), maxINR).commit();
+        prefs.edit().putString(mContext.getString(R.string.pref_med_time_key), medTime).commit();
+        prefs.edit().putString(mContext.getString(R.string.pref_med_name_key), medName).commit();
+        prefs.edit().putFloat(mContext.getString(R.string.pref_mg_per_tablet_key), mgPerTablet).commit();
+        //Insertion
+        try {
+            dbHelper.registerUser(mContext);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Exception was thrown by the registerUser Method.");
+        }
+
+        //Query sharedPrefs to see if it is recorded.
+        long userID = prefs.getLong("db_userID", -13);
+        assertTrue("User was not inserted into db", userID != -1);
+        assertTrue("UserID was not correctly stored in prefs", userID != -13);
+
+        //Query db
+        Cursor cursor = db.query(DBContract.UserTable.TABLE_NAME,null,null,null,null,null,null);
+        //Test User Table values
+        cursor.moveToFirst();
+        assertEquals(medTime, cursor.getString(cursor.getColumnIndex(DBContract.UserTable.COL_MED_TIME)));
+        assertEquals(maxINR, cursor.getDouble(cursor.getColumnIndex(DBContract.UserTable.COL_TARGET_INR_MAX)));
+        assertEquals(minINR, cursor.getDouble(cursor.getColumnIndex(DBContract.UserTable.COL_TARGET_INR_MIN)));
+        int medID = cursor.getInt(cursor.getColumnIndex(DBContract.UserTable.COL_MEDICINE_FK));
+        //Test Medicine Table
+        cursor = db.query(DBContract.MedicineTable.TABLE_NAME,null,null,null,null,null,null);
+        cursor.moveToFirst();
+        assertEquals(medName, cursor.getString(cursor.getColumnIndex(DBContract.MedicineTable.COL_COMMERCIAL_NAME)));
+        assertEquals(mgPerTablet, cursor.getInt(cursor.getColumnIndex(DBContract.MedicineTable.COL_MILLIGRAMS_PER_TABLET)));
     }
 }

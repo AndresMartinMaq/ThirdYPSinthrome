@@ -3,6 +3,7 @@ package com.example.andres.thirdypsinthrome.persistence;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.preference.PreferenceManager;
@@ -119,26 +120,63 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    //Inserts a new entry in MedicineTable. Returns id.
+    public long addMedicine(String commName, float mgPerTablet){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues medVals = new ContentValues();
+        medVals.put(MedicineTable.COL_MILLIGRAMS_PER_TABLET, mgPerTablet);
+        medVals.put(MedicineTable.COL_COMMERCIAL_NAME, commName);
+        long insertedRowID = db.insert(MedicineTable.TABLE_NAME, null, medVals);
+        return insertedRowID;
+    }
+
     //To Register the app's user on the initial setup
-    public void registerUser(Context context){
+    public void registerUser(Context context) throws Exception{
         SQLiteDatabase db = this.getWritableDatabase();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         //Get the values from SharedPreferences
-        double minINR = prefs.getFloat(context.getString(R.string.pref_mininr_key), 0f);
-        double maxINR = prefs.getFloat(context.getString(R.string.pref_maxinr_key), 10f);
-        
+        float minINR = prefs.getFloat(context.getString(R.string.pref_mininr_key), 0f);
+        float maxINR = prefs.getFloat(context.getString(R.string.pref_maxinr_key), 0f);
+        String medTime = prefs.getString(context.getString(R.string.pref_med_time_key), context.getString(R.string.pref_med_time_default));
+        String medName = prefs.getString(context.getString(R.string.pref_med_name_key), "");
+        float mgPerTablet = prefs.getFloat(context.getString(R.string.pref_mg_per_tablet_key), 0f);
+        if (minINR == 0 || maxINR == 0 || mgPerTablet == 0){
+            throw new Exception("MaxINR, MinINR or milligrams per tablet were not set properly");
+        }
+        int medID = -1;
 
         //Put Values in ConventValues
         ContentValues userValues = new ContentValues();
-        userValues.put(DBContract.UserTable.COL_TARGET_INR_MIN, 2.5d);
-        userValues.put(DBContract.UserTable.COL_TARGET_INR_MAX, 3.5d);
+        userValues.put(DBContract.UserTable.COL_TARGET_INR_MIN, minINR);
+        userValues.put(DBContract.UserTable.COL_TARGET_INR_MAX, maxINR);
+        userValues.put(UserTable.COL_MED_TIME, medTime);
+
+        //Check if the user's medicine is currently in the db
+        if (hasDoseTables(medName)){
+            //Get this medicine's _ID
+            Cursor c = db.rawQuery("SELECT "+MedicineTable._ID+" FROM "+MedicineTable.TABLE_NAME+" WHERE "+MedicineTable.COL_COMMERCIAL_NAME+"= '"+medName+"';", null);
+            c.moveToFirst();
+            medID = c.getInt(0);
+            //Set this medicine's mg per tablet
+            ContentValues medVals = new ContentValues();
+            medVals.put(MedicineTable.COL_MILLIGRAMS_PER_TABLET, mgPerTablet);
+            db.update(MedicineTable.TABLE_NAME, medVals, MedicineTable._ID + "=" + medID, null);
+            c.close();
+        } else {
+            //Create new medicine (will not have DosageAdjustment tables)
+            medName = medName.toLowerCase();
+            addMedicine(medName, mgPerTablet);
+
+        }
+        userValues.put(UserTable.COL_MEDICINE_FK, medID);
 
         //Insert in db
+        long userID = db.insert(UserTable.TABLE_NAME, null, userValues);
 
         //Keep record of userID
-
-        prefs.edit().putInt("db_userID", userID).commit();
+        prefs.edit().putLong("db_userID", userID).commit();
     }
 
     //Takes dates in epoch seconds.
@@ -164,5 +202,26 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void addDosageAutomatically(int userID, int startDate, int newLevel){
     //TODO
+    }
+
+    //Method to check if a medication has Dosage Adjustment tables (i.e.: automatic dose generation can be done with it).
+    public boolean hasDoseTables(String medicine){
+        SQLiteDatabase db = this.getWritableDatabase();
+        boolean bool = false;
+
+        Cursor cursor = db.rawQuery("SELECT "+MedicineTable.COL_COMMERCIAL_NAME+" FROM "+ MedicineTable.TABLE_NAME
+                +" INNER JOIN "+ DosageAdjustmentTable.TABLE_NAME
+                + " ON "+ MedicineTable._ID +"="+DosageAdjustmentTable.COL_MEDICINE_FK+";", null);
+        if(cursor.moveToFirst()) {
+            do {
+                if (cursor.getString(cursor.getColumnIndex(MedicineTable.COL_COMMERCIAL_NAME)).equals(medicine)) {
+                    bool = true;
+                    break;
+                }
+            } while (cursor.moveToNext());
+            cursor.close();
+            return bool;
+        }
+        return false;
     }
 }
