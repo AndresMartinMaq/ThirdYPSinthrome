@@ -2,7 +2,10 @@ package com.example.andres.thirdypsinthrome.Dosages;
 
 
 import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.util.Log;
@@ -13,8 +16,12 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.andres.thirdypsinthrome.DosageActivity;
+import com.example.andres.thirdypsinthrome.MainActivity;
 import com.example.andres.thirdypsinthrome.MyUtils;
 import com.example.andres.thirdypsinthrome.R;
+import com.example.andres.thirdypsinthrome.persistence.DBHelper;
+
+import java.text.ParseException;
 
 import static com.example.andres.thirdypsinthrome.MyUtils.*;
 
@@ -29,6 +36,10 @@ public class EnterDoseFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    public long getSelectedStartDate() throws ParseException {
+        return MyUtils.dateStrToEpochLong(selectedDateStr);
     }
 
     @Override
@@ -46,8 +57,9 @@ public class EnterDoseFragment extends Fragment {
             inrTxtF.setText(savedInstanceState.getString("newINRentered"));
         } else {
             //Default to today's date.
-            dateBttn.setText(MyUtils.getToday());
-            inrTxtF.setText("Enter the value of INR at the Start Date");
+            selectedDateStr = MyUtils.getToday();
+            dateBttn.setText(selectedDateStr);
+            inrTxtF.setHint("INR at Start Date");
         }
 
         return view;
@@ -56,7 +68,7 @@ public class EnterDoseFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         savedInstanceState.putString("selectedDate", selectedDateStr);
-        savedInstanceState.putDoubleArray("weekOfIntakeValues", getWeekIntakeValues());
+        //savedInstanceState.putDoubleArray("weekOfIntakeValues", getWeekIntakeValues());
         savedInstanceState.putString("newINRentered", ((EditText) getView().findViewById(R.id.txtF_new_INR)).getText().toString());
         super.onSaveInstanceState(savedInstanceState);
     }
@@ -68,7 +80,7 @@ public class EnterDoseFragment extends Fragment {
     }
 
     //Get the values in textFields and return them as an array of doubles.
-    private double[] getWeekIntakeValues(){
+    public double[] getWeekIntakeValues(){
         int size = 7;
         double[] array = new double[size];
         int[] txtFieldIDs = {R.id.enter_dose_item1,

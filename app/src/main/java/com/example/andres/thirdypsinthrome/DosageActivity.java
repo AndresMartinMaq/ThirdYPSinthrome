@@ -2,6 +2,9 @@ package com.example.andres.thirdypsinthrome;
 
 import android.app.DatePickerDialog;
 import android.app.FragmentManager;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -16,9 +19,11 @@ import android.widget.DatePicker;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.andres.thirdypsinthrome.Dosages.DateFragmentDialog;
 import com.example.andres.thirdypsinthrome.Dosages.EnterDoseFragment;
+import com.example.andres.thirdypsinthrome.persistence.DBHelper;
 
 public class DosageActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
 
@@ -68,10 +73,10 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
             EnterDoseFragment enterDoseFragment = new EnterDoseFragment();
 
             // Replace whatever is in the fragment_container view with this fragment,
-            // and add the transaction to the back stack so the user can navigate back
+            // Could add the transaction to the back stack so the user can navigate back
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.dose_fragment_holder, enterDoseFragment);
-            transaction.addToBackStack(null);
+            //transaction.addToBackStack(null);
             transaction.commit();
         }
     }
@@ -86,6 +91,31 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
         EnterDoseFragment enterDoseFragment =
                 (EnterDoseFragment) getSupportFragmentManager().findFragmentById(R.id.dose_fragment_holder);
         enterDoseFragment.showDate(year, monthOfYear, dayOfMonth);
+    }
+
+    //To be called by the "Done" button after the user has entered all required info.
+    public void onNewDosageEntered(View view) throws Exception {
+        //Get Fragment
+        EnterDoseFragment enterDoseFmt = (EnterDoseFragment) getSupportFragmentManager().findFragmentById(R.id.dose_fragment_holder);
+        //TODO check all fields have been filled
+
+        //Get entered values from SharedPreferences
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        long userID = prefs.getLong(getString(R.string.userID_prefkey), -1);
+        if (userID == -1){ throw new Exception("Could not find sharedPreference user ID");}
+        double[] intakes = enterDoseFmt.getWeekIntakeValues();
+        long startDate = enterDoseFmt.getSelectedStartDate();
+        long endDate = MyUtils.addDays(startDate, intakes.length);
+        //Add new Dosage
+        DBHelper.dbHelperInst(this).addDosageManually(userID, startDate, endDate, intakes);
+
+        //Go back to DosagesFragment, with updated UI.
+        DosagesFragment dosagesFmt = new DosagesFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.dose_fragment_holder, dosagesFmt).commit();
+
+        //Display a confirmatory message
+        Toast.makeText(this, "New Dosage recorded", Toast.LENGTH_LONG).show();
     }
 
     //---------------------------------------------------------------------------------
