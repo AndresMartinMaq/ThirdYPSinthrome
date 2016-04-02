@@ -151,6 +151,7 @@ public class TestDatabase extends AndroidTestCase{
         db.close();
     }
 
+    //-----------------------------------------The tests following involve testing the DBHelper's methods------------------------------------------------------
     //Method for manually adding a dosage.
     public void testAddDosageMethod(){
         //SQLiteDatabase db = DBHelper.dbHelperInst(mContext).getWritableDatabase(); Do NOT test with this directly.
@@ -206,7 +207,7 @@ public class TestDatabase extends AndroidTestCase{
         float minINR = 2.5f;
         float maxINR = 3.5f;
         String medTime = "16:20";
-        String medName = "Puredrugs";
+        String medName = "Puredrugs"; medName = medName.toLowerCase();
         float mgPerTablet = 1f;
 
         prefs.edit().putFloat(mContext.getString(R.string.pref_mininr_key), minINR).commit();
@@ -232,13 +233,13 @@ public class TestDatabase extends AndroidTestCase{
         //Test User Table values
         cursor.moveToFirst();
         assertEquals(medTime, cursor.getString(cursor.getColumnIndex(DBContract.UserTable.COL_MED_TIME)));
-        assertEquals(maxINR, cursor.getDouble(cursor.getColumnIndex(DBContract.UserTable.COL_TARGET_INR_MAX)));
-        assertEquals(minINR, cursor.getDouble(cursor.getColumnIndex(DBContract.UserTable.COL_TARGET_INR_MIN)));
+        assertEquals(maxINR, cursor.getFloat(cursor.getColumnIndex(DBContract.UserTable.COL_TARGET_INR_MAX)));
+        assertEquals(minINR, cursor.getFloat(cursor.getColumnIndex(DBContract.UserTable.COL_TARGET_INR_MIN)));
         int medID = cursor.getInt(cursor.getColumnIndex(DBContract.UserTable.COL_MEDICINE_FK));
         //Test Medicine Table
         cursor = db.query(DBContract.MedicineTable.TABLE_NAME,null,null,null,null,null,null);
         cursor.moveToFirst();
         assertEquals(medName, cursor.getString(cursor.getColumnIndex(DBContract.MedicineTable.COL_COMMERCIAL_NAME)));
-        assertEquals(mgPerTablet, cursor.getInt(cursor.getColumnIndex(DBContract.MedicineTable.COL_MILLIGRAMS_PER_TABLET)));
+        assertEquals(mgPerTablet, cursor.getFloat(cursor.getColumnIndex(DBContract.MedicineTable.COL_MILLIGRAMS_PER_TABLET)));
     }
 }
