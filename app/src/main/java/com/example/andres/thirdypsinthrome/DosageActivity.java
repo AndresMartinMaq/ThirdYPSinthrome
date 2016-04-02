@@ -4,9 +4,12 @@ import android.app.DatePickerDialog;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -119,7 +122,9 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
     }
 
     //---------------------------------------------------------------------------------
-    public static class DosagesFragment extends Fragment {
+    public static class DosagesFragment extends Fragment implements LoaderManager.LoaderCallbacks<DosageHolder>{
+
+        private static final int LOADER_ID = 3;
 
         public DosagesFragment() {
         }
@@ -141,6 +146,9 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
             ImageView img1 = (ImageView) item1.findViewById(R.id.dsg_item_icon);
             img1.setImageResource(R.drawable.tick);
 
+            //Setting UI to display the most relevant Dosage (making use of a Loader to get the data) will happen
+            //due to the loader being initiated in onActivityCreated and, subsequently, onLoadFinished calling the updateUI method.
+
             //To set the scrollView to scroll to the middle of an item
             centerScrollViewOn(item3, (HorizontalScrollView) view.findViewById(R.id.horizontalScrollView), view.findViewById(R.id.scrollingLinearLayout));
 
@@ -155,10 +163,66 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
             hsv.post(new Runnable() {
                 public void run() {
                     int extraScrollX = item.getWidth() / 2;
-                    hsv.scrollTo(hsv.getScrollX() + (hsv.getWidth()/2)-extraScrollX, 0);
+                    hsv.scrollTo(hsv.getScrollX() + (hsv.getWidth() / 2) - extraScrollX, 0);
                 }
             });
         }
 
+        public void updateUI(DosageHolder dosage){
+            if (dosage == null){
+                Log.d("DosagesFmt-Test", "updateID dosage was null");
+                return;
+            }
+            View view = getView();
+            View item1 = view.findViewById(R.id.dsg_item1);
+            View item2 = view.findViewById(R.id.dsg_item2);
+            View item3 = view.findViewById(R.id.dsg_item3);
+            View item4 = view.findViewById(R.id.dsg_item4);
+            View item5 = view.findViewById(R.id.dsg_item5);
+            View[] itemViews = {item1,item2,item3,item4,item5};
+            int i = 0;
+            //Iterate the views in the linear layout.
+            for (DosageHolder.DayHolder day : dosage.dayIntakes) {
+                if (i > itemViews.length -1){return;}//TODO deal with having shorter dosages. Also, have 7 items.
+                View item = itemViews[i];
+                //Set date
+                TextView dateView = (TextView) item.findViewById(R.id.dsg_item_date);
+                dateView.setText(MyUtils.dateLongToStr(day.date));
+                //Set Icon
+                ImageView imgView = (ImageView) item.findViewById(R.id.dsg_item_icon);
+                if (day.taken) {
+                    imgView.setImageResource(R.drawable.tick);
+                } else {
+                    imgView.setImageResource(R.drawable.circle);
+                }
+                //Set milligrams
+                TextView mgView = (TextView) item.findViewById(R.id.dsg_item_mgs);
+                mgView.setText(String.valueOf(day.mg));
+            }
+        }
+
+        //----Loader methods-----
+        public void onActivityCreated(Bundle savedInstanceState) {
+            getLoaderManager().initLoader(LOADER_ID, null, this); //This will call onCreateLoader appropriately.
+            super.onActivityCreated(savedInstanceState);
+        }
+        @Override //Method called when a new loader needs to be created.
+        public Loader<DosageHolder> onCreateLoader(int id, Bundle args) {
+            //Simply creates the Loader.
+            final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+            long userID = prefs.getLong(getString(R.string.userID_prefkey), -1);
+            return new DosageLoader(getContext(), userID);
+        }
+
+        @Override
+        public void onLoadFinished(Loader<DosageHolder> loader, DosageHolder data) {
+            //Update Views
+            updateUI(data);
+        }
+
+        @Override
+        public void onLoaderReset(Loader<DosageHolder> loader) {
+            updateUI(null);
+        }
     }
 }
