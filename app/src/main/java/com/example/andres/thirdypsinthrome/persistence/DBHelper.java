@@ -9,9 +9,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.example.andres.thirdypsinthrome.DosageHolder;
 import com.example.andres.thirdypsinthrome.MyUtils;
 import com.example.andres.thirdypsinthrome.R;
 import com.example.andres.thirdypsinthrome.persistence.DBContract.*;
+
+import java.util.Calendar;
 
 //NOTE: as SQLite doesn't have date or time data types, time is stored as string HH:MM
 //TODO: Consider: AUTOINCREMENT.
@@ -202,6 +205,25 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void addDosageAutomatically(int userID, int startDate, int newLevel){
     //TODO
+    }
+
+    //Returns the week dosage closest to today.
+    public DosageHolder getMostRelevantDosage(int userID){
+        SQLiteDatabase db = this.getWritableDatabase();
+        long now = Calendar.getInstance().getTimeInMillis() / 1000l;
+
+        Cursor c = db.rawQuery("SELECT "+DosageTable._ID+" FROM "+DosageTable.TABLE_NAME
+                +" WHERE "+DosageTable.COL_USER_FK+"="+userID
+                +" ORDER BY "+DosageTable.COL_START+" DESC LIMIT 1", null);
+        if (c.moveToFirst()){
+            int dosageID = c.getInt(c.getColumnIndex(DosageTable._ID));
+
+            String[] columns = {DayTable._ID, DayTable.COL_DATE, DayTable.COL_MILLIGRAMS, DayTable.COL_TAKEN};
+            c = db.query(DayTable.TABLE_NAME, columns,DayTable.COL_DOSAGE_FK+"="+dosageID,null,null,null,null);
+
+        } else { return null; }
+
+        return new DosageHolder(c);
     }
 
     //Method to check if a medication has Dosage Adjustment tables (i.e.: automatic dose generation can be done with it).

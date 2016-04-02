@@ -9,6 +9,7 @@ import java.util.Locale;
 public class MyUtils {
 
     public static String DATE_FORMAT = "dd MMMM ";
+    public static int MAX_DAYS_PER_DOSAGE = 7;
 
     public static String formatDate( int year, int monthOfYear, int dayOfMonth){
         SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
