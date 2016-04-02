@@ -208,9 +208,9 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     //Returns the week dosage closest to today.
-    public DosageHolder getMostRelevantDosage(int userID){
+    public DosageHolder getMostRelevantDosage(long userID){
         SQLiteDatabase db = this.getWritableDatabase();
-        long now = Calendar.getInstance().getTimeInMillis() / 1000l;
+        long now = Calendar.getInstance().getTimeInMillis() / 1000l;//TODO use this
 
         Cursor c = db.rawQuery("SELECT "+DosageTable._ID+" FROM "+DosageTable.TABLE_NAME
                 +" WHERE "+DosageTable.COL_USER_FK+"="+userID
