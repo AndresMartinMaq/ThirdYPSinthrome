@@ -176,11 +176,11 @@ public class DBHelper extends SQLiteOpenHelper {
         long userID = db.insert(UserTable.TABLE_NAME, null, userValues);
 
         //Keep record of userID
-        prefs.edit().putLong("db_userID", userID).commit();
+        prefs.edit().putLong(context.getString(R.string.userID_prefkey), userID).commit();
     }
 
     //Takes dates in epoch seconds.
-    public void addDosageManually(int userID, int startDate, int endDate, double[] intakes){
+    public void addDosageManually(long userID, long startDate, long endDate, double[] intakes){
         SQLiteDatabase db = this.getWritableDatabase();
 
         //Put values for Dosage

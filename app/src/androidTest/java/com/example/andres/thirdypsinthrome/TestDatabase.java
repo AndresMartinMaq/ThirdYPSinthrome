@@ -158,10 +158,10 @@ public class TestDatabase extends AndroidTestCase{
         DBHelper dbHelper = new DBHelper(mContext, "testSinthromeDatabase.db");
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        int startDate = (int) (new Date(2014 - 1900, 2, 2).getTime() / 1000);
+        long startDate = (new Date(2014 - 1900, 2, 2).getTime() / 1000);
         Log.d(TAG, "startDate in secs int: " + startDate);
         double[] intakes = {3d, 3.5, 3, 2.5, 2, 2.5, 3};
-        int endDate = MyUtils.addDays(startDate, intakes.length);
+        long endDate = MyUtils.addDays(startDate, intakes.length);
         Log.d(TAG, "endDate in secs int: " + endDate);
 
         //User creation, required?
@@ -177,19 +177,19 @@ public class TestDatabase extends AndroidTestCase{
         //Dosage Table
         Cursor cursor = db.rawQuery("SELECT * FROM " + DBContract.DosageTable.TABLE_NAME + ";", null);
         assertTrue(cursor.moveToFirst());
-        assertEquals(startDate, cursor.getInt(cursor.getColumnIndex(DBContract.DosageTable.COL_START)));
+        assertEquals(startDate, cursor.getLong(cursor.getColumnIndex(DBContract.DosageTable.COL_START)));
 
         //Query, Day Table
         cursor = db.rawQuery("SELECT * FROM " + DBContract.DayTable.TABLE_NAME + ";", null);
         assertNotNull(cursor);
         //Test Day Values
         assertTrue(cursor.moveToFirst());
-        assertEquals(startDate, cursor.getInt(cursor.getColumnIndex(DBContract.DayTable.COL_DATE)));
+        assertEquals(startDate, cursor.getLong(cursor.getColumnIndex(DBContract.DayTable.COL_DATE)));
         assertEquals(3d, cursor.getDouble(cursor.getColumnIndex(DBContract.DayTable.COL_MILLIGRAMS)));
         assertTrue(cursor.moveToNext());
         assertTrue(cursor.moveToNext());
         assertTrue(cursor.moveToNext());
-        assertEquals(MyUtils.addDays(startDate, 3), cursor.getInt(cursor.getColumnIndex(DBContract.DayTable.COL_DATE)));
+        assertEquals(MyUtils.addDays(startDate, 3), cursor.getLong(cursor.getColumnIndex(DBContract.DayTable.COL_DATE)));
         assertEquals(2.5, cursor.getDouble(cursor.getColumnIndex(DBContract.DayTable.COL_MILLIGRAMS)));
 
         cursor.close();
