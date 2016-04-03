@@ -210,11 +210,12 @@ public class TestDatabase extends AndroidTestCase{
         String medName = "Puredrugs"; medName = medName.toLowerCase();
         float mgPerTablet = 1f;
 
-        prefs.edit().putFloat(mContext.getString(R.string.pref_mininr_key), minINR).commit();
-        prefs.edit().putFloat(mContext.getString(R.string.pref_maxinr_key), maxINR).commit();
+        //Sadly, the numeric values are stored as strings by android's EditTextPreference.
+        prefs.edit().putString(mContext.getString(R.string.pref_mininr_key), String.valueOf(minINR)).commit();
+        prefs.edit().putString(mContext.getString(R.string.pref_maxinr_key), String.valueOf(maxINR)).commit();
         prefs.edit().putString(mContext.getString(R.string.pref_med_time_key), medTime).commit();
         prefs.edit().putString(mContext.getString(R.string.pref_med_name_key), medName).commit();
-        prefs.edit().putFloat(mContext.getString(R.string.pref_mg_per_tablet_key), mgPerTablet).commit();
+        prefs.edit().putString(mContext.getString(R.string.pref_mg_per_tablet_key), String.valueOf(mgPerTablet)).commit();
         //Insertion
         try {
             dbHelper.registerUser(mContext);
