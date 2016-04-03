@@ -1,6 +1,7 @@
 package com.example.andres.thirdypsinthrome;
 
 import android.database.Cursor;
+import android.util.Log;
 
 import com.example.andres.thirdypsinthrome.persistence.DBContract;
 
@@ -31,6 +32,8 @@ public class DosageHolder {
                     c.getFloat(c.getColumnIndex(DBContract.DayTable.COL_MILLIGRAMS)),
                     c.getInt(c.getColumnIndex(DBContract.DayTable.COL_TAKEN)));
             dayIntakes.add(day);
+            String dateStrTesting = MyUtils.dateLongToStr(c.getLong(c.getColumnIndex(DBContract.DayTable.COL_DATE)));//TODO delete
+            Log.d("DHolderTest", "Looping, added a day to the List<DayHolder>, date being "+dateStrTesting);
         } while (c.moveToNext());
 
         endDate = MyUtils.addDays(startDate, dayIntakes.size());

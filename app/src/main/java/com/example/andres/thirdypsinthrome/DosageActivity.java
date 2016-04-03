@@ -182,15 +182,8 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
             //If no dosage should be displayed, instead show a message to inform the user.
             if (dosage == null){
                 Log.d("DosagesFmt", "No current dosage found to display");
-                //Remove dosage views, replace with a message.
-                HorizontalScrollView hsv = (HorizontalScrollView) parentLayout.getParent();
-                //parentLayout.removeAllViews();
-                hsv.removeView(parentLayout);
-
-                View.inflate(getContext(), R.layout.msg_frame, hsv);
-                TextView txtv = ((TextView) hsv.findViewById(R.id.msg_txtview));
-                txtv.setText(R.string.dosages_none_found);
-
+                //Remove dosage views' contents
+                //Update message below
                 return;
             }
             View item1 = parentLayout.findViewById(R.id.dsg_item1);
