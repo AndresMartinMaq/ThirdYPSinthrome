@@ -198,6 +198,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
                 //Set milligrams
                 TextView mgView = (TextView) item.findViewById(R.id.dsg_item_mgs);
                 mgView.setText(String.valueOf(day.mg));
+                i++;
             }
         }
 

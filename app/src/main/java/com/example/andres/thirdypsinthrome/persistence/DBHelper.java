@@ -140,11 +140,11 @@ public class DBHelper extends SQLiteOpenHelper {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         //Get the values from SharedPreferences
-        float minINR = prefs.getFloat(context.getString(R.string.pref_mininr_key), 0f);
-        float maxINR = prefs.getFloat(context.getString(R.string.pref_maxinr_key), 0f);
+        float minINR = Float.parseFloat(prefs.getString(context.getString(R.string.pref_mininr_key), "0"));
+        float maxINR = Float.parseFloat(prefs.getString(context.getString(R.string.pref_maxinr_key), "0"));
         String medTime = prefs.getString(context.getString(R.string.pref_med_time_key), context.getString(R.string.pref_med_time_default));
         String medName = prefs.getString(context.getString(R.string.pref_med_name_key), "");
-        float mgPerTablet = prefs.getFloat(context.getString(R.string.pref_mg_per_tablet_key), 0f);
+        float mgPerTablet = Float.parseFloat(prefs.getString(context.getString(R.string.pref_mg_per_tablet_key),"0"));
         if (minINR == 0 || maxINR == 0 || mgPerTablet == 0){
             throw new Exception("MaxINR, MinINR or milligrams per tablet were not set properly");
         }
