@@ -88,6 +88,32 @@
                     android:layout_gravity="center" />
             </FrameLayout>
 
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:id="@+id/dsg_item6"
+                android:background="#c8b6ff" >
+
+                <include
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    layout="@layout/dosage_item"
+                    android:layout_gravity="center" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:id="@+id/dsg_item7"
+                android:background="#ffc95f" >
+
+                <include
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    layout="@layout/dosage_item"
+                    android:layout_gravity="center" />
+            </FrameLayout>
+
         </LinearLayout>
     </HorizontalScrollView>
 

@@ -19,8 +19,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -150,7 +152,9 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
             //due to the loader being initiated in onActivityCreated and, subsequently, onLoadFinished calling the updateUI method.
 
             //To set the scrollView to scroll to the middle of an item
-            centerScrollViewOn(item3, (HorizontalScrollView) view.findViewById(R.id.horizontalScrollView), view.findViewById(R.id.scrollingLinearLayout));
+            if (item4 != null) {
+                centerScrollViewOn(item4, (HorizontalScrollView) view.findViewById(R.id.horizontalScrollView), view.findViewById(R.id.scrollingLinearLayout));
+            }
 
             return view;
         }
@@ -179,11 +183,13 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
             View item3 = view.findViewById(R.id.dsg_item3);
             View item4 = view.findViewById(R.id.dsg_item4);
             View item5 = view.findViewById(R.id.dsg_item5);
-            View[] itemViews = {item1,item2,item3,item4,item5};
+            View item6 = view.findViewById(R.id.dsg_item6);
+            View item7 = view.findViewById(R.id.dsg_item7);
+            View[] itemViews = {item1,item2,item3,item4,item5,item6,item7};
+            //Iterate the views in the linear layout, modifying their values
             int i = 0;
-            //Iterate the views in the linear layout.
             for (DosageHolder.DayHolder day : dosage.dayIntakes) {
-                if (i > itemViews.length -1){return;}//TODO deal with having shorter dosages. Also, have 7 items.
+                if (i > itemViews.length -1){break;}
                 View item = itemViews[i];
                 //Set date
                 TextView dateView = (TextView) item.findViewById(R.id.dsg_item_date);
@@ -200,6 +206,15 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
                 mgView.setText(String.valueOf(day.mg));
                 i++;
             }
+            //Remove any views that have not been filled (due to a dosage detailing fewer than 7 days).
+            LinearLayout parentLayout = (LinearLayout) item1.getParent();
+            for (int i2 = i; i2 < itemViews.length; i2++){
+                parentLayout.removeViewAt(i2);//I believe this is zero indexed
+            }
+
+            /*//Center the view on a middle item, for aesthetics.
+            int middlePosition = (int) Math.floor(((double) dosage.dayIntakes.size()) / 2);
+            centerScrollViewOn(itemViews[middlePosition], (HorizontalScrollView) parentLayout.getParent(), parentLayout);*/
         }
 
         //----Loader methods-----
