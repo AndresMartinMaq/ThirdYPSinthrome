@@ -181,6 +181,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
             try {
                 parentLayout = (LinearLayout) getView().findViewById(R.id.scrollingLinearLayout);
             } catch (NullPointerException e){
+                //This happens when going back from this activity.
                 e.printStackTrace(); return;
             }
             View item1 = parentLayout.findViewById(R.id.dsg_item1);
@@ -196,7 +197,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
             if (dosage == null){
                 Log.d("DosagesFmt", "No current dosage found to display");
                 //Remove dosage views' contents
-                /*for (int i = 0; i < itemViews.length; i++){
+                for (int i = 0; i < itemViews.length; i++){
                     View item = itemViews[i];
                     //Set date
                     TextView dateView = (TextView) item.findViewById(R.id.dsg_item_date);
@@ -208,8 +209,8 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
                     mgView.setText("");
                     TextView unitsView = (TextView) item.findViewById(R.id.dsg_item_units);
                     unitsView.setText("");
-                }*/
-                //Update message below
+                }
+                //Update message below5
 
                 return;
             }
