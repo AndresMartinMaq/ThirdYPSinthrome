@@ -38,6 +38,7 @@
     <string name="userID_prefkey">db_userID</string>
 
     <!-- DosageActivity Activity-->
+    <string name="dosages_none_found">You do not have a dosage plan for this week, see below to add a new plan.</string>
     <string name="dosages_str">The current dosage ends on</string>
     <string name="dosages_end_date">31st of February</string>
     <string name="dosages_str_new">A new INR value or manually input dosage will be required.</string>

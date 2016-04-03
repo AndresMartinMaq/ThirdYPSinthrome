@@ -30,6 +30,8 @@ import com.example.andres.thirdypsinthrome.Dosages.DateFragmentDialog;
 import com.example.andres.thirdypsinthrome.Dosages.EnterDoseFragment;
 import com.example.andres.thirdypsinthrome.persistence.DBHelper;
 
+import org.w3c.dom.Text;
+
 public class DosageActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
 
     @Override
@@ -136,17 +138,19 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
                                  Bundle savedInstanceState) {
             final View view = inflater.inflate(R.layout.fragment_dosages, container, false);
 
-            View item1 = view.findViewById(R.id.dsg_item1);
+            View item4 = view.findViewById(R.id.dsg_item4);
+
+            /*View item1 = view.findViewById(R.id.dsg_item1);
             View item2 = view.findViewById(R.id.dsg_item2);
             View item3 = view.findViewById(R.id.dsg_item3);
-            View item4 = view.findViewById(R.id.dsg_item4);
+            iew item4 = view.findViewById(R.id.dsg_item4);V
             View item5 = view.findViewById(R.id.dsg_item5);
 
             TextView date1 = (TextView) item1.findViewById(R.id.dsg_item_date);
             date1.setText("22 February");
 
             ImageView img1 = (ImageView) item1.findViewById(R.id.dsg_item_icon);
-            img1.setImageResource(R.drawable.tick);
+            img1.setImageResource(R.drawable.tick);*/
 
             //Setting UI to display the most relevant Dosage (making use of a Loader to get the data) will happen
             //due to the loader being initiated in onActivityCreated and, subsequently, onLoadFinished calling the updateUI method.
@@ -173,18 +177,27 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
         }
 
         public void updateUI(DosageHolder dosage){
+            LinearLayout parentLayout = (LinearLayout)getView().findViewById(R.id.scrollingLinearLayout);
+            View item1 = parentLayout.findViewById(R.id.dsg_item1);
+            //If no dosage should be displayed, instead show a message to inform the user.
             if (dosage == null){
-                Log.d("DosagesFmt-Test", "updateID dosage was null");
+                Log.d("DosagesFmt", "No current dosage found to display");
+                //Create a message view and replace the dosage items with it.
+                View msgFrame = View.inflate(getContext(), R.layout.msg_frame, parentLayout);
+                ((TextView)msgFrame.findViewById(R.id.msg_txtview)).setText(R.string.dosages_none_found);
+
+                ((ViewGroup)msgFrame.getParent()).removeView(msgFrame);
+                //parentLayout.removeAllViews();
+                parentLayout.addView(msgFrame);
                 return;
             }
-            View view = getView();
-            View item1 = view.findViewById(R.id.dsg_item1);
-            View item2 = view.findViewById(R.id.dsg_item2);
-            View item3 = view.findViewById(R.id.dsg_item3);
-            View item4 = view.findViewById(R.id.dsg_item4);
-            View item5 = view.findViewById(R.id.dsg_item5);
-            View item6 = view.findViewById(R.id.dsg_item6);
-            View item7 = view.findViewById(R.id.dsg_item7);
+            //View item1 = parentLayout.findViewById(R.id.dsg_item1);
+            View item2 = parentLayout.findViewById(R.id.dsg_item2);
+            View item3 = parentLayout.findViewById(R.id.dsg_item3);
+            View item4 = parentLayout.findViewById(R.id.dsg_item4);
+            View item5 = parentLayout.findViewById(R.id.dsg_item5);
+            View item6 = parentLayout.findViewById(R.id.dsg_item6);
+            View item7 = parentLayout.findViewById(R.id.dsg_item7);
             View[] itemViews = {item1,item2,item3,item4,item5,item6,item7};
             //Iterate the views in the linear layout, modifying their values
             int i = 0;
@@ -207,7 +220,6 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
                 i++;
             }
             //Remove any views that have not been filled (due to a dosage detailing fewer than 7 days).
-            LinearLayout parentLayout = (LinearLayout) item1.getParent();
             for (int i2 = i; i2 < itemViews.length; i2++){
                 parentLayout.removeViewAt(i2);//I believe this is zero indexed
             }
