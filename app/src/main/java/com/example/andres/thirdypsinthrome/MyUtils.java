@@ -1,9 +1,14 @@
 package com.example.andres.thirdypsinthrome;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 
 public class MyUtils {
@@ -21,8 +26,18 @@ public class MyUtils {
         return new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(c.getTime());
     }
 
-    public static String getToday(){
+    public static String getTodayStr(){
         return formatDate(Calendar.getInstance());
+    }
+
+    //Returns the seconds corresponding to today normalised at midnight
+    public static long getTodayLong(){
+        Calendar date = new GregorianCalendar();
+        date.set(Calendar.HOUR_OF_DAY, 0);
+        date.set(Calendar.MINUTE, 0);
+        date.set(Calendar.SECOND, 0);
+        date.set(Calendar.MILLISECOND, 0);
+        return (date.getTimeInMillis() / 1000l);
     }
 
     public static String dateLongToStr(long dateInSeconds){
@@ -54,6 +69,12 @@ public class MyUtils {
 
         long newDateInSecs = c.getTimeInMillis() / 1000;
         return newDateInSecs;
+    }
+
+    //Returns the id of the user, that we store in shared preferences.
+    public static long getUserID(Context context){
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getLong(context.getString(R.string.userID_prefkey), -1);
     }
 
 }

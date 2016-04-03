@@ -217,7 +217,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
 
             //Iterate the views in the linear layout, modifying their values
             int i = 0;
-            for (DosageHolder.DayHolder day : dosage.dayIntakes) {
+            for (DayHolder day : dosage.dayIntakes) {
                 if (i > itemViews.length -1){break;}
                 View item = itemViews[i];
                 //Set date

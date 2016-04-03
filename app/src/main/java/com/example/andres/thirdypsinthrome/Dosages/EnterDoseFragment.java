@@ -1,29 +1,18 @@
 package com.example.andres.thirdypsinthrome.Dosages;
 
 
-import android.app.Activity;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.andres.thirdypsinthrome.DosageActivity;
-import com.example.andres.thirdypsinthrome.MainActivity;
 import com.example.andres.thirdypsinthrome.MyUtils;
 import com.example.andres.thirdypsinthrome.R;
-import com.example.andres.thirdypsinthrome.persistence.DBHelper;
 
 import java.text.ParseException;
-
-import static com.example.andres.thirdypsinthrome.MyUtils.*;
 
 public class EnterDoseFragment extends Fragment {
 
@@ -57,7 +46,7 @@ public class EnterDoseFragment extends Fragment {
             inrTxtF.setText(savedInstanceState.getString("newINRentered"));
         } else {
             //Default to today's date.
-            selectedDateStr = MyUtils.getToday();
+            selectedDateStr = MyUtils.getTodayStr();
             dateBttn.setText(selectedDateStr);
             inrTxtF.setHint("INR at Start Date");
         }
