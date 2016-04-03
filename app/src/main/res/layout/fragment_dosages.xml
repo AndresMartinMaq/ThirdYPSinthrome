@@ -126,15 +126,18 @@
     </HorizontalScrollView>
 
     <TextView android:text="@string/dosages_str"
+        android:id="@+id/dosage_txt1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:paddingTop="10dp" />
     <TextView android:text="@string/dosages_end_date"
+        android:id="@+id/dosage_txt2"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal" />
     <TextView android:text="@string/dosages_str_new"
+        android:id="@+id/dosage_txt3"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"

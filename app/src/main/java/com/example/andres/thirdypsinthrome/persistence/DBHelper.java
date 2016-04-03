@@ -207,9 +207,10 @@ public class DBHelper extends SQLiteOpenHelper {
     //TODO
     }
 
-    //Returns the future-most dosage.
-    public DosageHolder getFuturemostDosage(long userID){
+    //TODO should return recent past or recent future dosage
+    public DosageHolder getSomeRelevantDosage(long userID){
         SQLiteDatabase db = this.getWritableDatabase();
+        long now = Calendar.getInstance().getTimeInMillis() / 1000l;
 
         Cursor c = db.rawQuery("SELECT "+DosageTable._ID+" FROM "+DosageTable.TABLE_NAME
                 +" WHERE "+DosageTable.COL_USER_FK+"="+userID

@@ -178,11 +178,14 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
 
         public void updateUI(DosageHolder dosage){
             LinearLayout parentLayout = null;
+            View view;
             try {
-                parentLayout = (LinearLayout) getView().findViewById(R.id.scrollingLinearLayout);
+                view = getView();
+                parentLayout = (LinearLayout) view.findViewById(R.id.scrollingLinearLayout);
             } catch (NullPointerException e){
                 //This happens when going back from this activity.
-                e.printStackTrace(); return;
+                //e.printStackTrace();
+                return;
             }
             View item1 = parentLayout.findViewById(R.id.dsg_item1);
             View item2 = parentLayout.findViewById(R.id.dsg_item2);
@@ -199,19 +202,16 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
                 //Remove dosage views' contents
                 for (int i = 0; i < itemViews.length; i++){
                     View item = itemViews[i];
-                    //Set date
-                    TextView dateView = (TextView) item.findViewById(R.id.dsg_item_date);
-                    dateView.setText("");
-                    //Set Icon
-                    ImageView imgView = (ImageView) item.findViewById(R.id.dsg_item_icon);
-                    //Set milligrams
-                    TextView mgView = (TextView) item.findViewById(R.id.dsg_item_mgs);
-                    mgView.setText("");
-                    TextView unitsView = (TextView) item.findViewById(R.id.dsg_item_units);
-                    unitsView.setText("");
-                }
-                //Update message below5
 
+                    ((TextView) item.findViewById(R.id.dsg_item_date)).setText("");
+                    ImageView imgView = (ImageView) item.findViewById(R.id.dsg_item_icon);
+                    ((TextView) item.findViewById(R.id.dsg_item_mgs)).setText("");
+                    ((TextView) item.findViewById(R.id.dsg_item_units)).setText("");
+                }
+                //Update message below
+                ((TextView)view.findViewById(R.id.dosage_txt1)).setText("");
+                ((TextView)view.findViewById(R.id.dosage_txt2)).setText("");
+                ((TextView)view.findViewById(R.id.dosage_txt3)).setText(R.string.msg_no_current_dosage);
                 return;
             }
 
@@ -239,6 +239,10 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
             for (int i2 = i; i2 < itemViews.length; i2++){
                 parentLayout.removeViewAt(i2);//I believe this is zero indexed
             }
+
+            //Set the message that states the endDate of the dosage.
+            String endDate = MyUtils.dateLongToStr(dosage.endDate);
+            ((TextView) view.findViewById(R.id.dosage_txt2)).setText(endDate);
 
             /*//Center the view on a middle item, for aesthetics.
             int middlePosition = (int) Math.floor(((double) dosage.dayIntakes.size()) / 2);
