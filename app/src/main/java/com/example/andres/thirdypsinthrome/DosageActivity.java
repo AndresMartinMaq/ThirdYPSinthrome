@@ -177,14 +177,11 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
         }
 
         public void updateUI(DosageHolder dosage){
-            LinearLayout parentLayout = (LinearLayout)getView().findViewById(R.id.scrollingLinearLayout);
-
-            //If no dosage should be displayed, instead show a message to inform the user.
-            if (dosage == null){
-                Log.d("DosagesFmt", "No current dosage found to display");
-                //Remove dosage views' contents
-                //Update message below
-                return;
+            LinearLayout parentLayout = null;
+            try {
+                parentLayout = (LinearLayout) getView().findViewById(R.id.scrollingLinearLayout);
+            } catch (NullPointerException e){
+                e.printStackTrace(); return;
             }
             View item1 = parentLayout.findViewById(R.id.dsg_item1);
             View item2 = parentLayout.findViewById(R.id.dsg_item2);
@@ -194,6 +191,29 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
             View item6 = parentLayout.findViewById(R.id.dsg_item6);
             View item7 = parentLayout.findViewById(R.id.dsg_item7);
             View[] itemViews = {item1,item2,item3,item4,item5,item6,item7};
+
+            //If no dosage should be displayed, instead show a message to inform the user.
+            if (dosage == null){
+                Log.d("DosagesFmt", "No current dosage found to display");
+                //Remove dosage views' contents
+                /*for (int i = 0; i < itemViews.length; i++){
+                    View item = itemViews[i];
+                    //Set date
+                    TextView dateView = (TextView) item.findViewById(R.id.dsg_item_date);
+                    dateView.setText("");
+                    //Set Icon
+                    ImageView imgView = (ImageView) item.findViewById(R.id.dsg_item_icon);
+                    //Set milligrams
+                    TextView mgView = (TextView) item.findViewById(R.id.dsg_item_mgs);
+                    mgView.setText("");
+                    TextView unitsView = (TextView) item.findViewById(R.id.dsg_item_units);
+                    unitsView.setText("");
+                }*/
+                //Update message below
+
+                return;
+            }
+
             //Iterate the views in the linear layout, modifying their values
             int i = 0;
             for (DosageHolder.DayHolder day : dosage.dayIntakes) {

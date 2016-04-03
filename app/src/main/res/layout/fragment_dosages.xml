@@ -27,7 +27,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:id="@+id/dsg_item1"
-                android:background="#c0ff56">
+                android:background="#c0ff56"
+                android:minWidth="70dp">
 
                 <include
                     android:layout_width="wrap_content"
@@ -40,7 +41,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:id="@+id/dsg_item2"
-                android:background="#9bfbff" >
+                android:background="#9bfbff"
+                android:minWidth="70dp">
 
                 <include
                     android:layout_width="wrap_content"
@@ -54,7 +56,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:id="@+id/dsg_item3"
-                android:background="#ff534f" >
+                android:background="#ff534f"
+                android:minWidth="70dp">
 
                 <include
                     android:layout_width="wrap_content"
@@ -67,7 +70,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:id="@+id/dsg_item4"
-                android:background="#ff60e1" >
+                android:background="#ff60e1"
+                android:minWidth="70dp">
 
                 <include
                     android:layout_width="wrap_content"
@@ -80,7 +84,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:id="@+id/dsg_item5"
-                android:background="#507aff" >
+                android:background="#507aff"
+                android:minWidth="70dp">
 
                 <include
                     android:layout_width="wrap_content"
@@ -93,7 +98,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:id="@+id/dsg_item6"
-                android:background="#c8b6ff" >
+                android:background="#c8b6ff"
+                android:minWidth="70dp">
 
                 <include
                     android:layout_width="wrap_content"
@@ -106,7 +112,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:id="@+id/dsg_item7"
-                android:background="#507aff" >
+                android:background="#507aff"
+                android:minWidth="70dp">
 
                 <include
                     android:layout_width="wrap_content"
