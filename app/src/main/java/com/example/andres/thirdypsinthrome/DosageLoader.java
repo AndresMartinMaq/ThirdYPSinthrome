@@ -18,7 +18,7 @@ public class DosageLoader extends AsyncTaskLoader<DosageHolder> {
 
     @Override
     public DosageHolder loadInBackground() {
-        return DBHelper.dbHelperInst(getContext()).getMostRelevantDosage(userID);
+        return DBHelper.dbHelperInst(getContext()).getCurrentDosage(userID);
         //It seems it doesn't need to set dosageHolder here?
     }
 

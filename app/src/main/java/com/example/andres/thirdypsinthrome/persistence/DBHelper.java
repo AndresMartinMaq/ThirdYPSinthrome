@@ -140,11 +140,11 @@ public class DBHelper extends SQLiteOpenHelper {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         //Get the values from SharedPreferences
-        float minINR = Float.parseFloat(prefs.getString(context.getString(R.string.pref_mininr_key), "0"));
-        float maxINR = Float.parseFloat(prefs.getString(context.getString(R.string.pref_maxinr_key), "0"));
+        float minINR = prefs.getFloat(context.getString(R.string.pref_mininr_key), 0f);
+        float maxINR = prefs.getFloat(context.getString(R.string.pref_maxinr_key), 0f);
         String medTime = prefs.getString(context.getString(R.string.pref_med_time_key), context.getString(R.string.pref_med_time_default));
         String medName = prefs.getString(context.getString(R.string.pref_med_name_key), "");
-        float mgPerTablet = Float.parseFloat(prefs.getString(context.getString(R.string.pref_mg_per_tablet_key),"0"));
+        float mgPerTablet = prefs.getFloat(context.getString(R.string.pref_mg_per_tablet_key), 0f);
         if (minINR == 0 || maxINR == 0 || mgPerTablet == 0){
             throw new Exception("MaxINR, MinINR or milligrams per tablet were not set properly");
         }
@@ -207,20 +207,36 @@ public class DBHelper extends SQLiteOpenHelper {
     //TODO
     }
 
-    //Returns the week dosage closest to today.
-    public DosageHolder getMostRelevantDosage(long userID){
+    //Returns the future-most dosage.
+    public DosageHolder getFuturemostDosage(long userID){
         SQLiteDatabase db = this.getWritableDatabase();
-        long now = Calendar.getInstance().getTimeInMillis() / 1000l;//TODO use this
 
         Cursor c = db.rawQuery("SELECT "+DosageTable._ID+" FROM "+DosageTable.TABLE_NAME
                 +" WHERE "+DosageTable.COL_USER_FK+"="+userID
                 +" ORDER BY "+DosageTable.COL_START+" DESC LIMIT 1", null);
         if (c.moveToFirst()){
             int dosageID = c.getInt(c.getColumnIndex(DosageTable._ID));
+            String[] columns = {DayTable._ID, DayTable.COL_DATE, DayTable.COL_MILLIGRAMS, DayTable.COL_TAKEN};
+            c = db.query(DayTable.TABLE_NAME, columns,DayTable.COL_DOSAGE_FK+"="+dosageID,null,null,null,null);
+        } else { return null; }
+
+        return new DosageHolder(c);
+    }
+
+    //Returns the dosage that starts in the past and finishes is the future, if it exists.
+    public DosageHolder getCurrentDosage(long userID){
+        SQLiteDatabase db = this.getWritableDatabase();
+        long now = Calendar.getInstance().getTimeInMillis() / 1000l;
+
+        Cursor c = db.rawQuery("SELECT "+DosageTable._ID+" FROM "+DosageTable.TABLE_NAME
+                +" WHERE "+DosageTable.COL_USER_FK+"="+userID
+                +" AND "+DosageTable.COL_START+" < "+now
+                +" AND "+DosageTable.COL_END+" > "+now, null);
+        if (c.moveToFirst()){
+            int dosageID = c.getInt(c.getColumnIndex(DosageTable._ID));
 
             String[] columns = {DayTable._ID, DayTable.COL_DATE, DayTable.COL_MILLIGRAMS, DayTable.COL_TAKEN};
             c = db.query(DayTable.TABLE_NAME, columns,DayTable.COL_DOSAGE_FK+"="+dosageID,null,null,null,null);
-
         } else { return null; }
 
         return new DosageHolder(c);
