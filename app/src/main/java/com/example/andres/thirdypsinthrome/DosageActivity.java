@@ -178,20 +178,22 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
 
         public void updateUI(DosageHolder dosage){
             LinearLayout parentLayout = (LinearLayout)getView().findViewById(R.id.scrollingLinearLayout);
-            View item1 = parentLayout.findViewById(R.id.dsg_item1);
+
             //If no dosage should be displayed, instead show a message to inform the user.
             if (dosage == null){
                 Log.d("DosagesFmt", "No current dosage found to display");
-                //Create a message view and replace the dosage items with it.
-                View msgFrame = View.inflate(getContext(), R.layout.msg_frame, parentLayout);
-                ((TextView)msgFrame.findViewById(R.id.msg_txtview)).setText(R.string.dosages_none_found);
-
-                ((ViewGroup)msgFrame.getParent()).removeView(msgFrame);
+                //Remove dosage views, replace with a message.
+                HorizontalScrollView hsv = (HorizontalScrollView) parentLayout.getParent();
                 //parentLayout.removeAllViews();
-                parentLayout.addView(msgFrame);
+                hsv.removeView(parentLayout);
+
+                View.inflate(getContext(), R.layout.msg_frame, hsv);
+                TextView txtv = ((TextView) hsv.findViewById(R.id.msg_txtview));
+                txtv.setText(R.string.dosages_none_found);
+
                 return;
             }
-            //View item1 = parentLayout.findViewById(R.id.dsg_item1);
+            View item1 = parentLayout.findViewById(R.id.dsg_item1);
             View item2 = parentLayout.findViewById(R.id.dsg_item2);
             View item3 = parentLayout.findViewById(R.id.dsg_item3);
             View item4 = parentLayout.findViewById(R.id.dsg_item4);
