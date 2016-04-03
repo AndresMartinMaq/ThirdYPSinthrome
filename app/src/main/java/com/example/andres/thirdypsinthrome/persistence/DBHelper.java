@@ -9,12 +9,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.example.andres.thirdypsinthrome.DayHolder;
 import com.example.andres.thirdypsinthrome.DosageHolder;
 import com.example.andres.thirdypsinthrome.MyUtils;
 import com.example.andres.thirdypsinthrome.R;
 import com.example.andres.thirdypsinthrome.persistence.DBContract.*;
 
 import java.util.Calendar;
+
+import static com.example.andres.thirdypsinthrome.DosageHolder.*;
 
 //NOTE: as SQLite doesn't have date or time data types, time is stored as string HH:MM
 //TODO: Consider: AUTOINCREMENT.
@@ -61,7 +64,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         //Day table
         final String sqlSmtDay = "CREATE TABLE " + DayTable.TABLE_NAME + " (" +
-                DayTable._ID + " INTEGER PRIMARY KEY," +//is this necessary? TODO Consider Necessity: consider making date the PK
+                DayTable._ID + " INTEGER PRIMARY KEY," +//TODO Consider Necessity: consider making date the PK
                 DayTable.COL_DATE + " INTEGER NOT NULL, " +
                 DayTable.COL_DOSAGE_FK + " INTEGER NOT NULL, " +
                 DayTable.COL_MILLIGRAMS + " REAL NOT NULL, " +
@@ -241,6 +244,27 @@ public class DBHelper extends SQLiteOpenHelper {
         } else { return null; }
 
         return new DosageHolder(c);
+    }
+
+    //Returns today's information
+    public DayHolder getToday(long userID){
+        SQLiteDatabase db = this.getWritableDatabase();
+        long todayStart = MyUtils.getTodayLong();
+        long tomorrowStart = MyUtils.addDays(todayStart, 1);
+
+        String[] columns = {DayTable._ID, DayTable.COL_DATE, DayTable.COL_MILLIGRAMS, DayTable.COL_TAKEN};
+        Cursor c = db.query(DayTable.TABLE_NAME, columns,
+                DayTable.COL_DATE+">="+todayStart +" AND "+DayTable.COL_DATE+" < "+tomorrowStart,
+                null,null,null,null);
+        if (c.moveToFirst()){
+            int dayID = c.getInt(c.getColumnIndex(DayTable._ID));
+            long date = c.getLong(c.getColumnIndex(DayTable.COL_DATE));
+            float mg = c.getLong(c.getColumnIndex(DayTable.COL_MILLIGRAMS));
+            int taken = c.getInt(c.getColumnIndex(DayTable.COL_TAKEN));
+            return new DayHolder(dayID,date,mg,taken);
+        } else {
+            return null;
+        }
     }
 
     //Method to check if a medication has Dosage Adjustment tables (i.e.: automatic dose generation can be done with it).
