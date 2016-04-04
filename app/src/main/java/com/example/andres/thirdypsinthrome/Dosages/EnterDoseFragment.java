@@ -3,7 +3,6 @@ package com.example.andres.thirdypsinthrome.Dosages;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.TextDirectionHeuristic;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +34,7 @@ public class EnterDoseFragment extends Fragment {
             selectedDateStr = MyUtils.getTodayStr();
         }
         try {
-            return MyUtils.dateStrToEpochLong(selectedDateStr);
+            return MyUtils.dateStrToLong(selectedDateStr);
         } catch (ParseException e) {
             e.printStackTrace();
             return 0;//This in theory will never happen.

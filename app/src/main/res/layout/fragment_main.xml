@@ -13,11 +13,12 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_weight="0.85"
+        android:id="@+id/today_panel"
         android:background="#ffc95f"
         android:measureWithLargestChild="false"
         android:gravity="center"
         android:layout_height="40dp"
-        android:onClick="todayPressed">
+        android:onClick="testMethod">
 
         <TextView
             android:id="@+id/txtv_main_quantity"

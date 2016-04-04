@@ -27,7 +27,7 @@ public class DosageHolder {
         startDate = c.getLong(c.getColumnIndex(DBContract.DayTable.COL_DATE));
 
         do{
-            DayHolder day =  new DayHolder(c.getInt(c.getColumnIndex(DBContract.DayTable._ID)),
+            DayHolder day =  new DayHolder(c.getLong(c.getColumnIndex(DBContract.DayTable._ID)),
                     c.getLong(c.getColumnIndex(DBContract.DayTable.COL_DATE)),
                     c.getFloat(c.getColumnIndex(DBContract.DayTable.COL_MILLIGRAMS)),
                     c.getInt(c.getColumnIndex(DBContract.DayTable.COL_TAKEN)));

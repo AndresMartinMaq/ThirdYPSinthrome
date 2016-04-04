@@ -1,17 +1,15 @@
 package com.example.andres.thirdypsinthrome;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.preference.PreferenceManager;
+import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,6 +30,14 @@ public class MainActivityFragment extends Fragment {
         //Make the central panel display today's main information.
         bindTodaySummary();
 
+        //Attach listener for he today panel
+        view.findViewById(R.id.today_panel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                todayPressed();
+            }
+        });
+
         return view;
     }
 
@@ -39,14 +45,14 @@ public class MainActivityFragment extends Fragment {
         new Thread(new Runnable() {
             public void run() {
                 long userID = MyUtils.getUserID(getContext());
-                today = DBHelper.dbHelperInst(getContext()).getToday(userID);
+                today = DBHelper.getInstance(getContext()).getToday(userID);
                 updateUI();
             }
         }).start();
     }
 
     private void updateUI(){
-        //TODO use 'today' field to update UI.
+        //Use 'today' field to update UI.
         View view = getView();
         TextView datetxtv = (TextView) view.findViewById(R.id.txtv_main_date);
         TextView amounttxtv = (TextView) view.findViewById(R.id.txtv_main_quantity);
@@ -71,5 +77,33 @@ public class MainActivityFragment extends Fragment {
         } else {
             tick.setVisibility(View.INVISIBLE);
         }
+    }
+
+    //For when the user clicks the large main panel, to mark today as taken
+    public void todayPressed(){
+        //If today is not taken then show dialogue asking if you wish to mark today as taken.
+        if (today == null || today.taken){ return; }
+
+        final View thisView = getView();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage(R.string.dialog_mark_as_taken_msg)
+                .setTitle(R.string.dialog_mark_as_taken_title);
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            }
+        });
+        //On confirmation, display the tick and modify the database.
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                //This db access shouldn't be expensive enough to pose a problem for the thread.
+                DBHelper.getInstance(getContext()).setDayAsTaken(today.id, MyUtils.getDevFromMedTakingTime(getContext()));
+                thisView.findViewById(R.id.main_tick).setVisibility(View.VISIBLE);
+            }
+        });
+        AlertDialog dialog = builder.show();
+        TextView messageText = (TextView) dialog.findViewById(android.R.id.message);
+        messageText.setGravity(Gravity.CENTER);
+        dialog.show();
     }
 }

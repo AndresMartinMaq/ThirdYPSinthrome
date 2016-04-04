@@ -154,7 +154,7 @@ public class TestDatabase extends AndroidTestCase{
     //-----------------------------------------The tests following involve testing the DBHelper's methods------------------------------------------------------
     //Method for manually adding a dosage.
     public void testAddDosageMethod(){
-        //SQLiteDatabase db = DBHelper.dbHelperInst(mContext).getWritableDatabase(); Do NOT test with this directly.
+        //SQLiteDatabase db = DBHelper.getInstance(mContext).getWritableDatabase(); Do NOT test with this directly.
         DBHelper dbHelper = new DBHelper(mContext, "testSinthromeDatabase.db");
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 

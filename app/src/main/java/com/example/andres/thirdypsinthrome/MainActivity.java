@@ -1,6 +1,8 @@
 package com.example.andres.thirdypsinthrome;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -53,8 +55,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //For when the user clicks the large main panel, to mark today as taken
-    public void todayPressed(View v){
-        //TODO if today is not taken then show dialogue asking if you want to mark today as taken etc.
+    public void testMethod(View view){
+        Log.d("Tag", "Click detected");
     }
 }

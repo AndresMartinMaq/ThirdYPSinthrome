@@ -29,7 +29,7 @@ public class DBHelper extends SQLiteOpenHelper {
     static final String DATABASE_NAME = "sinthromeProject.db";
     private static DBHelper instance;
 
-    public static synchronized DBHelper dbHelperInst(Context context) {
+    public static synchronized DBHelper getInstance(Context context) {
         if (instance == null) {instance = new DBHelper(context);}
         return instance;
     }
@@ -210,6 +210,17 @@ public class DBHelper extends SQLiteOpenHelper {
     //TODO
     }
 
+    //Set as medicine taken for this day, record deviation between now and the medicine taking time.
+    public void setDayAsTaken(long dayID, int devInMins){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(DayTable.COL_TAKEN, 1);
+        values.put(DayTable.COL_DEVIATION, devInMins);
+
+        db.update(DayTable.TABLE_NAME,values,DayTable._ID+"="+dayID, null);
+    }
+
     //TODO should return recent past or recent future dosage
     public DosageHolder getSomeRelevantDosage(long userID){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -247,7 +258,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     //Returns today's information
-    public DayHolder getToday(long userID){
+    public DayHolder getToday(long userID){ //TODO consider keeping today's ID in sharedPreferences and updating it at the beginning of the app isntead.
         SQLiteDatabase db = this.getWritableDatabase();
         long todayStart = MyUtils.getTodayLong();
         long tomorrowStart = MyUtils.addDays(todayStart, 1);
@@ -257,7 +268,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 DayTable.COL_DATE+">="+todayStart +" AND "+DayTable.COL_DATE+" < "+tomorrowStart,
                 null,null,null,null);
         if (c.moveToFirst()){
-            int dayID = c.getInt(c.getColumnIndex(DayTable._ID));
+            long dayID = c.getLong(c.getColumnIndex(DayTable._ID));
             long date = c.getLong(c.getColumnIndex(DayTable.COL_DATE));
             float mg = c.getFloat(c.getColumnIndex(DayTable.COL_MILLIGRAMS));
             int taken = c.getInt(c.getColumnIndex(DayTable.COL_TAKEN));

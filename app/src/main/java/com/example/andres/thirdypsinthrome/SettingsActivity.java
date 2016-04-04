@@ -3,16 +3,11 @@ package com.example.andres.thirdypsinthrome;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Debug;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewManager;
-import android.widget.Button;
-import android.widget.LinearLayout;
 
 import com.example.andres.thirdypsinthrome.persistence.DBHelper;
 
@@ -57,7 +52,7 @@ public class SettingsActivity extends PreferenceActivity
         prefs.edit().putBoolean("first_time_opened", false).apply();
         //Register the user's data in the database and open the main activity.
         try {
-            DBHelper.dbHelperInst(getApplicationContext()).registerUser(getApplicationContext());
+            DBHelper.getInstance(getApplicationContext()).registerUser(getApplicationContext());
             startActivity(new Intent(SettingsActivity.this, MainActivity.class));
         } catch (Exception e) {
             e.printStackTrace();

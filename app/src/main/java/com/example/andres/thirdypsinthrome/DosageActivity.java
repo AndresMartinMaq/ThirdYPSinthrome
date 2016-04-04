@@ -108,7 +108,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
         long startDate = enterDoseFmt.getSelectedStartDate();
         long endDate = MyUtils.addDays(startDate, intakes.length);
         //Add new Dosage
-        DBHelper.dbHelperInst(this).addDosageManually(userID, startDate, endDate, intakes);
+        DBHelper.getInstance(this).addDosageManually(userID, startDate, endDate, intakes);
 
         //Go back to DosagesFragment, with updated UI.
         DosagesFragment dosagesFmt = new DosagesFragment();

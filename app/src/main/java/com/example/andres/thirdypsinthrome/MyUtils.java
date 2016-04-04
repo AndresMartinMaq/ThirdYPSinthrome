@@ -3,6 +3,7 @@ package com.example.andres.thirdypsinthrome;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,6 +15,7 @@ import java.util.Locale;
 public class MyUtils {
 
     public static String DATE_FORMAT = "dd MMMM ";
+    public static String TIME_FORMAT = "HH:mm";
     public static int MAX_DAYS_PER_DOSAGE = 7;
 
     public static String formatDate(Calendar c){
@@ -39,7 +41,7 @@ public class MyUtils {
     }
 
     //Takes a date in the string format DATE_FORMAT.
-    public static long dateStrToEpochLong(String dateStr) throws ParseException {
+    public static long dateStrToLong(String dateStr) throws ParseException {
         //Set date on a calendar
         Calendar c = Calendar.getInstance();
         int thisYear = c.get(Calendar.YEAR);
@@ -74,6 +76,30 @@ public class MyUtils {
     public static long getUserID(Context context){
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getLong(context.getString(R.string.userID_prefkey), -1);
+    }
+
+    //Returns the number of minutes (abs value, rounded down) between now and the time at which medication should be taken.
+    public static int getDevFromMedTakingTime(Context context){
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String targetTimeStr = prefs.getString(context.getString(R.string.pref_med_time_key), null);
+
+        SimpleDateFormat formatter = new SimpleDateFormat(TIME_FORMAT, Locale.getDefault());
+        try {
+
+            Calendar target = Calendar.getInstance();
+            Calendar now = Calendar.getInstance();
+            target.setTime(formatter.parse(targetTimeStr));//This should be the time at the epoch origin day in 1970.
+            now.set(1970,0,1); //Set day to epoch origin as well.
+
+            long devMil = now.getTimeInMillis() - target.getTimeInMillis();
+            double devSec = (double) Math.abs(devMil)/1000l;
+            int devMins = (int) Math.floor(devSec/60d);
+            return devMins;
+
+        } catch (ParseException e) {
+            e.printStackTrace();//This exception in theory will never happen
+            return -1;
+        }
     }
 
 }
