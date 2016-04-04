@@ -1,10 +1,7 @@
 package com.example.andres.thirdypsinthrome;
 
 import android.app.DatePickerDialog;
-import android.app.FragmentManager;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -19,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
-import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,8 +25,6 @@ import android.widget.Toast;
 import com.example.andres.thirdypsinthrome.Dosages.DateFragmentDialog;
 import com.example.andres.thirdypsinthrome.Dosages.EnterDoseFragment;
 import com.example.andres.thirdypsinthrome.persistence.DBHelper;
-
-import org.w3c.dom.Text;
 
 public class DosageActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
 
@@ -97,7 +91,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
         EnterDoseFragment enterDoseFragment =
                 (EnterDoseFragment) getSupportFragmentManager().findFragmentById(R.id.dose_fragment_holder);
-        enterDoseFragment.showDate(year, monthOfYear, dayOfMonth);
+        enterDoseFragment.onDateSelection(year, monthOfYear, dayOfMonth);
     }
 
     //To be called by the "Done" button after the user has entered all required info.
@@ -138,23 +132,10 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
                                  Bundle savedInstanceState) {
             final View view = inflater.inflate(R.layout.fragment_dosages, container, false);
 
-            View item4 = view.findViewById(R.id.dsg_item4);
-
-            /*View item1 = view.findViewById(R.id.dsg_item1);
-            View item2 = view.findViewById(R.id.dsg_item2);
-            View item3 = view.findViewById(R.id.dsg_item3);
-            iew item4 = view.findViewById(R.id.dsg_item4);V
-            View item5 = view.findViewById(R.id.dsg_item5);
-
-            TextView date1 = (TextView) item1.findViewById(R.id.dsg_item_date);
-            date1.setText("22 February");
-
-            ImageView img1 = (ImageView) item1.findViewById(R.id.dsg_item_icon);
-            img1.setImageResource(R.drawable.tick);*/
-
             //Setting UI to display the most relevant Dosage (making use of a Loader to get the data) will happen
             //due to the loader being initiated in onActivityCreated and, subsequently, onLoadFinished calling the updateUI method.
 
+            View item4 = view.findViewById(R.id.dsg_item4);
             //To set the scrollView to scroll to the middle of an item
             if (item4 != null) {
                 centerScrollViewOn(item4, (HorizontalScrollView) view.findViewById(R.id.horizontalScrollView), view.findViewById(R.id.scrollingLinearLayout));

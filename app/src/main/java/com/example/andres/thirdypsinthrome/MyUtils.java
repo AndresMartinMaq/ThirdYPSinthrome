@@ -16,12 +16,6 @@ public class MyUtils {
     public static String DATE_FORMAT = "dd MMMM ";
     public static int MAX_DAYS_PER_DOSAGE = 7;
 
-    public static String formatDate( int year, int monthOfYear, int dayOfMonth){
-        SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
-        Date date = new Date(year, monthOfYear,dayOfMonth);
-        return formatter.format(date);
-    }
-
     public static String formatDate(Calendar c){
         return new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(c.getTime());
     }
@@ -56,6 +50,11 @@ public class MyUtils {
         //Get int from calendar.
         long dateInSeconds = c.getTimeInMillis() / 1000l;
         return dateInSeconds;
+    }
+
+    public static long dateParamsToLong(int year, int monthOfYear, int dayOfMonth){
+        Date date = new Date(year, monthOfYear,dayOfMonth);
+        return (date.getTime()/1000l);
     }
 
     //@return The unix epoch date in seconds with a number of added days.
