@@ -259,7 +259,7 @@ public class DBHelper extends SQLiteOpenHelper {
         if (c.moveToFirst()){
             int dayID = c.getInt(c.getColumnIndex(DayTable._ID));
             long date = c.getLong(c.getColumnIndex(DayTable.COL_DATE));
-            float mg = c.getLong(c.getColumnIndex(DayTable.COL_MILLIGRAMS));
+            float mg = c.getFloat(c.getColumnIndex(DayTable.COL_MILLIGRAMS));
             int taken = c.getInt(c.getColumnIndex(DayTable.COL_TAKEN));
             return new DayHolder(dayID,date,mg,taken);
         } else {

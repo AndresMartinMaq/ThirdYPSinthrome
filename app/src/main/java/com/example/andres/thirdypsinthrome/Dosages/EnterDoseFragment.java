@@ -72,6 +72,12 @@ public class EnterDoseFragment extends Fragment {
         super.onSaveInstanceState(savedInstanceState);
     }
 
+    //Checks whether all required fields have been filled.
+    public boolean isAllFieldsFilled(){
+        //TODO
+        return true;
+    }
+
     //The activity calls this method when the user selects a start date.
     public void onDateSelection(int year, int monthOfYear, int dayOfMonth){
         //Set the selected date field.

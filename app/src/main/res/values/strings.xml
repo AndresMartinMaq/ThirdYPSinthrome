@@ -6,6 +6,7 @@
     <string name="weight_units">mg</string>
 
     <!-- Main Activity-->
+    <string name="main_today_txt">Today,</string>
     <string name="bttn_my_dosage">My Dosage</string>
     <string name="bttn_my_treatment">My Treatment</string>
     <string name="bttn_cit_science">Citizen Science</string>
