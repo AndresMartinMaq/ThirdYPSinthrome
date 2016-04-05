@@ -210,6 +210,18 @@ public class DBHelper extends SQLiteOpenHelper {
     //TODO
     }
 
+    public long addINRValue(Context context, float inr, long date){
+        SQLiteDatabase db = this.getWritableDatabase();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        long userID = prefs.getLong(context.getString(R.string.userID_prefkey), -1);
+
+        ContentValues values = new ContentValues();
+        values.put(INRBacklogTable.COL_USER_FK, userID);
+        values.put(INRBacklogTable.COL_DATE_OF_TEST, date);
+        values.put(INRBacklogTable.COL_INR_VALUE, inr);
+        return db.insert(INRBacklogTable.TABLE_NAME, null, values);
+    }
+
     //Set as medicine taken for this day, record deviation between now and the medicine taking time.
     public void setDayAsTaken(long dayID, int devInMins){
         SQLiteDatabase db = this.getWritableDatabase();

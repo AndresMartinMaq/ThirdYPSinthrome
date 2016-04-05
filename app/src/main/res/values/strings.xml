@@ -6,6 +6,7 @@
     <string name="weight_units">mg</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
+    <string name="error_txt">Error</string>
 
     <!-- Main Activity-->
     <string name="main_today_txt">Today,</string>
@@ -58,5 +59,9 @@
     <string name="new_dosage_INR">New INR:</string>
     <string name="start_date_txt">Start Date:</string>
     <string name="done_txt">Done</string>
+    <string name="toast_confirmation">New Dosage recorded</string>
+    <string name="toast_fill_all_fields">Please ensure all fields have been filled.</string>
+    <string name="dialog_startDate_in_past">Please ensure the Start Date is not in the past.</string>
+    <string name="dialog_startDate_in_past_title">Invalid starting date</string>
 
 </resources>

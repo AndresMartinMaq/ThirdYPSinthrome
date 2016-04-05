@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -98,17 +99,33 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
     public void onNewDosageEntered(View view) throws Exception {
         //Get Fragment
         EnterDoseFragment enterDoseFmt = (EnterDoseFragment) getSupportFragmentManager().findFragmentById(R.id.dose_fragment_holder);
-        //TODO check all fields have been filled
-
-        //Get entered values from SharedPreferences
+        //Get entered values
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         long userID = prefs.getLong(getString(R.string.userID_prefkey), -1);
         if (userID == -1){ throw new Exception("Could not find sharedPreference user ID");}
         double[] intakes = enterDoseFmt.getWeekIntakeValues();
         long startDate = enterDoseFmt.getSelectedStartDate();
         long endDate = MyUtils.addDays(startDate, intakes.length);
+        float newINR = enterDoseFmt.getINRInput();
+
+        //Check all fields have been filled
+        if (newINR == 0f || EnterDoseFragment.areValuesMissing(intakes)){
+            Toast.makeText(this, getString(R.string.toast_fill_all_fields), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        //Check startDate is not in the past
+        if (!(MyUtils.getTodayLong() <= startDate)){
+            new AlertDialog.Builder(this).setMessage(R.string.dialog_startDate_in_past)
+                    .setTitle(R.string.dialog_startDate_in_past_title)
+                    .setPositiveButton(R.string.ok, null)
+                    .create().show();
+            return;
+        }
+
         //Add new Dosage
         DBHelper.getInstance(this).addDosageManually(userID, startDate, endDate, intakes);
+        //Record the INR
+        DBHelper.getInstance(this).addINRValue(this, newINR, startDate);
 
         //Go back to DosagesFragment, with updated UI.
         DosagesFragment dosagesFmt = new DosagesFragment();
@@ -116,7 +133,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
                 .replace(R.id.dose_fragment_holder, dosagesFmt).commit();
 
         //Display a confirmatory message
-        Toast.makeText(this, "New Dosage recorded", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getString(R.string.toast_confirmation), Toast.LENGTH_LONG).show();
     }
 
     //---------------------------------------------------------------------------------

@@ -71,11 +71,11 @@ public class EnterDoseFragment extends Fragment {
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    //Checks whether all required fields have been filled.
-    public boolean isAllFieldsFilled(){
-        //TODO
-        return true;
-    }
+    /*//Checks whether input dates make sense. Currently, checks startDate is not in the past.
+    public static boolean areDoseDatesReasonable(long startDate, long endDate){
+        //TODO consider adding functionality for adding dosages that started in the past but have not yet ended.
+        return MyUtils.getTodayLong() < startDate;
+    }*/
 
     //The activity calls this method when the user selects a start date.
     public void onDateSelection(int year, int monthOfYear, int dayOfMonth){
@@ -118,9 +118,25 @@ public class EnterDoseFragment extends Fragment {
                 array[i] = number;
             } catch (NumberFormatException e){
                 e.printStackTrace();
+                array[0] = -1; //Use this to check, as seen in areValuesMissing().
             }
         }
         return array;
+    }
+
+    public static boolean areValuesMissing(double[] intakes){
+        return intakes[0] == -1;
+    }
+
+    //Get the inr value input
+    public float getINRInput(){
+        EditText inrTxtF = (EditText) getView().findViewById(R.id.txtF_new_INR);
+        String inrStr = ((EditText) getView().findViewById(R.id.txtF_new_INR)).getText().toString();
+        if (inrStr.equals("")){ return 0f; }
+
+        float inrF = Float.parseFloat(inrStr);
+        if (inrF < 0){ return 0f; }
+        return inrF;
     }
 }
 

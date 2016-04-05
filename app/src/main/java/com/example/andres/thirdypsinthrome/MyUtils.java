@@ -12,6 +12,10 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
+//TODO not let add dosages that overlap.
+//TODO be able to delete dosages?
+//TODO be able to reset taken?
+
 public class MyUtils {
 
     public static String DATE_FORMAT = "d 'of' MMMM ";
