@@ -23,6 +23,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.andres.thirdypsinthrome.DataHolders.DayHolder;
+import com.example.andres.thirdypsinthrome.DataHolders.DosageHolder;
 import com.example.andres.thirdypsinthrome.Dosages.DateFragmentDialog;
 import com.example.andres.thirdypsinthrome.Dosages.EnterDoseFragment;
 import com.example.andres.thirdypsinthrome.persistence.DBHelper;
@@ -239,7 +241,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
             }
 
             //Set the message that states the endDate of the dosage.
-            String endDate = MyUtils.dateLongToStr(dosage.endDate);
+            String endDate = MyUtils.dateLongToStr(MyUtils.addDays(dosage.endDate, -1));
             ((TextView) view.findViewById(R.id.dosage_txt2)).setText(endDate);
 
             /*//Center the view on a middle item, for aesthetics.

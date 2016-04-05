@@ -1,8 +1,9 @@
-package com.example.andres.thirdypsinthrome;
+package com.example.andres.thirdypsinthrome.DataHolders;
 
 import android.database.Cursor;
 import android.util.Log;
 
+import com.example.andres.thirdypsinthrome.MyUtils;
 import com.example.andres.thirdypsinthrome.persistence.DBContract;
 
 import java.util.ArrayList;

@@ -3,6 +3,7 @@ package com.example.andres.thirdypsinthrome;
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
+import com.example.andres.thirdypsinthrome.DataHolders.DosageHolder;
 import com.example.andres.thirdypsinthrome.persistence.DBHelper;
 
 //Will get the required information for the DosageActivity DosageFragment asynchronously.

@@ -33,6 +33,7 @@
             android:title="@string/pref_med_name_title"
             android:defaultValue="@string/pref_med_name_default"
             android:selectAllOnFocus="true"
+            android:capitalize="none"
             android:inputType="textNoSuggestions"
             android:singleLine="true"
             android:maxLines="1" />

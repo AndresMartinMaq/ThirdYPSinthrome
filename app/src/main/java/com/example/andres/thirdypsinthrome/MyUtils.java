@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
+//TODO IMPORTANT DosageAdjustmenttables need to have an associated therapeutic range they are good for.
 //TODO not let add dosages that overlap.
 //TODO be able to delete dosages?
 //TODO be able to reset taken?

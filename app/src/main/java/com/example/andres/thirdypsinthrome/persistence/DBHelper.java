@@ -7,17 +7,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
-import com.example.andres.thirdypsinthrome.DayHolder;
-import com.example.andres.thirdypsinthrome.DosageHolder;
+import com.example.andres.thirdypsinthrome.DataHolders.DayHolder;
+import com.example.andres.thirdypsinthrome.DataHolders.DosageHolder;
 import com.example.andres.thirdypsinthrome.MyUtils;
 import com.example.andres.thirdypsinthrome.R;
 import com.example.andres.thirdypsinthrome.persistence.DBContract.*;
 
 import java.util.Calendar;
-
-import static com.example.andres.thirdypsinthrome.DosageHolder.*;
 
 //NOTE: as SQLite doesn't have date or time data types, time is stored as string HH:MM
 //TODO: Consider: AUTOINCREMENT.

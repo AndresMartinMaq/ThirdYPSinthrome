@@ -1,11 +1,11 @@
-package com.example.andres.thirdypsinthrome;
+package com.example.andres.thirdypsinthrome.DataHolders;
 
 
 public class DayHolder{
-    long id;
-    long date;
-    float mg;
-    boolean taken;
+    public final long id;
+    public final long date;
+    public final float mg;
+    public boolean taken;
 
     public DayHolder(long id, long date, float mg, int taken) {
         this.id = id;
