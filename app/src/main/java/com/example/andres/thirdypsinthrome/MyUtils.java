@@ -14,7 +14,7 @@ import java.util.Locale;
 
 public class MyUtils {
 
-    public static String DATE_FORMAT = "dd MMMM ";
+    public static String DATE_FORMAT = "d 'of' MMMM ";
     public static String TIME_FORMAT = "HH:mm";
     public static int MAX_DAYS_PER_DOSAGE = 7;
 
@@ -94,6 +94,7 @@ public class MyUtils {
             long devMil = now.getTimeInMillis() - target.getTimeInMillis();
             double devSec = (double) Math.abs(devMil)/1000l;
             int devMins = (int) Math.floor(devSec/60d);
+            Log.d("Utils", "Dev calculated was: "+devMins+"mins.");
             return devMins;
 
         } catch (ParseException e) {

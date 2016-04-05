@@ -99,6 +99,7 @@ public class MainActivityFragment extends Fragment {
                 //This db access shouldn't be expensive enough to pose a problem for the thread.
                 DBHelper.getInstance(getContext()).setDayAsTaken(today.id, MyUtils.getDevFromMedTakingTime(getContext()));
                 thisView.findViewById(R.id.main_tick).setVisibility(View.VISIBLE);
+                today.taken = true;
             }
         });
         AlertDialog dialog = builder.show();

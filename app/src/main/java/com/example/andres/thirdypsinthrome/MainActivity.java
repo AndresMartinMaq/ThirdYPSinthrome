@@ -54,8 +54,4 @@ public class MainActivity extends AppCompatActivity {
             Log.d("","Citizen Science clicked, functionality not yet implemented.");
         }
     }
-
-    public void testMethod(View view){
-        Log.d("Tag", "Click detected");
-    }
 }
