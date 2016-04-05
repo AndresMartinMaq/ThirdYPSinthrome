@@ -15,6 +15,7 @@ import java.util.Locale;
 //TODO not let add dosages that overlap.
 //TODO be able to delete dosages?
 //TODO be able to reset taken?
+//TODO check all fields are filled in settings.
 
 public class MyUtils {
 
@@ -80,6 +81,11 @@ public class MyUtils {
     public static long getUserID(Context context){
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getLong(context.getString(R.string.userID_prefkey), -1);
+    }
+
+    public static boolean isAutoModePossible(Context context){
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean(context.getString(R.string.automode_prefkey), false);
     }
 
     //Returns the number of minutes (abs value, rounded down) between now and the time at which medication should be taken.

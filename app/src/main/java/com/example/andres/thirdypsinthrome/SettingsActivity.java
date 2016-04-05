@@ -9,6 +9,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.view.View;
 
+import com.example.andres.thirdypsinthrome.DataHolders.DsgAdjustHolder;
 import com.example.andres.thirdypsinthrome.persistence.DBHelper;
 
 /**
@@ -28,6 +29,7 @@ public class SettingsActivity extends PreferenceActivity
 
         // For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
         // updated when the preference changes.
+        //With the default values, automode will be available.
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_mininr_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_maxinr_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_med_name_key)));
@@ -88,8 +90,19 @@ public class SettingsActivity extends PreferenceActivity
             if (prefIndex >= 0) {
                 preference.setSummary(listPreference.getEntries()[prefIndex]);
             }
+        }else if(preference.getKey().equals(getString(R.string.pref_med_name_key))){
+            //For the medicine, check and set whether automatic dosage generation will be possible with it.
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            String medName = prefs.getString(preference.getKey(), "");
+            float inrMin = Float.parseFloat(prefs.getString(getString(R.string.pref_mininr_key), ""));
+            float inrMax = Float.parseFloat(prefs.getString(getString(R.string.pref_maxinr_key), ""));
+
+            boolean autoMode = DsgAdjustHolder.isAutoModePossible(medName, inrMin, inrMax);
+            prefs.edit().putBoolean(getString(R.string.automode_prefkey), autoMode).apply();
+
+            preference.setSummary(stringValue);
         } else {
-            // For other preferences, set the summary to the value's simple string representation.
+            // For other preferences, set the summary to the value's string representation.
             preference.setSummary(stringValue);
         }
         return true;

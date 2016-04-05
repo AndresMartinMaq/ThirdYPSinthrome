@@ -9,7 +9,7 @@
         <EditTextPreference
             android:key="@string/pref_mininr_key"
             android:title="@string/pref_mininr_title"
-            android:defaultValue=""
+            android:defaultValue="@string/pref_mininr_default"
             android:selectAllOnFocus="true"
             android:inputType="numberDecimal"
             android:singleLine="true"
@@ -18,7 +18,7 @@
         <EditTextPreference
             android:key="@string/pref_maxinr_key"
             android:title="@string/pref_maxinr_title"
-            android:defaultValue=""
+            android:defaultValue="@string/pref_maxinr_default"
             android:selectAllOnFocus="true"
             android:inputType="numberDecimal"
             android:singleLine="true"
@@ -31,7 +31,7 @@
         <EditTextPreference
             android:key="@string/pref_med_name_key"
             android:title="@string/pref_med_name_title"
-            android:defaultValue="Sinthrome"
+            android:defaultValue="@string/pref_med_name_default"
             android:selectAllOnFocus="true"
             android:inputType="textNoSuggestions"
             android:singleLine="true"
