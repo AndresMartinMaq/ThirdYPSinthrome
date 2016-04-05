@@ -127,6 +127,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public long addMedicine(String commName, float mgPerTablet){
         SQLiteDatabase db = this.getWritableDatabase();
 
+        commName = commName.toLowerCase();
         ContentValues medVals = new ContentValues();
         medVals.put(MedicineTable.COL_MILLIGRAMS_PER_TABLET, mgPerTablet);
         medVals.put(MedicineTable.COL_COMMERCIAL_NAME, commName);
@@ -156,7 +157,7 @@ public class DBHelper extends SQLiteOpenHelper {
         userValues.put(DBContract.UserTable.COL_TARGET_INR_MAX, maxINR);
         userValues.put(UserTable.COL_MED_TIME, medTime);
 
-        //Check if the user's medicine is currently in the db
+        //Check if the user's medicine is currently in the db because it has DosageAdjustmentTables
         if (hasDoseTables(medName)){
             //Get this medicine's _ID
             Cursor c = db.rawQuery("SELECT "+MedicineTable._ID+" FROM "+MedicineTable.TABLE_NAME+" WHERE "+MedicineTable.COL_COMMERCIAL_NAME+"= '"+medName+"';", null);
@@ -169,6 +170,7 @@ public class DBHelper extends SQLiteOpenHelper {
             c.close();
         } else {
             //Create new medicine (will not have DosageAdjustment tables)
+            //TODO check it hasn't been created already.
             medName = medName.toLowerCase();
             addMedicine(medName, mgPerTablet);
 
@@ -287,7 +289,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    //Method to check if a medication has Dosage Adjustment tables (i.e.: automatic dose generation can be done with it).
+    //Method to check if a medication has Dosage Adjustment tables (i.e.: automatic dose generation (ADG) can be done with it).
     public boolean hasDoseTables(String medicine){
         SQLiteDatabase db = this.getWritableDatabase();
         boolean bool = false;
