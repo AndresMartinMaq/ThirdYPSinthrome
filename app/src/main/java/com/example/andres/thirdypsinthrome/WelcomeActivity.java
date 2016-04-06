@@ -5,11 +5,12 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
 
 import com.example.andres.thirdypsinthrome.DataHolders.DsgAdjustHolder;
 import com.example.andres.thirdypsinthrome.persistence.DBHelper;
+
+import java.util.List;
 
 public class WelcomeActivity extends AppCompatActivity {
 
@@ -29,15 +30,20 @@ public class WelcomeActivity extends AppCompatActivity {
         }
     }
 
-    //To be called when the app first launches, to put in database the info regarding automatic dosage generation.
+    //To be called when the app first launches, puts in database the info regarding automatic dosage generation.
     //In the future, might be substituted by loading this from an external file.
-    private void setUpADGInfo(){ //Could do this in another thread.
-
-        for(String medName : DsgAdjustHolder.KNOWN_MEDS) {
-            //Insert, in the db, the medicines for which we can do ADG.
-            DBHelper.getInstance(this).addMedicine(medName, 4); //Note, the "4" here is irrelevant, as it will get replaced once the initial setup is done.
-            //Insert, in the db, the corresponding Dosage Adjustment tables.
-            DBHelper.getInstance(this).addDAdjustTabels( long medID, List<DsgAdjustHolder > tableQuoteUnquote);
-        }
+    private void setUpADGInfo(){
+        //Done in another thread, since could be expensive.
+        new Thread(new Runnable() {
+            public void run() {
+                for(String medName : DsgAdjustHolder.KNOWN_MEDS) {
+                    //Insert, in the db, the medicines for which we can do ADG.
+                    long medID = DBHelper.getInstance(getApplicationContext()).addMedicine(medName, 4); //Note, the "4" here is irrelevant, as it will get replaced once the initial setup is done.
+                    //Insert, in the db, their corresponding Dosage Adjustment tables.
+                    List<DsgAdjustHolder> tables = DsgAdjustHolder.getDATables(medName);
+                    DBHelper.getInstance(getApplicationContext()).addDAdjustTables(medID, tables);
+                }
+            }
+        }).start();
     }
 }

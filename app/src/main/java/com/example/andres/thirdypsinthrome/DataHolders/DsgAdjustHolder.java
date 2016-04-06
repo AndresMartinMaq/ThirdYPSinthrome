@@ -27,7 +27,7 @@ public class DsgAdjustHolder {
     public static final int INCR = 1;
     public static final int DECR = 0;
 
-    public DsgAdjustHolder(int incrOrDecr, int level, float mgDay1, float mgDay2, float mgDay3, float mgDay4) {
+    public DsgAdjustHolder(int level, int incrOrDecr, float mgDay1, float mgDay2, float mgDay3, float mgDay4) {
         this.incrOrDecr = incrOrDecr;
         this.level = level;
         this.mgDay1 = mgDay1;
@@ -55,26 +55,33 @@ public class DsgAdjustHolder {
     }
 
     public static List<DsgAdjustHolder> getSinthromeDATable(){
-        List<DsgAdjustHolder> table = new ArrayList<DsgAdjustHolder>();
+        //Note: this code is intentionally written with duplication to make it more understandable.
+        List<DsgAdjustHolder> table = new ArrayList<>();
         int noOfLevels = 54;
         int cycleSize = 6;
-        float interval = 0.5f;
+        float interval = 1f;
 
         //"Increasing" table
-        int incrOrDecr = 1;
+        int incrOrDecr = INCR;
         table.add(new DsgAdjustHolder(1, incrOrDecr, 0.5f, 0, 0, -1));
         table.add(new DsgAdjustHolder(2, incrOrDecr, 0.5f, 0, 0.5f, 0));
         table.add(new DsgAdjustHolder(3, incrOrDecr, 0.5f, 0.5f, 0, -1));
         table.add(new DsgAdjustHolder(4, incrOrDecr, 0.5f, 0.5f, 0.5f, 0));
         table.add(new DsgAdjustHolder(5, incrOrDecr, 0.5f, 0.5f, 0.5f, 0.5f));
-        //Level 6, is the 1g or 0.5g level.
+        //Level 6, is the 1mg or 0.5mg level.
         int lvl = 6;
         float b = 0.5f;
-        float a = b + interval;
-        //Levels 6 to 54.
-        for (lvl = 6; lvl < noOfLevels ;lvl = lvl + cycleSize){
-            b = b + 0.5f;
-            a = a + 0.5f;
+        float a = b + 0.5f;
+        table.add(new DsgAdjustHolder(lvl+0, incrOrDecr, a, b, b, b));
+        table.add(new DsgAdjustHolder(lvl+1, incrOrDecr, a, b, b, -1));
+        table.add(new DsgAdjustHolder(lvl+2, incrOrDecr, a, b, a, b));
+        table.add(new DsgAdjustHolder(lvl+3, incrOrDecr, a, a, b, -1));
+        table.add(new DsgAdjustHolder(lvl+4, incrOrDecr, a, a, a, b));
+        table.add(new DsgAdjustHolder(lvl+5, incrOrDecr, a, a, a, a));
+        //Levels 12 to 53, Xmg or X+1mg (X+interval)
+        for (lvl = 12; lvl < noOfLevels ;lvl = lvl + cycleSize){
+            b = a;
+            a = a + interval;
             table.add(new DsgAdjustHolder(lvl+0, incrOrDecr, a, b, b, b));
             table.add(new DsgAdjustHolder(lvl+1, incrOrDecr, a, b, b, -1));
             table.add(new DsgAdjustHolder(lvl+2, incrOrDecr, a, b, a, b));
@@ -82,7 +89,34 @@ public class DsgAdjustHolder {
             table.add(new DsgAdjustHolder(lvl+4, incrOrDecr, a, a, a, b));
             table.add(new DsgAdjustHolder(lvl+5, incrOrDecr, a, a, a, a));
         }
-
+        //"Decreasing" Table------------
+        incrOrDecr = DECR;
+        table.add(new DsgAdjustHolder(1, incrOrDecr, 0, 0, 0.5f, -1));
+        table.add(new DsgAdjustHolder(2, incrOrDecr, 0, 0.5f, 0, 0.5f));
+        table.add(new DsgAdjustHolder(3, incrOrDecr, 0, 0.5f, 0.5f, -1));
+        table.add(new DsgAdjustHolder(4, incrOrDecr, 0, 0.5f, 0.5f, 0.5f));
+        table.add(new DsgAdjustHolder(5, incrOrDecr, 0.5f, 0.5f, 0.5f, 0.5f));
+        lvl = 6;
+        b = 0.5f;
+        a = b + 0.5f;
+        //Levels 6 to 11
+        table.add(new DsgAdjustHolder(lvl+0, incrOrDecr, b, b, b, a));
+        table.add(new DsgAdjustHolder(lvl+1, incrOrDecr, b, b, a, -1));
+        table.add(new DsgAdjustHolder(lvl+2, incrOrDecr, b, a, b, a));
+        table.add(new DsgAdjustHolder(lvl+3, incrOrDecr, b, a, a, -1));
+        table.add(new DsgAdjustHolder(lvl+4, incrOrDecr, b, a, a, a));
+        table.add(new DsgAdjustHolder(lvl+5, incrOrDecr, a, a, a, a));
+        //Levels 12 to 53
+        for (lvl = 12; lvl < noOfLevels ;lvl = lvl + cycleSize){
+            b = a;
+            a = a + interval;
+            table.add(new DsgAdjustHolder(lvl+0, incrOrDecr, b, b, b, a));
+            table.add(new DsgAdjustHolder(lvl+1, incrOrDecr, b, b, a, -1));
+            table.add(new DsgAdjustHolder(lvl+2, incrOrDecr, b, a, b, a));
+            table.add(new DsgAdjustHolder(lvl+3, incrOrDecr, b, a, a, -1));
+            table.add(new DsgAdjustHolder(lvl+4, incrOrDecr, b, a, a, a));
+            table.add(new DsgAdjustHolder(lvl+5, incrOrDecr, a, a, a, a));
+        }
         return table;
     }
 

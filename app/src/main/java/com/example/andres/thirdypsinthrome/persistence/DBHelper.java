@@ -7,14 +7,17 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.example.andres.thirdypsinthrome.DataHolders.DayHolder;
 import com.example.andres.thirdypsinthrome.DataHolders.DosageHolder;
+import com.example.andres.thirdypsinthrome.DataHolders.DsgAdjustHolder;
 import com.example.andres.thirdypsinthrome.MyUtils;
 import com.example.andres.thirdypsinthrome.R;
 import com.example.andres.thirdypsinthrome.persistence.DBContract.*;
 
 import java.util.Calendar;
+import java.util.List;
 
 //NOTE: as SQLite doesn't have date or time data types, time is stored as string HH:MM
 //TODO: Consider: AUTOINCREMENT.
@@ -135,6 +138,27 @@ public class DBHelper extends SQLiteOpenHelper {
         return insertedRowID;
     }
 
+    //Insert info used for Automatic Dosage Generation
+    public void addDAdjustTables(long medID, List<DsgAdjustHolder> tables){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values;
+        for (DsgAdjustHolder row : tables) {
+            values = new ContentValues();
+            values.put(DosageAdjustmentTable.COL_MEDICINE_FK, medID);
+            values.put(DosageAdjustmentTable.COL_INCR_OR_DECR, row.incrOrDecr);
+            values.put(DosageAdjustmentTable.COL_LEVEL, row.level);
+            values.put(DosageAdjustmentTable.COL_DAY1, row.mgDay1);
+            values.put(DosageAdjustmentTable.COL_DAY2, row.mgDay2);
+            values.put(DosageAdjustmentTable.COL_DAY3, row.mgDay3);
+            values.put(DosageAdjustmentTable.COL_DAY4, row.mgDay4);
+
+            Log.i("AddDATables", "Adding row: Lvl- "+row.level+" Day1: "+row.mgDay1
+                    +" Day2: "+row.mgDay2+" Day3: "+row.mgDay3+" Day4: "+row.mgDay4);
+            db.insert(DosageAdjustmentTable.TABLE_NAME, null, values);
+        }
+    }
+
     //To Register the app's user on the initial setup
     public void registerUser(Context context) throws Exception{
         SQLiteDatabase db = this.getWritableDatabase();
@@ -232,6 +256,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.update(DayTable.TABLE_NAME,values,DayTable._ID+"="+dayID, null);
     }
 
+    //--------------------------------------------------------------------------------------------------------------------------------------------
     //TODO should return recent past or recent future dosage
     public DosageHolder getSomeRelevantDosage(long userID){
         SQLiteDatabase db = this.getWritableDatabase();
