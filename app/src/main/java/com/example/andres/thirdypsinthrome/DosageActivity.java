@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.example.andres.thirdypsinthrome.DataHolders.DayHolder;
 import com.example.andres.thirdypsinthrome.DataHolders.DosageHolder;
+import com.example.andres.thirdypsinthrome.Dosages.ADGManager;
 import com.example.andres.thirdypsinthrome.Dosages.DateFragmentDialog;
 import com.example.andres.thirdypsinthrome.Dosages.EnterDoseFragment;
 import com.example.andres.thirdypsinthrome.persistence.DBHelper;
@@ -94,13 +95,13 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
             }
             //If ADG is not available, show error dialog.
             else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(R.string.dg_noDAG_title);
-                builder.setMessage(R.string.dg_noDAG_msg);
-                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                new AlertDialog.Builder(this).setTitle(R.string.dg_noDAG_title)
+                        .setMessage(R.string.dg_noDAG_msg)
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int i) {dialog.dismiss();}
-                    });
+                    })
+                        .show();
             }
         }
     }
@@ -111,7 +112,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
     }
 
     //Show a dialog asking for the INR to generate the new dosage.
-    public void showGenerateDoseDialog(){
+    private void showGenerateDoseDialog(){
         final View dialogView = getLayoutInflater().inflate(R.layout.fragment_gen_dose, null);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -124,7 +125,11 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
                 String inrInput = ((EditText) dialogView.findViewById(R.id.dg_INR_editText)).getText().toString();
                 float inr = Float.parseFloat(inrInput);
                 boolean today = ((RadioButton) dialogView.findViewById(R.id.rbttn_today)).isChecked();
-                //TODO do something with these
+                long startDate = MyUtils.getTodayLong();
+                if (!today){//If 'tomorrow' was checked.
+                    startDate = MyUtils.addDays(startDate, 1);
+                }
+                attemptADG(inr, startDate);
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -135,6 +140,48 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
         });
         builder.create();
         builder.show();
+    }
+
+    //Checks the conditions are correct for ADG and launches ADG if so.
+    private boolean attemptADG(float inr, long startDate){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        //Check if Automode is available for medicine and if a current or just finished dosage plan is available (as they contain info necessary for ADG).
+        //If Automode is available, but neither a current or just finished plan is, ask for additional information.
+        if (prefs.getBoolean(getString(R.string.automode_prefkey), false)) {
+            DosagesFragment doseFragment = (DosagesFragment) getSupportFragmentManager().findFragmentById(R.id.dose_fragment_holder);
+            DosageHolder lastDosage = doseFragment.dosage;
+            if (lastDosage == null){
+                long userID =  prefs.getLong(getString(R.string.userID_prefkey), 0);
+                long yesterday = MyUtils.addDays(MyUtils.getTodayLong(), -1);
+                DosageHolder justFinishedPlan = DBHelper.getInstance(this).getDosagePlanEndingOn(userID, yesterday);
+                lastDosage = justFinishedPlan;
+            }
+            if (lastDosage != null){
+                String medName = prefs.getString(getString(R.string.pref_med_name_key), "");
+                float minINR = prefs.getFloat(getString(R.string.pref_mininr_key), 0f);
+                float maxINR = prefs.getFloat(getString(R.string.pref_maxinr_key), 0f);
+
+                try {
+                    //Generate the Dosage
+                    ADGManager.generateDosage(medName, lastDosage, startDate, minINR, maxINR, inr);
+                } catch (Exception e) {
+                    //Display error dialog if generation fails.
+                    new AlertDialog.Builder(this).setTitle(R.string.error_txt)
+                            .setMessage(R.string.dg_DAG_errormsg)
+                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int i) {dialog.dismiss();}
+                            })
+                            .show();
+                    e.printStackTrace();
+                }
+                return true;
+            } else {
+                //Ask for additional info.TODO open dialog etc.
+            }
+        }
+        return false;
     }
 
     //Used by DateFragmentDialog to comm with EnterDosage Fragment to update the latter's ui.
@@ -189,6 +236,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
     public static class DosagesFragment extends Fragment implements LoaderManager.LoaderCallbacks<DosageHolder>{
 
         private static final int LOADER_ID = 3;
+        DosageHolder dosage;
 
         public DosagesFragment() {
         }
@@ -225,6 +273,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
 
         public void updateUI(DosageHolder dosage){
             LinearLayout parentLayout = null;
+            this.dosage = dosage;
             View view;
             try {
                 view = getView();
@@ -264,7 +313,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
 
             //Iterate the views in the linear layout, modifying their values
             int i = 0;
-            for (DayHolder day : dosage.dayIntakes) {
+            for (DayHolder day : dosage.days) {
                 if (i > itemViews.length -1){break;}
                 View item = itemViews[i];
                 //Set date

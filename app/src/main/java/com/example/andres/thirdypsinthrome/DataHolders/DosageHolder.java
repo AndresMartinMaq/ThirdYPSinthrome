@@ -13,30 +13,32 @@ public class DosageHolder {
 
     public final long startDate;
     public final long endDate;
-    public final List<DayHolder> dayIntakes;
+    public final List<DayHolder> days;
+    public final int level;
 
-    public DosageHolder(long startDate, long endDate, List<DayHolder> dayIntakes) {
-        this.dayIntakes = dayIntakes;
+    public DosageHolder(long startDate, long endDate, List<DayHolder> days, int level) {
+        this.days = days;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.level = level;
     }
 
-    public DosageHolder(Cursor c){
-        dayIntakes = new ArrayList<DayHolder>(MyUtils.MAX_DAYS_PER_DOSAGE);
+    public DosageHolder(Cursor c, int level){
+        days = new ArrayList<DayHolder>(MyUtils.MAX_DAYS_PER_DOSAGE);
+        this.level = level;
 
         c.moveToFirst();
         startDate = c.getLong(c.getColumnIndex(DBContract.DayTable.COL_DATE));
-
         do{
             DayHolder day =  new DayHolder(c.getLong(c.getColumnIndex(DBContract.DayTable._ID)),
                     c.getLong(c.getColumnIndex(DBContract.DayTable.COL_DATE)),
                     c.getFloat(c.getColumnIndex(DBContract.DayTable.COL_MILLIGRAMS)),
                     c.getInt(c.getColumnIndex(DBContract.DayTable.COL_TAKEN)));
-            dayIntakes.add(day);
+            days.add(day);
             String dateStrTesting = MyUtils.dateLongToStr(c.getLong(c.getColumnIndex(DBContract.DayTable.COL_DATE)));//TODO delete
             Log.d("DHolderTest", "Looping, added a day to the List<DayHolder>, date being "+dateStrTesting);
         } while (c.moveToNext());
 
-        endDate = MyUtils.addDays(startDate, dayIntakes.size());
+        endDate = MyUtils.addDays(startDate, days.size());
     }
 }

@@ -253,7 +253,7 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(DayTable.COL_TAKEN, 1);
         values.put(DayTable.COL_DEVIATION, devInMins);
 
-        db.update(DayTable.TABLE_NAME,values,DayTable._ID+"="+dayID, null);
+        db.update(DayTable.TABLE_NAME, values, DayTable._ID + "=" + dayID, null);
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------------
@@ -267,11 +267,14 @@ public class DBHelper extends SQLiteOpenHelper {
                 +" ORDER BY "+DosageTable.COL_START+" DESC LIMIT 1", null);
         if (c.moveToFirst()){
             int dosageID = c.getInt(c.getColumnIndex(DosageTable._ID));
+            int level = -1;
+            if (!c.isNull(c.getColumnIndex(DosageTable.COL_LEVEL))){
+                level = c.getInt(c.getColumnIndex(DosageTable.COL_LEVEL));
+            }
             String[] columns = {DayTable._ID, DayTable.COL_DATE, DayTable.COL_MILLIGRAMS, DayTable.COL_TAKEN};
             c = db.query(DayTable.TABLE_NAME, columns,DayTable.COL_DOSAGE_FK+"="+dosageID,null,null,null,null);
+            return new DosageHolder(c, level);
         } else { return null; }
-
-        return new DosageHolder(c);
     }
 
     //Returns the dosage that starts in the past and finishes is the future, if it exists.
@@ -285,12 +288,40 @@ public class DBHelper extends SQLiteOpenHelper {
                 +" AND "+DosageTable.COL_END+" > "+now, null);
         if (c.moveToFirst()){
             int dosageID = c.getInt(c.getColumnIndex(DosageTable._ID));
+            int level = -1;
+            if (!c.isNull(c.getColumnIndex(DosageTable.COL_LEVEL))){
+                level = c.getInt(c.getColumnIndex(DosageTable.COL_LEVEL));
+            }
 
             String[] columns = {DayTable._ID, DayTable.COL_DATE, DayTable.COL_MILLIGRAMS, DayTable.COL_TAKEN};
             c = db.query(DayTable.TABLE_NAME, columns,DayTable.COL_DOSAGE_FK+"="+dosageID,null,null,null,null);
-        } else { return null; }
 
-        return new DosageHolder(c);
+            return new DosageHolder(c, level);
+        } else { return null; }
+    }
+
+    public DosageHolder getDosagePlanEndingOn(long userID, long endDate){
+        SQLiteDatabase db = this.getWritableDatabase();
+        //Note endDate should be normalised.
+        long endDatePlus1 = MyUtils.addDays(endDate, 1);
+
+        Cursor c = db.rawQuery("SELECT "+DosageTable._ID+" FROM "+DosageTable.TABLE_NAME
+                +" WHERE "+DosageTable.COL_USER_FK+"="+userID
+                +" AND "+DosageTable.COL_END+" >= "+endDate
+                +" AND "+DosageTable.COL_END+" < "+endDatePlus1, null);
+
+        if (c.moveToFirst()){
+            int dosageID = c.getInt(c.getColumnIndex(DosageTable._ID));
+            int level = -1;
+            if (!c.isNull(c.getColumnIndex(DosageTable.COL_LEVEL))){
+                level = c.getInt(c.getColumnIndex(DosageTable.COL_LEVEL));
+            }
+
+            String[] columns = {DayTable._ID, DayTable.COL_DATE, DayTable.COL_MILLIGRAMS, DayTable.COL_TAKEN};
+            c = db.query(DayTable.TABLE_NAME, columns,DayTable.COL_DOSAGE_FK+"="+dosageID,null,null,null,null);
+
+            return new DosageHolder(c, level);
+        } else { return null; }
     }
 
     //Returns today's information

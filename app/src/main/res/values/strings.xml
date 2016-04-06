@@ -79,5 +79,6 @@
     <string name="dg_inr_today_hint">INR as tested today</string>
     <string name="dg_noDAG_title">Automatic Dosage Generation is unavailable</string>
     <string name="dg_noDAG_msg">Unfortunately, we don\'t posess the data required to generate dosage plans for your specific medication or treatment parameters. See \"About\" in the options menu for more information.</string>
+    <string name="dg_DAG_errormsg">Could not generate a dosage plan automatically.</string>
 
 </resources>
