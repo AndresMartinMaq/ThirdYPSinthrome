@@ -13,6 +13,7 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 //TODO IMPORTANT DosageAdjustmenttables need to have an associated therapeutic range they are good for.
+//TODO update today UI when new dose is added.
 //TODO not let add dosages that overlap.
 //TODO be able to delete dosages?
 //TODO be able to reset taken?
@@ -20,7 +21,7 @@ import java.util.Locale;
 
 public class MyUtils {
 
-    public static String DATE_FORMAT = "d 'of' MMMM ";
+    public static String DATE_FORMAT = "d 'of' MMMM ";//TODO make spanish not say "of".
     public static String TIME_FORMAT = "HH:mm";
     public static int MAX_DAYS_PER_DOSAGE = 7;
 

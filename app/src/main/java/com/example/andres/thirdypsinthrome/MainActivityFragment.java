@@ -62,6 +62,7 @@ public class MainActivityFragment extends Fragment {
         if(today == null){
             Log.d("4Abril", "today was null");
             datetxtv.setText(R.string.msg_main_nodosage);
+            datetxtv.setTextSize(20);
             amounttxtv.setText("");
             amounttxtv.setTextSize(0f);
             ((TextView) view.findViewById(R.id.txtv_main_units)).setText("");
@@ -69,6 +70,7 @@ public class MainActivityFragment extends Fragment {
             return;
         }
         datetxtv.setText(getString(R.string.main_today_txt)+" "+MyUtils.dateLongToStr(today.date));
+        datetxtv.setTextSize(24);
         Log.d("April", "Day mg in DayHolder is: "+today.mg);
         amounttxtv.setText(String.valueOf(today.mg));
         amounttxtv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 72f);

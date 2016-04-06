@@ -94,10 +94,12 @@ public class SettingsActivity extends PreferenceActivity
             //For the medicine, check and set whether automatic dosage generation will be possible with it.
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             String medName = prefs.getString(preference.getKey(), "");
+            prefs.edit().putString(preference.getKey(), medName.toLowerCase()).apply(); //Also, make sure only lowercase letters are stored.
+
             float inrMin = Float.parseFloat(prefs.getString(getString(R.string.pref_mininr_key), ""));
             float inrMax = Float.parseFloat(prefs.getString(getString(R.string.pref_maxinr_key), ""));
 
-            boolean autoMode = DsgAdjustHolder.isAutoModePossible(medName, inrMin, inrMax);
+            boolean autoMode = DsgAdjustHolder.isAutoModePossible(this, medName, inrMin, inrMax);
             prefs.edit().putBoolean(getString(R.string.automode_prefkey), autoMode).apply();
 
             preference.setSummary(stringValue);
