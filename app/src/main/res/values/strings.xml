@@ -54,7 +54,7 @@
     <string name="dosages_str">The current dosage ends on</string>
     <string name="dosages_end_date">31st of February</string>
     <string name="dosages_str_new">A new INR value or manually input dosage will be required.</string>
-    <string name="msg_no_current_dosage">There is no dosage plan applicable to today. Introduce a new dosage plan manually or a INR that can be used to generate a plan automatically.</string>
+    <string name="msg_no_current_dosage">There is no dosage plan applicable to today. Introduce a new dosage plan manually or generate one automatically with a blood test result.</string>
     <string name="bttn_new_dosage_manually">Enter New Dosage Manually</string>
     <string name="bttn_new_dosage_auto">Generate New Dosage</string>
 
@@ -69,5 +69,15 @@
     <string name="toast_fill_all_fields">Please ensure all fields have been filled.</string>
     <string name="dialog_startDate_in_past">Please ensure the Start Date is not in the past.</string>
     <string name="dialog_startDate_in_past_title">Invalid starting date</string>
+
+    <!-- Generate Dosage-->
+    <string name="dg_newINR_title">Generate a new dosage</string>
+    <string name="dg_newINR_msg">Please carry out a blood test and provide the result below:</string>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="dg_starting_txt">Dosage starting date:</string>
+    <string name="dg_inr_today_hint">INR as tested today</string>
+    <string name="dg_noDAG_title">Automatic Dosage Generation is unavailable</string>
+    <string name="dg_noDAG_msg">Unfortunately, we don\'t posess the data required to generate dosage plans for your specific medication or treatment parameters. See \"About\" in the options menu for more information.</string>
 
 </resources>

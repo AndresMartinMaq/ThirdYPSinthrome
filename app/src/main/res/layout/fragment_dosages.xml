@@ -155,6 +155,7 @@
         android:layout_height="wrap_content"
         android:text="@string/bttn_new_dosage_auto"
         android:id="@+id/btt_enter_INR"
+        android:onClick="buttonPressed"
         android:layout_gravity="bottom|center_horizontal" />
 
     <Button

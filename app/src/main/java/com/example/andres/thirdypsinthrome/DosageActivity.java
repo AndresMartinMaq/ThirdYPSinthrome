@@ -1,6 +1,7 @@
 package com.example.andres.thirdypsinthrome;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -17,9 +18,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -83,11 +86,55 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
             //transaction.addToBackStack(null);
             transaction.commit();
         }
+        if (id == R.id.btt_enter_INR) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            //TODO check a prev. dosage exists.
+            if (prefs.getBoolean(getString(R.string.automode_prefkey), false)) {
+                showGenerateDoseDialog();
+            }
+            //If ADG is not available, show error dialog.
+            else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.dg_noDAG_title);
+                builder.setMessage(R.string.dg_noDAG_msg);
+                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int i) {dialog.dismiss();}
+                    });
+            }
+        }
     }
 
     public void showDatePickerDialog(View v) {
         DateFragmentDialog newFragment = new DateFragmentDialog();
         newFragment.show(getFragmentManager(), "datePicker");
+    }
+
+    //Show a dialog asking for the INR to generate the new dosage.
+    public void showGenerateDoseDialog(){
+        final View dialogView = getLayoutInflater().inflate(R.layout.fragment_gen_dose, null);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.dg_newINR_title);
+        builder.setView(dialogView);
+        // Set up the buttons with listeners
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String inrInput = ((EditText) dialogView.findViewById(R.id.dg_INR_editText)).getText().toString();
+                float inr = Float.parseFloat(inrInput);
+                boolean today = ((RadioButton) dialogView.findViewById(R.id.rbttn_today)).isChecked();
+                //TODO do something with these
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.create();
+        builder.show();
     }
 
     //Used by DateFragmentDialog to comm with EnterDosage Fragment to update the latter's ui.

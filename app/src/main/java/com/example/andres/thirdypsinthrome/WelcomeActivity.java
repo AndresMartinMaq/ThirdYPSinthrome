@@ -23,8 +23,10 @@ public class WelcomeActivity extends AppCompatActivity {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if (prefs.getBoolean("first_time_opened", true)){
             setContentView(R.layout.activity_welcome);
-            setUpADGInfo();
             //after initial setup, "first_time_opened" will be set to false.
+            if (!(prefs.getBoolean("DAGSetupDone", false))) {
+                setUpADGInfo(prefs);
+            }
         } else {
             startActivity(new Intent(this, MainActivity.class));
         }
@@ -32,7 +34,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
     //To be called when the app first launches, puts in database the info regarding automatic dosage generation.
     //In the future, might be substituted by loading this from an external file.
-    private void setUpADGInfo(){
+    private void setUpADGInfo(SharedPreferences prefs){
         //Done in another thread, since could be expensive.
         new Thread(new Runnable() {
             public void run() {
@@ -45,5 +47,6 @@ public class WelcomeActivity extends AppCompatActivity {
                 }
             }
         }).start();
+        prefs.edit().putBoolean("DAGSetupDone", true).apply();
     }
 }
