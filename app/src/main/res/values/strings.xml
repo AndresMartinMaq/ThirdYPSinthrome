@@ -80,5 +80,10 @@
     <string name="dg_noDAG_title">Automatic Dosage Generation is unavailable</string>
     <string name="dg_noDAG_msg">Unfortunately, we don\'t posess the data required to generate dosage plans for your specific medication or treatment parameters. See \"About\" in the options menu for more information.</string>
     <string name="dg_DAG_errormsg">Could not generate a dosage plan automatically.</string>
+    <string name="dg_addinfo_required_title">Additional Information Required</string>
+    <string name="dg_addinfo_required_msg">A previous dosage plan is needed to generate a new one. You may enter your first plan manually or, alternatively, provide here the sum of milligrams that you have taken in the past week.</string>
+    <string name="dg_addinfo_required_hint">Past week intake sum (mg)</string>
+    <string name="dg_addinfo_required_manu">Add manually</string>
+    <string name="dg_addinfo_required_ok">Generate</string>
 
 </resources>

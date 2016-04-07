@@ -2,15 +2,18 @@ package com.example.andres.thirdypsinthrome;
 
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,6 +37,8 @@ import com.example.andres.thirdypsinthrome.Dosages.EnterDoseFragment;
 import com.example.andres.thirdypsinthrome.persistence.DBHelper;
 
 public class DosageActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
+
+    public float mgSumAsked = -1; //Used only when attempting ADG and no previous dosage is available.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,18 +161,31 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
                 DosageHolder justFinishedPlan = DBHelper.getInstance(this).getDosagePlanEndingOn(userID, yesterday);
                 lastDosage = justFinishedPlan;
             }
-            if (lastDosage != null){
+
+            if (lastDosage == null && mgSumAsked < 1) {
+                //Ask for additional info.
+                showAskForMgSum(inr, startDate);
+            } else {
                 String medName = prefs.getString(getString(R.string.pref_med_name_key), "");
                 float minINR = prefs.getFloat(getString(R.string.pref_mininr_key), 0f);
                 float maxINR = prefs.getFloat(getString(R.string.pref_maxinr_key), 0f);
 
                 try {
                     //Generate the Dosage
-                    ADGManager.generateDosage(this, medName, lastDosage, startDate, minINR, maxINR, inr);
+                    if (lastDosage != null) {
+                        ADGManager.generateDosage(this, medName, lastDosage, startDate, minINR, maxINR, inr);
+                    } else {
+                        ADGManager.generateDosage(this, medName, mgSumAsked, startDate, minINR, maxINR, inr);
+                    }
+                    //Go back to main activity to refresh.
+                    startActivity(new Intent(this, MainActivity.class));
+                    //Pop backstack
+                    int id = getFragmentManager().getBackStackEntryAt(0).getId();
+                    getFragmentManager().popBackStack(id, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 } catch (Exception e) {
                     //Display error dialog if generation fails.
                     new AlertDialog.Builder(this).setTitle(R.string.error_txt)
-                            .setMessage(R.string.dg_DAG_errormsg)
+                            .setMessage(R.string.dg_DAG_errormsg+" "+e.getMessage())
                             .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int i) {dialog.dismiss();}
@@ -176,11 +194,52 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
                     e.printStackTrace();
                 }
                 return true;
-            } else {
-                //Ask for additional info.TODO open dialog etc.
             }
         }
         return false;
+    }
+
+    //Needed to ask for mgSum when no previous dosage can be used as reference for ADG.
+    //Should exclusively be called from attemptADG
+    private void showAskForMgSum(final float inr, final long startDate){
+        final View dialogView = getLayoutInflater().inflate(R.layout.fragment_gen_dose, null);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.dg_addinfo_required_title);
+        builder.setView(dialogView);
+        //Personalise it for the purpose
+        ((LinearLayout)dialogView.findViewById(R.id.panel2)).removeAllViews();
+        final EditText editText = (EditText) dialogView.findViewById(R.id.dg_INR_editText);
+        editText.setHint(R.string.dg_addinfo_required_hint);
+        ((TextView)dialogView.findViewById(R.id.dg_msg_txtv)).setText(R.string.dg_addinfo_required_msg);
+        // Set up the buttons with listeners
+        builder.setPositiveButton(getString(R.string.dg_addinfo_required_ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String mgInput = editText.getText().toString();
+                try {
+                    mgSumAsked = Float.parseFloat(mgInput);
+                } catch (Exception e){}
+                attemptADG(inr, startDate);
+            }
+        });
+        builder.setNegativeButton(getString(R.string.dg_addinfo_required_manu), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                EnterDoseFragment enterDoseFragment = new EnterDoseFragment();
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.dose_fragment_holder, enterDoseFragment);
+                transaction.commit();
+            }
+        });
+        builder.setNeutralButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.create();
+        builder.show();
     }
 
     //Used by DateFragmentDialog to comm with EnterDosage Fragment to update the latter's ui.

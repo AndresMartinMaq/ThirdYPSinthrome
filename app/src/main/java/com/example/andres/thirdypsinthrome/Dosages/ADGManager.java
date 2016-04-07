@@ -17,9 +17,21 @@ import java.util.List;
 public class ADGManager {
 
 
-    public static boolean generateDosage(Context context, String medName, DosageHolder lastDosagePlan, long startDate, float minINR, float maxINR, float recordedINR) throws Exception {
-        if (!medName.equals(DsgAdjustHolder.KNOWN_MEDS[0])){ return false; }
+    public static boolean generateDosage(Context context, String medName, float mgSum, long startDate, float minINR, float maxINR, float recordedINR) throws Exception{
+        if (!medName.equals(DsgAdjustHolder.KNOWN_MEDS[0])){
+            throw new Exception("Adjustment tables for "+medName+" are not available.");
+        }
+        //Calculate level from mg intake.
+        int currentLevel = (int)mgWeekSumToLevelSinthrome(mgSum);
+        //Generate using this level
+        return generateDosage(context, medName, currentLevel, startDate, minINR, maxINR, recordedINR);
+    }
 
+    public static boolean generateDosage(Context context, String medName, DosageHolder lastDosagePlan, long startDate, float minINR, float maxINR, float recordedINR) throws Exception {
+        if (!medName.equals(DsgAdjustHolder.KNOWN_MEDS[0])){
+            throw new Exception("Adjustment tables for "+medName+" are not available.");
+        }
+        //Calculate level from lastDosagePlan.
         int currentLevel;
         if (lastDosagePlan.level > 0){
             currentLevel = lastDosagePlan.level;
@@ -34,13 +46,17 @@ public class ADGManager {
             double level = mgWeekSumToLevelSinthrome(mgSum);
             currentLevel = (int)level;
         }
+        return generateDosage(context, medName, currentLevel, startDate, minINR, maxINR, recordedINR);
+    }
+
+    private static boolean generateDosage(Context context, String medName, int currentLevel, long startDate, float minINR, float maxINR, float recordedINR) throws Exception {
         //Decide if increase or decrease dosage and by how much. Assumes a therapeutic range of 2.5-3.5.
         //Calculate new level (simple sum).
         int newLevel = 0;
         int incrOrDecr = 0;
         int newDsgPlanLength = 0;
         if (recordedINR < 1){
-            return false;
+            throw new Exception("Recorded INR value cannot be under 1");
         }else if (recordedINR < 1.5){
             //Repeat. Increase 2 levels.//TODO "repeat"
             incrOrDecr = 1;
@@ -73,35 +89,35 @@ public class ADGManager {
         }
 
         //if (incrOrDecr != -1 || lastDosagePlan.days.size() < 4){//4 is the max size of DsgAdjustment patterns.
-            if (incrOrDecr == -1){ incrOrDecr = 1; }
-            //Access db to get the DsgAdjustHolder relevant to the new level.
-            DsgAdjustHolder dsgAdjustHolder = DBHelper.getInstance(context).getDsgAdjustLine(medName, incrOrDecr, newLevel);
+        if (incrOrDecr == -1){ incrOrDecr = 1; }
+        //Access db to get the DsgAdjustHolder relevant to the new level.
+        DsgAdjustHolder dsgAdjustHolder = DBHelper.getInstance(context).getDsgAdjustLine(medName, incrOrDecr, newLevel);
 
-            //With it and the dosagePlanLength fabricate a dosageHolder.
-            float[] intakesPattern = new float[4];
-            intakesPattern[0] = dsgAdjustHolder.mgDay1;
-            intakesPattern[1] = dsgAdjustHolder.mgDay2;
-            intakesPattern[2] = dsgAdjustHolder.mgDay3;
-            intakesPattern[3] = dsgAdjustHolder.mgDay4;
+        //With it and the dosagePlanLength fabricate a dosageHolder.
+        float[] intakesPattern = new float[4];
+        intakesPattern[0] = dsgAdjustHolder.mgDay1;
+        intakesPattern[1] = dsgAdjustHolder.mgDay2;
+        intakesPattern[2] = dsgAdjustHolder.mgDay3;
+        intakesPattern[3] = dsgAdjustHolder.mgDay4;
 
-            List<Float> list = new ArrayList<>();
-            for (Float i = 0f; i < intakesPattern.length; i++) {
-                if (i != -1){//-1 indicates termination of a repeating pattern, it isnt an amount of mg. See DsgAdjustHolder's getSinthromeDATable();
-                    list.add(i);
-                }
+        List<Float> list = new ArrayList<>();
+        for (Float i = 0f; i < intakesPattern.length; i++) {
+            if (i != -1){//-1 indicates termination of a repeating pattern, it isnt an amount of mg. See DsgAdjustHolder's getSinthromeDATable();
+                list.add(i);
             }
-            //This refined version now does not contain -1's . For sinthrome, it might be size 3 or 4.
-            Float[] intakesPatternRefined = list.toArray(new Float[list.size()]);
+        }
+        //This refined version now does not contain -1's . For sinthrome, it might be size 3 or 4.
+        Float[] intakesPatternRefined = list.toArray(new Float[list.size()]);
 
-            Float[] intakesPlan = getXLongList(intakesPatternRefined, newDsgPlanLength);
+        Float[] intakesPlan = getXLongList(intakesPatternRefined, newDsgPlanLength);
 
-            //Create a Dosage(plan) int he database;
-            long endDate = MyUtils.addDays(startDate, intakesPlan.length);
-            long userID = PreferenceManager.getDefaultSharedPreferences(context).getLong(context.getString(R.string.userID_prefkey), -1);
-            long insertedRowID = DBHelper.getInstance(context).addDosage(userID, startDate, endDate, intakesPlan);
-            if (insertedRowID == -1){ //TODO
-                return false;
-            }
+        //Create a Dosage(plan) int he database;
+        long endDate = MyUtils.addDays(startDate, intakesPlan.length);
+        long userID = PreferenceManager.getDefaultSharedPreferences(context).getLong(context.getString(R.string.userID_prefkey), -1);
+        long insertedRowID = DBHelper.getInstance(context).addDosage(userID, startDate, endDate, intakesPlan);
+        if (insertedRowID == -1){
+            throw new Exception("Could not write new dosage to the database");
+        }
         //}
         //For the case in which we have to extend the current Dosage Plan. This is very specific to the tables we have (for all we know, for sinthrome).
         /*else {
@@ -118,7 +134,6 @@ public class ADGManager {
             //See where in the pattern we left.
             //Continue the new intakes array from there.
         }*/
-        //Take care of refreshing everything.
         return true;
     }
 
