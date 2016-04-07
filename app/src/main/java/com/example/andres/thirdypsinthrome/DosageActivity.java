@@ -167,8 +167,8 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
                 showAskForMgSum(inr, startDate);
             } else {
                 String medName = prefs.getString(getString(R.string.pref_med_name_key), "");
-                float minINR = prefs.getFloat(getString(R.string.pref_mininr_key), 0f);
-                float maxINR = prefs.getFloat(getString(R.string.pref_maxinr_key), 0f);
+                float minINR = Float.parseFloat(prefs.getString(getString(R.string.pref_mininr_key), "0"));
+                float maxINR = Float.parseFloat(prefs.getString(getString(R.string.pref_maxinr_key), "0"));
 
                 try {
                     //Generate the Dosage
@@ -180,15 +180,16 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
                     //Go back to main activity to refresh.
                     startActivity(new Intent(this, MainActivity.class));
                     //Pop backstack
-                    int id = getFragmentManager().getBackStackEntryAt(0).getId();
-                    getFragmentManager().popBackStack(id, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 } catch (Exception e) {
                     //Display error dialog if generation fails.
-                    new AlertDialog.Builder(this).setTitle(R.string.error_txt)
-                            .setMessage(R.string.dg_DAG_errormsg+" "+e.getMessage())
+                    new AlertDialog.Builder(this).setTitle("Error")
+                            .setMessage(getString(R.string.dg_DAG_errormsg)+" "+e.getMessage())
                             .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                 @Override
-                                public void onClick(DialogInterface dialog, int i) {dialog.dismiss();}
+                                public void onClick(DialogInterface dialog, int i) {
+                                    dialog.dismiss();
+                                }
                             })
                             .show();
                     e.printStackTrace();
@@ -219,7 +220,8 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
                 String mgInput = editText.getText().toString();
                 try {
                     mgSumAsked = Float.parseFloat(mgInput);
-                } catch (Exception e){}
+                } catch (Exception e) {
+                }
                 attemptADG(inr, startDate);
             }
         });
@@ -232,14 +234,14 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
                 transaction.commit();
             }
         });
-        builder.setNeutralButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        builder.create();
-        builder.show();
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setSingleLine(true);
+        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setAllCaps(true);
+        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextSize(12);
+        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setSingleLine(true);
+        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setAllCaps(true);
+        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextSize(12);
     }
 
     //Used by DateFragmentDialog to comm with EnterDosage Fragment to update the latter's ui.
@@ -259,7 +261,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
         if (userID == -1){ throw new Exception("Could not find sharedPreference user ID");}
         double[] intakes = enterDoseFmt.getWeekIntakeValues();
         long startDate = enterDoseFmt.getSelectedStartDate();
-        long endDate = MyUtils.addDays(startDate, intakes.length);
+        long endDate = MyUtils.addDays(startDate, intakes.length - 1);
         float newINR = enterDoseFmt.getINRInput();
 
         //Check all fields have been filled
@@ -374,6 +376,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
             for (DayHolder day : dosage.days) {
                 if (i > itemViews.length -1){break;}
                 View item = itemViews[i];
+                item.setVisibility(View.VISIBLE);
                 //Set date
                 TextView dateView = (TextView) item.findViewById(R.id.dsg_item_date);
                 dateView.setText(MyUtils.dateLongToStr(day.date));
@@ -389,9 +392,11 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
                 mgView.setText(String.valueOf(day.mg));
                 i++;
             }
-            //Remove any views that have not been filled (due to a dosage detailing fewer than 7 days).
+            //Hide any views that have not been filled (due to a dosage detailing fewer than 7 days).
             for (int i2 = i; i2 < itemViews.length; i2++){
-                parentLayout.removeViewAt(i2);//I believe this is zero indexed
+                //this is zero indexed and when a view is removed, the rest fall into place
+                //(e.g.: removing view "2" will cause view "3" to become 2 and "4" to become 3, etc.
+                parentLayout.getChildAt(i).setVisibility(View.INVISIBLE);
             }
 
             //Set the message that states the endDate of the dosage.

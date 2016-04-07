@@ -11,8 +11,8 @@ import java.util.List;
 
 public class DosageHolder {
 
-    public final long startDate;
-    public final long endDate;
+    public final long startDate;        //Refers to the date of the first day which includes an intake.
+    public final long endDate;          //Refers to the date of the last day which includes an intake.
     public final List<DayHolder> days;
     public final int level;
 

@@ -210,7 +210,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     //Takes dates in epoch seconds.
-    public long addDosageManually(long userID, long startDate, long endDate, double[] intakes){
+    private long addDosage(long userID, long startDate, long endDate, double[] intakes, int level){
         SQLiteDatabase db = this.getWritableDatabase();
 
         //Put values for Dosage
@@ -218,6 +218,7 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(DosageTable.COL_USER_FK, userID);
         values.put(DosageTable.COL_START, startDate);
         values.put(DosageTable.COL_END, endDate);
+        values.put(DosageTable.COL_LEVEL, level);
         long insertedRowID = db.insert(DBContract.DosageTable.TABLE_NAME, null, values);
         //Put values for the Dosage's Days.
         for (int i = 0; i < intakes.length; i++) {
@@ -226,21 +227,21 @@ public class DBHelper extends SQLiteOpenHelper {
             values.put(DayTable.COL_DATE, MyUtils.addDays(startDate, i));
             values.put(DayTable.COL_MILLIGRAMS, intakes[i]);
 
-            return db.insert(DayTable.TABLE_NAME, null, values);
+            db.insert(DayTable.TABLE_NAME, null, values);
         }
-        return -1;
+        return insertedRowID;
     }
 
-    public long addDosage(long userID, long startDate, long endDate, Float[] intakes) {
+    public long addDosageManually(long userID, long startDate, long endDate, double[] intakes){
+        return addDosage( userID,  startDate,  endDate,  intakes, -1);
+    }
+
+    public long addDosage(long userID, long startDate, long endDate, Float[] intakes, int level) {
         double[] intakesDoubles = new double[intakes.length];
         for (int i = 0; i < intakes.length; i++) {
             intakesDoubles[i] = intakes[i];
         }
-        return addDosageManually(userID, startDate, endDate, intakesDoubles);
-    }
-
-    public void addDosageAutomatically(int userID, int startDate, int newLevel){
-    //TODO
+        return addDosage(userID, startDate, endDate, intakesDoubles, level);
     }
 
     public long addINRValue(Context context, float inr, long date){

@@ -101,9 +101,9 @@ public class ADGManager {
         intakesPattern[3] = dsgAdjustHolder.mgDay4;
 
         List<Float> list = new ArrayList<>();
-        for (Float i = 0f; i < intakesPattern.length; i++) {
+        for (int i = 0; i < intakesPattern.length; i++) {
             if (i != -1){//-1 indicates termination of a repeating pattern, it isnt an amount of mg. See DsgAdjustHolder's getSinthromeDATable();
-                list.add(i);
+                list.add(intakesPattern[i]);
             }
         }
         //This refined version now does not contain -1's . For sinthrome, it might be size 3 or 4.
@@ -112,9 +112,9 @@ public class ADGManager {
         Float[] intakesPlan = getXLongList(intakesPatternRefined, newDsgPlanLength);
 
         //Create a Dosage(plan) int he database;
-        long endDate = MyUtils.addDays(startDate, intakesPlan.length);
+        long endDate = MyUtils.addDays(startDate, intakesPlan.length - 1);
         long userID = PreferenceManager.getDefaultSharedPreferences(context).getLong(context.getString(R.string.userID_prefkey), -1);
-        long insertedRowID = DBHelper.getInstance(context).addDosage(userID, startDate, endDate, intakesPlan);
+        long insertedRowID = DBHelper.getInstance(context).addDosage(userID, startDate, endDate, intakesPlan, newLevel);
         if (insertedRowID == -1){
             throw new Exception("Could not write new dosage to the database");
         }

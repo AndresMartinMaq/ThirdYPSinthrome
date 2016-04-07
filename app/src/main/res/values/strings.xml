@@ -84,6 +84,6 @@
     <string name="dg_addinfo_required_msg">A previous dosage plan is needed to generate a new one. You may enter your first plan manually or, alternatively, provide here the sum of milligrams that you have taken in the past week.</string>
     <string name="dg_addinfo_required_hint">Past week intake sum (mg)</string>
     <string name="dg_addinfo_required_manu">Add manually</string>
-    <string name="dg_addinfo_required_ok">Generate</string>
+    <string name="dg_addinfo_required_ok">Generate from sum</string>
 
 </resources>
