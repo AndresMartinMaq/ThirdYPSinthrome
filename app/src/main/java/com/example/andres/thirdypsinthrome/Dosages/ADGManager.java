@@ -102,7 +102,7 @@ public class ADGManager {
 
         List<Float> list = new ArrayList<>();
         for (int i = 0; i < intakesPattern.length; i++) {
-            if (i != -1){//-1 indicates termination of a repeating pattern, it isnt an amount of mg. See DsgAdjustHolder's getSinthromeDATable();
+            if (intakesPattern[i] != -1){//-1 indicates termination of a repeating pattern, it isnt an amount of mg. See DsgAdjustHolder's getSinthromeDATable();
                 list.add(intakesPattern[i]);
             }
         }
