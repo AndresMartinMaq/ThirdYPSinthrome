@@ -41,4 +41,12 @@ public class DosageHolder {
 
         endDate = MyUtils.addDays(startDate, days.size());
     }
+
+    public float[] getIntakes(){
+        float[] result = new float[days.size()];
+        for (int i = 0; i < days.size(); i++) {
+            result[i] = days.get(i).mg;
+        }
+        return result;
+    }
 }

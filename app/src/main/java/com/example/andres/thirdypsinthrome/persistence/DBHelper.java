@@ -18,6 +18,7 @@ import com.example.andres.thirdypsinthrome.persistence.DBContract.*;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.logging.Level;
 
 //NOTE: as SQLite doesn't have date or time data types, time is stored as string HH:MM
 //TODO: Consider: AUTOINCREMENT.
@@ -209,7 +210,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     //Takes dates in epoch seconds.
-    public void addDosageManually(long userID, long startDate, long endDate, double[] intakes){
+    public long addDosageManually(long userID, long startDate, long endDate, double[] intakes){
         SQLiteDatabase db = this.getWritableDatabase();
 
         //Put values for Dosage
@@ -225,8 +226,17 @@ public class DBHelper extends SQLiteOpenHelper {
             values.put(DayTable.COL_DATE, MyUtils.addDays(startDate, i));
             values.put(DayTable.COL_MILLIGRAMS, intakes[i]);
 
-            db.insert(DayTable.TABLE_NAME, null, values);
+            return db.insert(DayTable.TABLE_NAME, null, values);
         }
+        return -1;
+    }
+
+    public long addDosage(long userID, long startDate, long endDate, Float[] intakes) {
+        double[] intakesDoubles = new double[intakes.length];
+        for (int i = 0; i < intakes.length; i++) {
+            intakesDoubles[i] = intakes[i];
+        }
+        return addDosageManually(userID, startDate, endDate, intakesDoubles);
     }
 
     public void addDosageAutomatically(int userID, int startDate, int newLevel){
@@ -305,10 +315,10 @@ public class DBHelper extends SQLiteOpenHelper {
         //Note endDate should be normalised.
         long endDatePlus1 = MyUtils.addDays(endDate, 1);
 
-        Cursor c = db.rawQuery("SELECT "+DosageTable._ID+" FROM "+DosageTable.TABLE_NAME
-                +" WHERE "+DosageTable.COL_USER_FK+"="+userID
-                +" AND "+DosageTable.COL_END+" >= "+endDate
-                +" AND "+DosageTable.COL_END+" < "+endDatePlus1, null);
+        Cursor c = db.rawQuery("SELECT " + DosageTable._ID + " FROM " + DosageTable.TABLE_NAME
+                + " WHERE " + DosageTable.COL_USER_FK + "=" + userID
+                + " AND " + DosageTable.COL_END + " >= " + endDate
+                + " AND " + DosageTable.COL_END + " < " + endDatePlus1, null);
 
         if (c.moveToFirst()){
             int dosageID = c.getInt(c.getColumnIndex(DosageTable._ID));
@@ -332,14 +342,35 @@ public class DBHelper extends SQLiteOpenHelper {
 
         String[] columns = {DayTable._ID, DayTable.COL_DATE, DayTable.COL_MILLIGRAMS, DayTable.COL_TAKEN};
         Cursor c = db.query(DayTable.TABLE_NAME, columns,
-                DayTable.COL_DATE+">="+todayStart +" AND "+DayTable.COL_DATE+" < "+tomorrowStart,
-                null,null,null,null);
+                DayTable.COL_DATE + ">=" + todayStart + " AND " + DayTable.COL_DATE + " < " + tomorrowStart,
+                null, null, null, null);
         if (c.moveToFirst()){
             long dayID = c.getLong(c.getColumnIndex(DayTable._ID));
             long date = c.getLong(c.getColumnIndex(DayTable.COL_DATE));
             float mg = c.getFloat(c.getColumnIndex(DayTable.COL_MILLIGRAMS));
             int taken = c.getInt(c.getColumnIndex(DayTable.COL_TAKEN));
             return new DayHolder(dayID,date,mg,taken);
+        } else {
+            return null;
+        }
+    }
+
+    public DsgAdjustHolder getDsgAdjustLine(String medName, int incrOrDecr, int level){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor c = db.rawQuery("SELECT * FROM " + MedicineTable.TABLE_NAME
+                + " INNER JOIN " + DosageAdjustmentTable.TABLE_NAME
+                + " ON " + MedicineTable._ID + "=" + DosageAdjustmentTable.COL_MEDICINE_FK
+                + " WHERE "+DosageAdjustmentTable.COL_LEVEL+"="+ level
+                + " AND "+MedicineTable.COL_COMMERCIAL_NAME+"= '"+medName+"'"
+                + " AND "+DosageAdjustmentTable.COL_INCR_OR_DECR+"="+incrOrDecr, null);
+        if(c.moveToFirst()) {
+            float mgDay1 = c.getFloat(c.getColumnIndex(DBContract.DosageAdjustmentTable.COL_DAY1));
+            float mgDay2 = c.getFloat(c.getColumnIndex(DBContract.DosageAdjustmentTable.COL_DAY2));
+            float mgDay3 = c.getFloat(c.getColumnIndex(DBContract.DosageAdjustmentTable.COL_DAY3));
+            float mgDay4 = c.getFloat(c.getColumnIndex(DBContract.DosageAdjustmentTable.COL_DAY4));
+
+            return new DsgAdjustHolder(level,incrOrDecr, mgDay1, mgDay2, mgDay3, mgDay4);
         } else {
             return null;
         }

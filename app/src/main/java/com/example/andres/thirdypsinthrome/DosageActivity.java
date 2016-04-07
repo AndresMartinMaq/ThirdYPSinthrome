@@ -89,7 +89,6 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
         }
         if (id == R.id.btt_enter_INR) {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            //TODO check a prev. dosage exists.
             if (prefs.getBoolean(getString(R.string.automode_prefkey), false)) {
                 showGenerateDoseDialog();
             }
@@ -164,7 +163,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
 
                 try {
                     //Generate the Dosage
-                    ADGManager.generateDosage(medName, lastDosage, startDate, minINR, maxINR, inr);
+                    ADGManager.generateDosage(this, medName, lastDosage, startDate, minINR, maxINR, inr);
                 } catch (Exception e) {
                     //Display error dialog if generation fails.
                     new AlertDialog.Builder(this).setTitle(R.string.error_txt)
