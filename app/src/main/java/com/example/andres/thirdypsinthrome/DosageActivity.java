@@ -178,9 +178,11 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
                         ADGManager.generateDosage(this, medName, mgSumAsked, startDate, minINR, maxINR, inr);
                     }
                     //Go back to main activity to refresh.
-                    startActivity(new Intent(this, MainActivity.class));
-                    //Pop backstack
-                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    //Also, Pop backstack so unupdated activities and fragments die.
+                    Intent intent = new Intent(this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish(); //finish the current activity.
                 } catch (Exception e) {
                     //Display error dialog if generation fails.
                     new AlertDialog.Builder(this).setTitle("Error")

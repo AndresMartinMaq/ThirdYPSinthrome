@@ -28,7 +28,9 @@ public class WelcomeActivity extends AppCompatActivity {
                 setUpADGInfo(prefs);
             }
         } else {
+            //Start main activity, making sure this activity is finished so user cannot back-button to it.
             startActivity(new Intent(this, MainActivity.class));
+            finish();
         }
     }
 
