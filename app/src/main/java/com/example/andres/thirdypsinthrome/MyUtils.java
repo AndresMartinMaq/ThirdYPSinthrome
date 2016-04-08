@@ -13,8 +13,7 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 //TODO IMPORTANT DosageAdjustmenttables need to have an associated therapeutic range they are good for.
-//TODO update today UI when new dose is added.
-//TODO autodosage creation keeps giving 1 level less than desired.
+//TODO update today UI when new dose is added. --Done?
 //TODO 1 dia sin acenocoumarl
 
 //TODO not let add dosages that overlap.
@@ -28,12 +27,19 @@ public class MyUtils {
     public static String TIME_FORMAT = "HH:mm";
     public static int MAX_DAYS_PER_DOSAGE = 7;
 
+    //This and some other code in this class can be used for testing and evaluating the app by simulating the passage of time.
+    public static final boolean TIME_SIMULATION_ON = false;//To be modified manually in code only.
+    public static int simlatedDayOffset = 0;
+
     public static String formatDate(Calendar c){
         return new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(c.getTime());
     }
+    public static String formatDate(long dayInSecs){
+        return new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(dayInSecs * 1000l);
+    }
 
     public static String getTodayStr(){
-        return formatDate(Calendar.getInstance());
+        return formatDate(getTodayLong());
     }
 
     //Returns the seconds corresponding to today normalised at midnight
@@ -43,7 +49,18 @@ public class MyUtils {
         date.set(Calendar.MINUTE, 0);
         date.set(Calendar.SECOND, 0);
         date.set(Calendar.MILLISECOND, 0);
-        return (date.getTimeInMillis() / 1000l);
+
+        long answer = (date.getTimeInMillis() / 1000l);
+
+        if (TIME_SIMULATION_ON){ answer = addDays(answer, simlatedDayOffset); }
+
+        return answer;
+    }
+
+    public static long getNowLong(){
+        long answer = Calendar.getInstance().getTimeInMillis() / 1000l;
+        if (TIME_SIMULATION_ON){ answer = addDays(answer, simlatedDayOffset); }
+        return answer;
     }
 
     public static String dateLongToStr(long dateInSeconds){

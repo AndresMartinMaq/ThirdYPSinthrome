@@ -271,7 +271,7 @@ public class DBHelper extends SQLiteOpenHelper {
     //TODO should return recent past or recent future dosage
     public DosageHolder getSomeRelevantDosage(long userID){
         SQLiteDatabase db = this.getWritableDatabase();
-        long now = Calendar.getInstance().getTimeInMillis() / 1000l;
+        long now = MyUtils.getNowLong();
 
         Cursor c = db.rawQuery("SELECT "+DosageTable._ID+" ,"+DosageTable.COL_LEVEL+" FROM "+DosageTable.TABLE_NAME
                 +" WHERE "+DosageTable.COL_USER_FK+"="+userID
@@ -291,7 +291,7 @@ public class DBHelper extends SQLiteOpenHelper {
     //Returns the dosage that starts in the past and finishes is the future, if it exists.
     public DosageHolder getCurrentDosage(long userID){
         SQLiteDatabase db = this.getWritableDatabase();
-        long now = Calendar.getInstance().getTimeInMillis() / 1000l;
+        long now = MyUtils.getNowLong();
 
         Cursor c = db.rawQuery("SELECT "+DosageTable._ID+" ,"+DosageTable.COL_LEVEL+" FROM "+DosageTable.TABLE_NAME
                 +" WHERE "+DosageTable.COL_USER_FK+"="+userID
