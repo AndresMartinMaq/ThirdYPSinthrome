@@ -27,7 +27,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     //Upon changing the database schema, you must increment the database version manually here.
     private static final int DATABASE_VERSION = 1;
-    static final String DATABASE_NAME = "sinthromeProject.db";
+    public static String DATABASE_NAME = "sinthromeProject.db";
     private static DBHelper instance;
 
     public static synchronized DBHelper getInstance(Context context) {
@@ -273,7 +273,7 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         long now = Calendar.getInstance().getTimeInMillis() / 1000l;
 
-        Cursor c = db.rawQuery("SELECT "+DosageTable._ID+" FROM "+DosageTable.TABLE_NAME
+        Cursor c = db.rawQuery("SELECT "+DosageTable._ID+" ,"+DosageTable.COL_LEVEL+" FROM "+DosageTable.TABLE_NAME
                 +" WHERE "+DosageTable.COL_USER_FK+"="+userID
                 +" ORDER BY "+DosageTable.COL_START+" DESC LIMIT 1", null);
         if (c.moveToFirst()){
@@ -293,7 +293,7 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         long now = Calendar.getInstance().getTimeInMillis() / 1000l;
 
-        Cursor c = db.rawQuery("SELECT "+DosageTable._ID+" FROM "+DosageTable.TABLE_NAME
+        Cursor c = db.rawQuery("SELECT "+DosageTable._ID+" ,"+DosageTable.COL_LEVEL+" FROM "+DosageTable.TABLE_NAME
                 +" WHERE "+DosageTable.COL_USER_FK+"="+userID
                 +" AND "+DosageTable.COL_START+" < "+now
                 +" AND "+DosageTable.COL_END+" > "+now, null);
@@ -316,7 +316,7 @@ public class DBHelper extends SQLiteOpenHelper {
         //Note endDate should be normalised.
         long endDatePlus1 = MyUtils.addDays(endDate, 1);
 
-        Cursor c = db.rawQuery("SELECT " + DosageTable._ID + " FROM " + DosageTable.TABLE_NAME
+        Cursor c = db.rawQuery("SELECT " + DosageTable._ID +" ,"+DosageTable.COL_LEVEL+ " FROM " + DosageTable.TABLE_NAME
                 + " WHERE " + DosageTable.COL_USER_FK + "=" + userID
                 + " AND " + DosageTable.COL_END + " >= " + endDate
                 + " AND " + DosageTable.COL_END + " < " + endDatePlus1, null);

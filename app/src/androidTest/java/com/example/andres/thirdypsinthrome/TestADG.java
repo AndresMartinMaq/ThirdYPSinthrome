@@ -1,10 +1,10 @@
 package com.example.andres.thirdypsinthrome;
 
-import android.database.sqlite.SQLiteDatabase;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.test.AndroidTestCase;
 import android.util.Log;
 
-import com.example.andres.thirdypsinthrome.DataHolders.DayHolder;
 import com.example.andres.thirdypsinthrome.DataHolders.DosageHolder;
 import com.example.andres.thirdypsinthrome.DataHolders.DsgAdjustHolder;
 import com.example.andres.thirdypsinthrome.Dosages.ADGManager;
@@ -45,28 +45,30 @@ public class TestADG extends AndroidTestCase {
     //Tests the ADG working with having had a previously manually input dosage as a base.
     public void testADGFromManual(){
         mContext.deleteDatabase("testSinthromeDatabase.db");
-        DBHelper dbHelper = new DBHelper(mContext, "testSinthromeDatabase.db");
+        DBHelper.DATABASE_NAME = "testSinthromeDatabase.db";
         String medName = "sinthrome";
 
         //Add DosageAdjsutment Information to db
         //Insert, in the db, the medicines for which we can do ADG.
-        long medID = dbHelper.addMedicine(medName, 4);
+        long medID = DBHelper.getInstance(mContext).addMedicine(medName, 4);
         //Insert, in the db, their corresponding Dosage Adjustment tables.
         List<DsgAdjustHolder> tables = DsgAdjustHolder.getDATables(medName);
-        dbHelper.addDAdjustTables(medID, tables);
+        DBHelper.getInstance(mContext).addDAdjustTables(medID, tables);
 
 
         long userID = 1;
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        prefs.edit().putLong(mContext.getString(R.string.userID_prefkey), userID).commit();
         //Dosage ended yesterday.
         long endDate =  MyUtils.addDays(MyUtils.getTodayLong(), -1);
         long startDate = MyUtils.addDays(endDate, -6);
         double[] intakes = {2.25, 2.5, 2, 2.25, 1.75, 2, 2.75}; //Sum = 15.5, level 18.
         float recordedINR = 4;
         //Add past dosage to db.
-        dbHelper.addDosageManually(userID, startDate, endDate, intakes);
+        DBHelper.getInstance(mContext).addDosageManually(userID, startDate, endDate, intakes);
 
         //Get the past dosage
-        DosageHolder lastDosagePlan = dbHelper.getDosagePlanEndingOn(1, endDate);
+        DosageHolder lastDosagePlan = DBHelper.getInstance(mContext).getDosagePlanEndingOn(1, endDate);
         long newStartDate = MyUtils.getTodayLong();
         //Minor check, "level" should be unavailable (encoded as -1) but calculated as 18.
         assertEquals(-1, lastDosagePlan.level);
@@ -80,8 +82,9 @@ public class TestADG extends AndroidTestCase {
             e.printStackTrace();
         }
         //Get generated dosage.
-        DosageHolder generated = dbHelper.getCurrentDosage(1);//NOTICE: this fails for no apparent reason.
+        DosageHolder generated = DBHelper.getInstance(mContext).getCurrentDosage(1);
         if (generated == null){ fail("Retrieved generated current dosage was null."); }
+
         //Check generated level
         int expectedNewLevel = 17;
         assertEquals("Failed to generate the correct new level, ", expectedNewLevel, generated.level);
@@ -93,6 +96,5 @@ public class TestADG extends AndroidTestCase {
         for (int i = 0; i < generatedIntakes.length; i++){
             assertEquals(expectedIntakes[i], generatedIntakes[i]);
         }
-
     }
 }

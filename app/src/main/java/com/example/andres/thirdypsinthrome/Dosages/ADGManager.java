@@ -17,7 +17,7 @@ import java.util.List;
 public class ADGManager {
 
 
-    public static boolean generateDosage(Context context, String medName, float mgSum, long startDate, float minINR, float maxINR, float recordedINR) throws Exception{
+    public static long generateDosage(Context context, String medName, float mgSum, long startDate, float minINR, float maxINR, float recordedINR) throws Exception{
         if (!medName.equals(DsgAdjustHolder.KNOWN_MEDS[0])){
             throw new Exception("Adjustment tables for "+medName+" are not available.");
         }
@@ -27,7 +27,7 @@ public class ADGManager {
         return generateDosage(context, medName, currentLevel, startDate, minINR, maxINR, recordedINR);
     }
 
-    public static boolean generateDosage(Context context, String medName, DosageHolder lastDosagePlan, long startDate, float minINR, float maxINR, float recordedINR) throws Exception {
+    public static long generateDosage(Context context, String medName, DosageHolder lastDosagePlan, long startDate, float minINR, float maxINR, float recordedINR) throws Exception {
         if (!medName.equals(DsgAdjustHolder.KNOWN_MEDS[0])){
             throw new Exception("Adjustment tables for "+medName+" are not available.");
         }
@@ -48,7 +48,7 @@ public class ADGManager {
         return generateDosage(context, medName, currentLevel, startDate, minINR, maxINR, recordedINR);
     }
 
-    private static boolean generateDosage(Context context, String medName, int currentLevel, long startDate, float minINR, float maxINR, float recordedINR) throws Exception {
+    private static long generateDosage(Context context, String medName, int currentLevel, long startDate, float minINR, float maxINR, float recordedINR) throws Exception {
         //Decide if increase or decrease dosage and by how much. Assumes a therapeutic range of 2.5-3.5.
         //Calculate new level (simple sum).
         int newLevel = 0;
@@ -84,7 +84,7 @@ public class ADGManager {
         } else if (recordedINR > 7){
             //Repeat. Contact your doctor.
             //TODO.
-            return false;
+            return -1;
         }
 
         //if (incrOrDecr != -1 || lastDosagePlan.days.size() < 4){//4 is the max size of DsgAdjustment patterns.
@@ -133,7 +133,7 @@ public class ADGManager {
             //See where in the pattern we left.
             //Continue the new intakes array from there.
         }*/
-        return true;
+        return insertedRowID;
     }
 
     public static String identifyPattern(float[] intakes){
