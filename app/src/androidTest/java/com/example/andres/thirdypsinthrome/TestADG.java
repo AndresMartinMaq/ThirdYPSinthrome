@@ -43,7 +43,8 @@ public class TestADG extends AndroidTestCase {
     }
 
     //Tests the ADG working with having had a previously manually input dosage as a base.
-    public void testADGFromManual(){
+    public void aidTestADGFromManual(long startDate, long endDate, double[] intakes, float recordedINR,
+                                     int expectedNewLevel, int expectedLengthOfPlan, float[] expectedNewIntakes){
         mContext.deleteDatabase("testSinthromeDatabase.db");
         DBHelper.DATABASE_NAME = "testSinthromeDatabase.db";
         String medName = "sinthrome";
@@ -55,15 +56,10 @@ public class TestADG extends AndroidTestCase {
         List<DsgAdjustHolder> tables = DsgAdjustHolder.getDATables(medName);
         DBHelper.getInstance(mContext).addDAdjustTables(medID, tables);
 
-
         long userID = 1;
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
         prefs.edit().putLong(mContext.getString(R.string.userID_prefkey), userID).commit();
-        //Dosage ended yesterday.
-        long endDate =  MyUtils.addDays(MyUtils.getTodayLong(), -1);
-        long startDate = MyUtils.addDays(endDate, -6);
-        double[] intakes = {2.25, 2.5, 2, 2.25, 1.75, 2, 2.75}; //Sum = 15.5, level 18.
-        float recordedINR = 4;
+
         //Add past dosage to db.
         DBHelper.getInstance(mContext).addDosageManually(userID, startDate, endDate, intakes);
 
@@ -86,15 +82,40 @@ public class TestADG extends AndroidTestCase {
         if (generated == null){ fail("Retrieved generated current dosage was null."); }
 
         //Check generated level
-        int expectedNewLevel = 17;
         assertEquals("Failed to generate the correct new level, ", expectedNewLevel, generated.level);
         //Check length of dosage plan (should be 7 for 1 level decrease).
-        assertEquals("Failed to generate the correct length of dosage, ", 7, generated.days.size());
+        assertEquals("Failed to generate the correct length of dosage, ", expectedLengthOfPlan, generated.days.size());
         //Check generated intakes
-        float[] expectedIntakes = {2,2,2,2,2,2,2};//Level 17 by decrease has pattern 2,2,2,2.
         float[] generatedIntakes = generated.getIntakes();
         for (int i = 0; i < generatedIntakes.length; i++){
-            assertEquals(expectedIntakes[i], generatedIntakes[i]);
+            assertEquals(expectedNewIntakes[i], generatedIntakes[i]);
         }
+    }
+
+    //Can only do one of this set of tests at once.
+    public void ignoretestADGFromManual1(){
+
+        long endDate =  MyUtils.addDays(MyUtils.getTodayLong(), -1);
+        long startDate = MyUtils.addDays(endDate, -6);
+        double[] intakes = {2.25, 2.5, 2, 2.25, 1.75, 2, 2.75}; //Sum = 15.5, level 18.
+        float recordedINR = 4;
+        int expectedNewLevel = 17;
+        int expectedLengthOfPlan = 7;//(should be 7 for 1 level decrease).
+        float[] expectedNewIntakes = {2,2,2,2,2,2,2};//Level 17 by decrease has pattern 2,2,2,2.
+
+        aidTestADGFromManual(startDate,  endDate, intakes, recordedINR, expectedNewLevel,expectedLengthOfPlan, expectedNewIntakes);
+    }
+
+    public void testADGFromManual2(){
+
+        long endDate =  MyUtils.addDays(MyUtils.getTodayLong(), -1);
+        long startDate = MyUtils.addDays(endDate, -6);
+        double[] intakes = {2.25, 2.5, 2, 2.25, 1.75, 2, 2.75}; //Sum = 15.5, level 18.
+        float recordedINR = 2;  //Will cause increase 1.
+        int expectedNewLevel = 19;
+        int expectedLengthOfPlan = 4;//Should be 4 for 1 level increase.
+        float[] expectedNewIntakes = {3,2,2,3};//Level 19 by decrease has pattern 3,2,2.
+
+        aidTestADGFromManual(startDate,  endDate, intakes, recordedINR, expectedNewLevel,expectedLengthOfPlan, expectedNewIntakes);
     }
 }
