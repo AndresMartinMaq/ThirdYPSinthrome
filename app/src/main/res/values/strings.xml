@@ -86,5 +86,7 @@
     <string name="dg_addinfo_required_hint">Past week intake sum (mg)</string>
     <string name="dg_addinfo_required_manu">Add manually</string>
     <string name="dg_addinfo_required_ok">Generate from sum</string>
+    <string name="err_msg_ADG_not_supported_1">"Unfortunately, automatic dosage generation for"</string>
+    <string name="err_msg_ADG_not_supported_2">"is not currently supported due to lack of dosage adjustment tables."</string>
 
 </resources>

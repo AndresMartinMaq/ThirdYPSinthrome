@@ -19,7 +19,7 @@ import java.util.Locale;
 //TODO not let add dosages that overlap.
 //TODO be able to delete dosages?
 //TODO be able to reset taken?
-//TODO check all fields are filled in settings.
+//TODO check all fields are filled in settings. In onPreferenceChanged, just set them to their defaults if empty?
 
 public class MyUtils {
 

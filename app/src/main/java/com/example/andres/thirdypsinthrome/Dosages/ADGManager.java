@@ -29,7 +29,7 @@ public class ADGManager {
 
     public static long generateDosage(Context context, String medName, DosageHolder lastDosagePlan, long startDate, float minINR, float maxINR, float recordedINR) throws Exception {
         if (!medName.equals(DsgAdjustHolder.KNOWN_MEDS[0])){
-            throw new Exception("Adjustment tables for "+medName+" are not available.");
+            throw new Exception(context.getString(R.string.err_msg_ADG_not_supported_1)+" "+medName+" "+context.getString(R.string.err_msg_ADG_not_supported_2));
         }
         //Calculate level from lastDosagePlan.
         int currentLevel;

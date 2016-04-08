@@ -1,5 +1,6 @@
 package com.example.andres.thirdypsinthrome;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -70,14 +71,14 @@ public class SettingsActivity extends PreferenceActivity
         // Set the listener to watch for value changes.
         preference.setOnPreferenceChangeListener(this);
 
-        // Trigger the listener immediately with the preference's
-        // current value.
+        // Trigger the listener immediately with the preference's current value.
         onPreferenceChange(preference,
                 PreferenceManager
                         .getDefaultSharedPreferences(preference.getContext())
                         .getString(preference.getKey(), ""));
     }
 
+    @SuppressLint("CommitPrefEdits")
     @Override
     public boolean onPreferenceChange(Preference preference, Object value) {
         String stringValue = value.toString();
@@ -94,13 +95,13 @@ public class SettingsActivity extends PreferenceActivity
             //For the medicine, check and set whether automatic dosage generation will be possible with it.
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             String medName = prefs.getString(preference.getKey(), "");
-            prefs.edit().putString(preference.getKey(), medName.toLowerCase()).apply(); //Also, make sure only lowercase letters are stored.
+            prefs.edit().putString(preference.getKey(), medName.toLowerCase()).commit(); //Also, make sure only lowercase letters are stored.
 
             float inrMin = Float.parseFloat(prefs.getString(getString(R.string.pref_mininr_key), ""));
             float inrMax = Float.parseFloat(prefs.getString(getString(R.string.pref_maxinr_key), ""));
 
             boolean autoMode = DsgAdjustHolder.isAutoModePossible(this, medName, inrMin, inrMax);
-            prefs.edit().putBoolean(getString(R.string.automode_prefkey), autoMode).apply();
+            prefs.edit().putBoolean(getString(R.string.automode_prefkey), autoMode).commit();
 
             preference.setSummary(stringValue);
         } else {

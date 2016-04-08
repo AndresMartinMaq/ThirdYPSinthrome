@@ -311,11 +311,11 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
             //Setting UI to display the most relevant Dosage (making use of a Loader to get the data) will happen
             //due to the loader being initiated in onActivityCreated and, subsequently, onLoadFinished calling the updateUI method.
 
-            View item4 = view.findViewById(R.id.dsg_item4);
+            /*View item4 = view.findViewById(R.id.dsg_item4);
             //To set the scrollView to scroll to the middle of an item
             if (item4 != null) {
                 centerScrollViewOn(item4, (HorizontalScrollView) view.findViewById(R.id.horizontalScrollView), view.findViewById(R.id.scrollingLinearLayout));
-            }
+            }*/
 
             return view;
         }
@@ -398,16 +398,16 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
             for (int i2 = i; i2 < itemViews.length; i2++){
                 //this is zero indexed and when a view is removed, the rest fall into place
                 //(e.g.: removing view "2" will cause view "3" to become 2 and "4" to become 3, etc.
-                parentLayout.getChildAt(i2).setVisibility(View.INVISIBLE);
+            //    parentLayout.getChildAt(i2).setVisibility(View.INVISIBLE);
+                parentLayout.removeViewAt(i);
             }
 
             //Set the message that states the endDate of the dosage.
             String endDate = MyUtils.dateLongToStr(MyUtils.addDays(dosage.endDate, -1));
             ((TextView) view.findViewById(R.id.dosage_txt2)).setText(endDate);
 
-            /*//Center the view on a middle item, for aesthetics.
-            int middlePosition = (int) Math.floor(((double) dosage.dayIntakes.size()) / 2);
-            centerScrollViewOn(itemViews[middlePosition], (HorizontalScrollView) parentLayout.getParent(), parentLayout);*/
+            //Center the view on today, for aesthetics.
+            //centerScrollViewOn(item1, (HorizontalScrollView) parentLayout.getParent(), parentLayout);
         }
 
         //----Loader methods-----
