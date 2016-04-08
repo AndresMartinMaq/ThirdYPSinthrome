@@ -28,8 +28,8 @@ public class MyUtils {
     public static int MAX_DAYS_PER_DOSAGE = 7;
 
     //This and some other code in this class can be used for testing and evaluating the app by simulating the passage of time.
-    public static final boolean TIME_SIMULATION_ON = false;//To be modified manually in code only.
-    public static int simlatedDayOffset = 0;
+    public static final boolean TIME_SIMULATION_ON = true;//To be modified manually in code only.
+    public static int SIMULATION_DAY_OFFSET = 0;
 
     public static String formatDate(Calendar c){
         return new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(c.getTime());
@@ -52,14 +52,14 @@ public class MyUtils {
 
         long answer = (date.getTimeInMillis() / 1000l);
 
-        if (TIME_SIMULATION_ON){ answer = addDays(answer, simlatedDayOffset); }
+        if (TIME_SIMULATION_ON){ answer = addDays(answer, SIMULATION_DAY_OFFSET); }
 
         return answer;
     }
 
     public static long getNowLong(){
         long answer = Calendar.getInstance().getTimeInMillis() / 1000l;
-        if (TIME_SIMULATION_ON){ answer = addDays(answer, simlatedDayOffset); }
+        if (TIME_SIMULATION_ON){ answer = addDays(answer, SIMULATION_DAY_OFFSET); }
         return answer;
     }
 

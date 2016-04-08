@@ -7,6 +7,7 @@
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="error_txt">Error</string>
+    <string name="action_timetravel">Simulate passage of 1 day</string>
 
     <!-- Main Activity-->
     <string name="main_today_txt">Today,</string>

@@ -28,8 +28,10 @@ public class WelcomeActivity extends AppCompatActivity {
                 setUpADGInfo(prefs);
             }
         } else {
-            //Start main activity, making sure this activity is finished so user cannot back-button to it.
-            startActivity(new Intent(this, MainActivity.class));
+            //Start main activity, making sure this activity is finished and the user cannot back-button to it.
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
             finish();
         }
     }

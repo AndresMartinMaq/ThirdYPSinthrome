@@ -398,7 +398,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
             for (int i2 = i; i2 < itemViews.length; i2++){
                 //this is zero indexed and when a view is removed, the rest fall into place
                 //(e.g.: removing view "2" will cause view "3" to become 2 and "4" to become 3, etc.
-                parentLayout.getChildAt(i).setVisibility(View.INVISIBLE);
+                parentLayout.getChildAt(i2).setVisibility(View.INVISIBLE);
             }
 
             //Set the message that states the endDate of the dosage.
@@ -431,7 +431,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
 
         @Override
         public void onLoaderReset(Loader<DosageHolder> loader) {
-            updateUI(null);
+            updateUI(dosage);
         }
     }
 }
