@@ -15,6 +15,7 @@ import java.util.Locale;
 //TODO IMPORTANT DosageAdjustmenttables need to have an associated therapeutic range they are good for.
 //TODO update today UI when new dose is added.
 //TODO autodosage creation keeps giving 1 level less than desired.
+//TODO 1 dia sin acenocoumarl
 
 //TODO not let add dosages that overlap.
 //TODO be able to delete dosages?

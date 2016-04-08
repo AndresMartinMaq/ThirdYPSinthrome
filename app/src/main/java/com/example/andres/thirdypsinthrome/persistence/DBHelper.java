@@ -361,7 +361,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         Cursor c = db.rawQuery("SELECT * FROM " + MedicineTable.TABLE_NAME
                 + " INNER JOIN " + DosageAdjustmentTable.TABLE_NAME
-                + " ON " + MedicineTable._ID + "=" + DosageAdjustmentTable.COL_MEDICINE_FK
+                + " ON " + MedicineTable.TABLE_NAME+"."+MedicineTable._ID + "=" + DosageAdjustmentTable.TABLE_NAME+"."+DosageAdjustmentTable.COL_MEDICINE_FK
                 + " WHERE "+DosageAdjustmentTable.COL_LEVEL+"="+ level
                 + " AND "+MedicineTable.COL_COMMERCIAL_NAME+"= '"+medName+"'"
                 + " AND "+DosageAdjustmentTable.COL_INCR_OR_DECR+"="+incrOrDecr, null);

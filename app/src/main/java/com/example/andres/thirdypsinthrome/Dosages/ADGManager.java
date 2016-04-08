@@ -22,7 +22,7 @@ public class ADGManager {
             throw new Exception("Adjustment tables for "+medName+" are not available.");
         }
         //Calculate level from mg intake.
-        int currentLevel = (int)mgWeekSumToLevelSinthrome(mgSum);
+        int currentLevel = mgWeekSumToLevelSinthrome(mgSum);
         //Generate using this level
         return generateDosage(context, medName, currentLevel, startDate, minINR, maxINR, recordedINR);
     }
@@ -43,8 +43,7 @@ public class ADGManager {
                 mgSum+= day.mg;
             }
             //Calculate level from mg intake.
-            double level = mgWeekSumToLevelSinthrome(mgSum);
-            currentLevel = (int)level;
+            currentLevel = mgWeekSumToLevelSinthrome(mgSum);
         }
         return generateDosage(context, medName, currentLevel, startDate, minINR, maxINR, recordedINR);
     }
@@ -189,9 +188,9 @@ public class ADGManager {
     }
 
     //Calculates a Dosage Level when one isn't available using a past dosage's mg/week intake.
-    public static double mgWeekSumToLevelSinthrome(double mgSum) throws Exception {
-        if (mgSum >= 58 || 0 >= mgSum){ throw new Exception("Miligrams should be between 0 and 58 non-inclusive.");}
-        double level = -1;
+    public static int mgWeekSumToLevelSinthrome(double mgSum) throws Exception {
+        if (mgSum > 58 || 0 >= mgSum){ throw new Exception("Miligrams should be between 0 and 59 non-inclusive.");}
+        int level = -1;
         if (mgSum < 1.5){
             level = 1;
         } else if (mgSum < 2.5){
@@ -216,20 +215,22 @@ public class ADGManager {
             level = 11;
         }else if (mgSum < 9){
             level = 12;
-        }else if (mgSum < 16) {///-----
-            level = mgSum + 2;
-        }else if (mgSum < 23) {
-            level = mgSum + 1;
-        }else if (mgSum < 30) {
-            level = mgSum;
-        }else if (mgSum < 37) {
-            level = mgSum - 1;
-        } else if (mgSum < 44){
-            level = mgSum - 2;
-        }else if (mgSum < 51){
-            level = mgSum - 3;
-        } else if (mgSum < 58){
-            level = mgSum - 4;
+        }else if (mgSum < 15) {///-----
+            level = ((int)Math.ceil(mgSum)) + 3;        // [9-16)
+        }else if (mgSum < 22) {
+            level = ((int)Math.ceil(mgSum)) + 2;        //[16-22)
+        }else if (mgSum < 29) {
+            level = ((int)Math.ceil(mgSum)) + 1;        //[22, 29)
+        }else if (mgSum < 36) {
+            level = ((int)Math.ceil(mgSum));            //[36, 43)
+        } else if (mgSum < 43){
+            level = ((int)Math.ceil(mgSum)) - 1;        //[43, 50)
+        }else if (mgSum < 50){
+            level = ((int)Math.ceil(mgSum)) - 2;
+        } else if (mgSum < 57){
+            level = ((int)Math.ceil(mgSum)) - 3;
+        } else {
+            level = ((int)Math.ceil(mgSum)) - 4;
         }
         return level;
     }
