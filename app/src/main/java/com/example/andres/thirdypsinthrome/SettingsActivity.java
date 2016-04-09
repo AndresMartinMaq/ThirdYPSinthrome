@@ -17,6 +17,9 @@ import android.view.View;
 import com.example.andres.thirdypsinthrome.DataHolders.DsgAdjustHolder;
 import com.example.andres.thirdypsinthrome.persistence.DBHelper;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 /**
  * A {@link PreferenceActivity} that presents a set of application settings.
  * See <a href="http://developer.android.com/design/patterns/settings.html">
@@ -97,6 +100,11 @@ public class SettingsActivity extends PreferenceActivity
             if (prefIndex >= 0) {
                 preference.setSummary(listPreference.getEntries()[prefIndex]);
             }
+
+            if(preference.getKey().equals(getString(R.string.pref_alarm_timing_key))){
+                //Set the alarm
+                setAlarms(stringValue);
+            }
         }else
         if (preference.getKey().equals(getString(R.string.pref_alarmtone_key))){
             //For alarm tone, get the name (otherwise it displays the filepath).
@@ -126,19 +134,34 @@ public class SettingsActivity extends PreferenceActivity
     }
 
     //Setting an alarm for the medicine taking time
-    private void setAlarm() {
+    private void setAlarms(String timingStr) {
+        //Get ringtone
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String timeStr = prefs.getString(getString(R.string.pref_med_time_key), getString(R.string.pref_med_time_default));
-        String[] strArr = timeStr.split(":");
+        Uri ringtoneUri = Uri.parse(prefs.getString(getString(R.string.pref_alarmtone_key), getString(R.string.pref_alarmtone_default)));
 
-        int  hour = Integer.parseInt(strArr[0]);
-        int minute = Integer.parseInt(strArr[1]);
+        //Set a calendar to the medicine intake time.
+        String intakeTimeStr = prefs.getString(getString(R.string.pref_med_time_key), getString(R.string.pref_med_time_default));
+        String[] hAndMins = intakeTimeStr.split(":");
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(MyUtils.getTodayLong() * 1000l);
+        c.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hAndMins[0]));
+        c.set(Calendar.MINUTE, Integer.parseInt(hAndMins[1]));
 
-        Intent i = new Intent(AlarmClock.ACTION_SET_ALARM);
-        i.putExtra(AlarmClock.EXTRA_HOUR, hour );
-        i.putExtra(AlarmClock.EXTRA_MINUTES, minute);
-        i.putExtra(AlarmClock.EXTRA_SKIP_UI, false);
-        startActivity(i);
+        //Set alarms X minutes prior to this time (may set 1, 2 or more alarms depending on the timingStr set chosen by user).
+        String[] strArr = timingStr.split(",");
+        for (String x : strArr){
+
+            c.add(Calendar.MINUTE, -Integer.parseInt(x) );
+
+            int hour = c.get(Calendar.HOUR_OF_DAY);
+            int minute = c.get(Calendar.MINUTE);
+
+            Intent i = new Intent(AlarmClock.ACTION_SET_ALARM);
+            i.putExtra(AlarmClock.EXTRA_HOUR, hour );
+            i.putExtra(AlarmClock.EXTRA_MINUTES, minute);
+            i.putExtra(AlarmClock.EXTRA_SKIP_UI, false);//true
+            i.putExtra(AlarmClock.EXTRA_RINGTONE, ringtoneUri);
+            startActivity(i);
+        }
     }
-
 }
