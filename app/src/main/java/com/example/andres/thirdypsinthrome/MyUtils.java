@@ -16,6 +16,8 @@ import java.util.Locale;
 //TODO update today UI when new dose is added. --Done?
 //TODO 1 dia sin acenocoumarl
 
+//TODO Notifications, Cit. Science notes, Exporting, History.
+
 //TODO not let add dosages that overlap.
 //TODO be able to delete dosages?
 //TODO be able to reset taken?

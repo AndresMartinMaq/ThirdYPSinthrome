@@ -3,11 +3,15 @@ package com.example.andres.thirdypsinthrome;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.provider.AlarmClock;
 import android.view.View;
 
 import com.example.andres.thirdypsinthrome.DataHolders.DsgAdjustHolder;
@@ -36,6 +40,8 @@ public class SettingsActivity extends PreferenceActivity
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_med_name_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_med_time_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_mg_per_tablet_key)));
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_alarmtone_key)));
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_alarm_timing_key)));
 
         //For when this is the initial setup.
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -91,10 +97,18 @@ public class SettingsActivity extends PreferenceActivity
             if (prefIndex >= 0) {
                 preference.setSummary(listPreference.getEntries()[prefIndex]);
             }
-        }else if(preference.getKey().equals(getString(R.string.pref_med_name_key))){
+        }else
+        if (preference.getKey().equals(getString(R.string.pref_alarmtone_key))){
+            //For alarm tone, get the name (otherwise it displays the filepath).
+            Uri ringtoneUri = Uri.parse(stringValue);
+            Ringtone ringtone = RingtoneManager.getRingtone(this, ringtoneUri);
+            String name = ringtone.getTitle(this);
+            preference.setSummary(name);
+        }else
+        if(preference.getKey().equals(getString(R.string.pref_med_name_key))){
             //For the medicine, check and set whether automatic dosage generation will be possible with it.
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            String medName = prefs.getString(preference.getKey(), "");
+            String medName = stringValue;
             prefs.edit().putString(preference.getKey(), medName.toLowerCase()).commit(); //Also, make sure only lowercase letters are stored.
 
             float inrMin = Float.parseFloat(prefs.getString(getString(R.string.pref_mininr_key), ""));
@@ -103,12 +117,28 @@ public class SettingsActivity extends PreferenceActivity
             boolean autoMode = DsgAdjustHolder.isAutoModePossible(this, medName, inrMin, inrMax);
             prefs.edit().putBoolean(getString(R.string.automode_prefkey), autoMode).commit();
 
-            preference.setSummary(stringValue);
+            preference.setSummary(medName);
         } else {
             // For other preferences, set the summary to the value's string representation.
             preference.setSummary(stringValue);
         }
         return true;
+    }
+
+    //Setting an alarm for the medicine taking time
+    private void setAlarm() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String timeStr = prefs.getString(getString(R.string.pref_med_time_key), getString(R.string.pref_med_time_default));
+        String[] strArr = timeStr.split(":");
+
+        int  hour = Integer.parseInt(strArr[0]);
+        int minute = Integer.parseInt(strArr[1]);
+
+        Intent i = new Intent(AlarmClock.ACTION_SET_ALARM);
+        i.putExtra(AlarmClock.EXTRA_HOUR, hour );
+        i.putExtra(AlarmClock.EXTRA_MINUTES, minute);
+        i.putExtra(AlarmClock.EXTRA_SKIP_UI, false);
+        startActivity(i);
     }
 
 }

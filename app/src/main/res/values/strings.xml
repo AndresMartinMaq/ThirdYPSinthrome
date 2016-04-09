@@ -35,6 +35,7 @@
     <string name="pref_maxinr_title">Maximum INR</string>
     <string name="pref_maxinr_default">3.5</string>
 
+    <string name="pref_catg_time_title">Daily Intakes</string>
     <string name="pref_med_time_key">medTime</string>
     <string name="pref_med_time_title">Time of medicine intake</string>
     <string name="pref_med_time_default">18:30</string>
@@ -46,6 +47,33 @@
     <string name="pref_mg_per_tablet_key">mgPerTablet</string>
     <string name="pref_mg_per_tablet_title">Milligrams per medicine tablet</string>
 
+    <!-- Settings Activity, alarm -->
+    <string name="pref_alarm_enabled_key">alarmsEnabled</string>
+    <string name="pref_alarm_enabled_title">Enable daily alarms</string>
+    <string name="pref_alarmtone_key">alarmTone</string>
+    <string name="pref_alarmtone_title">Alarm tone</string>
+    <string name="pref_alarmtone_default">content://settings/system/alarm_alert</string>
+    <string name="pref_alarm_timing_key">alarmTiming</string>
+    <string name="pref_alarm_timing_title">Alarm timing</string>
+    <string name="pref_alarm_timing_default">15,1</string>
+    <string-array name="pref_alarm_times_titles">
+        <item>5 minutes prior</item>
+        <item>10 minutes prior</item>
+        <item>15 and 1 minutes prior</item>
+        <item>20 and 1 minutes prior</item>
+        <item>30 and 1 minutes prior</item>
+        <item>30 and 5 minutes prior</item>
+    </string-array>
+    <string-array name="pref_alarm_times_values">
+        <item>5</item>
+        <item>10</item>
+        <item>15,1</item>
+        <item>20,1</item>
+        <item>30,1</item>
+        <item>30,5</item>
+    </string-array>
+
+    <!-- Special values stored in shared preferences-->
     <string name="userID_prefkey">db_userID</string>
     <string name="automode_prefkey">is_auto_dose_generation_available</string>
 
