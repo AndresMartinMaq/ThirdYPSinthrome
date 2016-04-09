@@ -1,24 +1,28 @@
 package com.example.andres.thirdypsinthrome;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.provider.AlarmClock;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 
 import com.example.andres.thirdypsinthrome.DataHolders.DsgAdjustHolder;
 import com.example.andres.thirdypsinthrome.persistence.DBHelper;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings.
@@ -29,22 +33,24 @@ public class SettingsActivity extends PreferenceActivity
         implements Preference.OnPreferenceChangeListener {
 
     //TODO consider enhancing ui using spinners and such personalised Preference xml units.
+    //Note: With the default values, automode will be available.
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         addPreferencesFromResource(R.xml.general_prefs);
 
-        // For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
-        // updated when the preference changes.
-        //With the default values, automode will be available.
+        //For all preferences, attach an OnPreferenceChangeListener so the UI summary can be updated when the preference changes.
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_mininr_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_maxinr_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_med_name_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_med_time_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_mg_per_tablet_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_alarmtone_key)));
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_alarm_timing_key)));
+        //These are  here so they doesn't get triggered onCreation like the others.
+        findPreference(getString(R.string.pref_alarm_timing_key)).setOnPreferenceChangeListener(this);
+        findPreference(getString(R.string.pref_alarm_enabled_key)).setOnPreferenceChangeListener(this);
 
         //For when this is the initial setup.
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -101,17 +107,39 @@ public class SettingsActivity extends PreferenceActivity
                 preference.setSummary(listPreference.getEntries()[prefIndex]);
             }
 
-            if(preference.getKey().equals(getString(R.string.pref_alarm_timing_key))){
-                //Set the alarm
+            if (preference.getKey().equals(getString(R.string.pref_alarm_timing_key))){
+                //Set the alarms
                 setAlarms(stringValue);
             }
         }else
         if (preference.getKey().equals(getString(R.string.pref_alarmtone_key))){
-            //For alarm tone, get the name (otherwise it displays the filepath).
+            //For alarm tone, get the name (otherwise it displays the uri).
             Uri ringtoneUri = Uri.parse(stringValue);
             Ringtone ringtone = RingtoneManager.getRingtone(this, ringtoneUri);
             String name = ringtone.getTitle(this);
             preference.setSummary(name);
+        }else
+        if (preference.getKey().equals(getString(R.string.pref_alarm_enabled_key))) {
+            if (stringValue.equals("false")) {
+                //If trying to disable alarms, show a dialog to inform that already set alarms will need to be deleted manually.
+                new AlertDialog.Builder(this).setTitle(getString(R.string.notice))
+                        .setMessage(getString(R.string.dg_past_alarms_not_deleted))
+                        .setPositiveButton(getString(R.string.dg_past_alarms_bttn1), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int i) {
+                                //Start the Clock Activity.
+                                startActivity(new Intent(AlarmClock.ACTION_SHOW_ALARMS));
+                            }
+                        })
+                        .setNegativeButton(getString(R.string.later), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int i) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
+            }
+            //Notice the lack of setSummary() here, due to it being a checkbox.
         }else
         if(preference.getKey().equals(getString(R.string.pref_med_name_key))){
             //For the medicine, check and set whether automatic dosage generation will be possible with it.
@@ -135,17 +163,21 @@ public class SettingsActivity extends PreferenceActivity
 
     //Setting an alarm for the medicine taking time
     private void setAlarms(String timingStr) {
-        //Get ringtone
+        //Get prefernces used
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         Uri ringtoneUri = Uri.parse(prefs.getString(getString(R.string.pref_alarmtone_key), getString(R.string.pref_alarmtone_default)));
+        String intakeTimeStr = prefs.getString(getString(R.string.pref_med_time_key), getString(R.string.pref_med_time_default));
 
         //Set a calendar to the medicine intake time.
-        String intakeTimeStr = prefs.getString(getString(R.string.pref_med_time_key), getString(R.string.pref_med_time_default));
         String[] hAndMins = intakeTimeStr.split(":");
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(MyUtils.getTodayLong() * 1000l);
         c.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hAndMins[0]));
         c.set(Calendar.MINUTE, Integer.parseInt(hAndMins[1]));
+
+        //Days the alarm will be set for.
+        Integer[] week = {Calendar.MONDAY,Calendar.TUESDAY,Calendar.WEDNESDAY,Calendar.THURSDAY,Calendar.FRIDAY,Calendar.SATURDAY, Calendar.SUNDAY};
+        ArrayList<Integer> daysOfWeek = new ArrayList<Integer>(Arrays.asList(week));
 
         //Set alarms X minutes prior to this time (may set 1, 2 or more alarms depending on the timingStr set chosen by user).
         String[] strArr = timingStr.split(",");
@@ -159,9 +191,45 @@ public class SettingsActivity extends PreferenceActivity
             Intent i = new Intent(AlarmClock.ACTION_SET_ALARM);
             i.putExtra(AlarmClock.EXTRA_HOUR, hour );
             i.putExtra(AlarmClock.EXTRA_MINUTES, minute);
-            i.putExtra(AlarmClock.EXTRA_SKIP_UI, false);//true
-            i.putExtra(AlarmClock.EXTRA_RINGTONE, ringtoneUri);
-            startActivity(i);
+            i.putExtra(AlarmClock.EXTRA_MESSAGE, getString(R.string.alarm_message));
+            if (Build.VERSION.SDK_INT >= 19) {
+                i.putExtra(AlarmClock.EXTRA_RINGTONE, ringtoneUri.toString());
+                i.putIntegerArrayListExtra(AlarmClock.EXTRA_DAYS, daysOfWeek);
+            }
+            //Only open the clock activity if this is the last alarm to be set.
+            if (x.equals(strArr[strArr.length-1])){
+                i.putExtra(AlarmClock.EXTRA_SKIP_UI, true);
+                startActivity(i);
+            } else {
+                i.putExtra(AlarmClock.EXTRA_SKIP_UI, false);
+                startActivity(i);
+                try {Thread.sleep(2000);} catch (InterruptedException e) {}
+            }
+            //Undo the change to the calendar, in case another alarm will be set.
+            c.add(Calendar.MINUTE, +Integer.parseInt(x) );
         }
     }
+
+
+    /*private void seeAlarmsSet(){         //doesn't work, cursor is null TODO delete
+        final String tag_alarm = "tag_alarm";
+        Uri uri = Uri.parse("content://com.android.alarmclock/alarm");
+        Cursor c = getContentResolver().query(uri, null, null, null, null);
+        Log.i(tag_alarm, "no of records are " + c.getCount());
+        Log.i(tag_alarm, "no of columns are " + c.getColumnCount());
+        if (c != null) {
+            String names[] = c.getColumnNames();
+            for (String temp : names) {
+                System.out.println(temp);
+            }
+            if (c.moveToFirst()) {
+                do {
+                    for (int j = 0; j < c.getColumnCount(); j++) {
+                        Log.i(tag_alarm, c.getColumnName(j)
+                                + " which has value " + c.getString(j));
+                    }
+                } while (c.moveToNext());
+            }
+        }
+    }*/
 }

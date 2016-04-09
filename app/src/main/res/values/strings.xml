@@ -49,12 +49,12 @@
 
     <!-- Settings Activity, alarm -->
     <string name="pref_alarm_enabled_key">alarmsEnabled</string>
-    <string name="pref_alarm_enabled_title">Enable daily alarms</string>
+    <string name="pref_alarm_enabled_title">Set recurring alarms</string>
     <string name="pref_alarmtone_key">alarmTone</string>
     <string name="pref_alarmtone_title">Alarm tone</string>
     <string name="pref_alarmtone_default">content://settings/system/alarm_alert</string>
     <string name="pref_alarm_timing_key">alarmTiming</string>
-    <string name="pref_alarm_timing_title">Alarm timing</string>
+    <string name="pref_alarm_timing_title">Alarm time</string>
     <string name="pref_alarm_timing_default">15,1</string>
     <string-array name="pref_alarm_times_titles">
         <item>5 minutes prior</item>
@@ -72,6 +72,11 @@
         <item>30,1</item>
         <item>30,5</item>
     </string-array>
+    <string name="alarm_message">Medication Intake Alarm</string>
+    <string name="notice">Notice</string>
+    <string name="dg_past_alarms_not_deleted">Be aware that any currently set alarms will not be deleted. If you wish to delete them you may do so from your Clock app at any point.</string>
+    <string name="dg_past_alarms_bttn1">Go to my Clock app</string>
+    <string name="later">Later</string>
 
     <!-- Special values stored in shared preferences-->
     <string name="userID_prefkey">db_userID</string>

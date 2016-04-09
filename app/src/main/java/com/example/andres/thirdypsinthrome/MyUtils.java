@@ -19,6 +19,7 @@ import java.util.Locale;
 //TODO Notifications, Cit. Science notes, Exporting, History.
 
 //TODO not let add dosages that overlap.
+//TODO consider using notifications for alarm.
 //TODO be able to delete dosages?
 //TODO be able to reset taken?
 //TODO check all fields are filled in settings. In onPreferenceChanged, just set them to their defaults if empty?
