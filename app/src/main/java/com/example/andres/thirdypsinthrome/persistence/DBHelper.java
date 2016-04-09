@@ -291,12 +291,12 @@ public class DBHelper extends SQLiteOpenHelper {
     //Returns the dosage that starts in the past and finishes is the future, if it exists.
     public DosageHolder getCurrentDosage(long userID){
         SQLiteDatabase db = this.getWritableDatabase();
-        long now = MyUtils.getNowLong();
+        long todayStart = MyUtils.getTodayLong();
 
         Cursor c = db.rawQuery("SELECT "+DosageTable._ID+" ,"+DosageTable.COL_LEVEL+" FROM "+DosageTable.TABLE_NAME
                 +" WHERE "+DosageTable.COL_USER_FK+"="+userID
-                +" AND "+DosageTable.COL_START+" < "+now
-                +" AND "+DosageTable.COL_END+" > "+now, null);
+                +" AND "+DosageTable.COL_START+" <= "+todayStart
+                +" AND "+DosageTable.COL_END+" >= "+todayStart, null);
         if (c.moveToFirst()){
             int dosageID = c.getInt(c.getColumnIndex(DosageTable._ID));
             int level = -1;
