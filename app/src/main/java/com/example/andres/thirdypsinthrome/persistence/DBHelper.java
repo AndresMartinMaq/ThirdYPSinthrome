@@ -233,7 +233,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public long addDosageManually(long userID, long startDate, long endDate, double[] intakes){
-        return addDosage( userID,  startDate,  endDate,  intakes, -1);
+        return addDosage( userID,  startDate,  endDate,  intakes, -1);//Before calling this method, call isDatesAvailable.
     }
 
     public long addDosage(long userID, long startDate, long endDate, Float[] intakes, int level) {
@@ -361,10 +361,10 @@ public class DBHelper extends SQLiteOpenHelper {
 
         Cursor c = db.rawQuery("SELECT * FROM " + MedicineTable.TABLE_NAME
                 + " INNER JOIN " + DosageAdjustmentTable.TABLE_NAME
-                + " ON " + MedicineTable.TABLE_NAME+"."+MedicineTable._ID + "=" + DosageAdjustmentTable.TABLE_NAME+"."+DosageAdjustmentTable.COL_MEDICINE_FK
-                + " WHERE "+DosageAdjustmentTable.COL_LEVEL+"="+ level
-                + " AND "+MedicineTable.COL_COMMERCIAL_NAME+"= '"+medName+"'"
-                + " AND "+DosageAdjustmentTable.COL_INCR_OR_DECR+"="+incrOrDecr, null);
+                + " ON " + MedicineTable.TABLE_NAME + "." + MedicineTable._ID + "=" + DosageAdjustmentTable.TABLE_NAME + "." + DosageAdjustmentTable.COL_MEDICINE_FK
+                + " WHERE " + DosageAdjustmentTable.COL_LEVEL + "=" + level
+                + " AND " + MedicineTable.COL_COMMERCIAL_NAME + "= '" + medName + "'"
+                + " AND " + DosageAdjustmentTable.COL_INCR_OR_DECR + "=" + incrOrDecr, null);
         if(c.moveToFirst()) {
             float mgDay1 = c.getFloat(c.getColumnIndex(DBContract.DosageAdjustmentTable.COL_DAY1));
             float mgDay2 = c.getFloat(c.getColumnIndex(DBContract.DosageAdjustmentTable.COL_DAY2));
@@ -396,5 +396,23 @@ public class DBHelper extends SQLiteOpenHelper {
             return bool;
         }
         return false;
+    }
+
+    //Used to check so that dosages don't overlap each other.
+    public boolean isDatesAvailable(long userID, long startDate, long endDate){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT "+DosageTable.COL_START+","+DosageTable.COL_END+" FROM "+ DosageTable.TABLE_NAME
+                + " WHERE " + DosageTable.COL_USER_FK + "=" + userID
+                + " AND ((" + startDate + " <= " + DosageTable.COL_START+ " AND " + DosageTable.COL_START + " <= " + endDate +")"
+                + " OR (" + startDate + " <= " + DosageTable.COL_END+ " AND " + DosageTable.COL_END + " <= " + endDate+")"
+                + " OR (" + DosageTable.COL_START + " <= " + startDate+ " AND " + endDate + " <= " + DosageTable.COL_END+"))", null);
+        if(cursor.moveToFirst()) {
+            cursor.close();
+            return false;
+        } else {
+            cursor.close();
+            return true;
+        }
     }
 }

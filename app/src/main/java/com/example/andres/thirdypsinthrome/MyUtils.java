@@ -13,16 +13,15 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 //TODO IMPORTANT DosageAdjustmenttables need to have an associated therapeutic range they are good for.
-//TODO update today UI when new dose is added. --Done?
-//TODO 1 dia sin acenocoumarl
+//TODO 1 dia sin acenocoumarl.
 
-//TODO Notifications, Cit. Science notes, Exporting, History.
+//TODO Cit. Science notes, Exporting, History.
 
-//TODO not let add dosages that overlap.
-//TODO consider using notifications for alarm.
 //TODO be able to delete dosages?
 //TODO be able to reset taken?
 //TODO check all fields are filled in settings. In onPreferenceChanged, just set them to their defaults if empty?
+//Consider using notifications for alarm.
+//Could make it possible to manually input shorter dosages at this point.
 
 public class MyUtils {
 
@@ -70,7 +69,7 @@ public class MyUtils {
         return new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(dateInSeconds * 1000l);
     }
 
-    //Takes a date in the string format DATE_FORMAT.
+    //Takes a date in the string format DATE_FORMAT. Works with dates within this year.TODO
     public static long dateStrToLong(String dateStr) throws ParseException {
         //Set date on a calendar
         Calendar c = Calendar.getInstance();
@@ -85,7 +84,7 @@ public class MyUtils {
     }
 
     public static long dateParamsToLong(int year, int monthOfYear, int dayOfMonth){
-        Date date = new Date(year, monthOfYear,dayOfMonth);
+        Date date = new Date(year - 1900, monthOfYear,dayOfMonth);
         return (date.getTime()/1000l);
     }
 
@@ -116,7 +115,7 @@ public class MyUtils {
     //Returns the number of minutes (abs value, rounded down) between now and the time at which medication should be taken.
     public static int getDevFromMedTakingTime(Context context){
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String targetTimeStr = prefs.getString(context.getString(R.string.pref_med_time_key), null);
+        String targetTimeStr = prefs.getString(context.getString(R.string.pref_med_time_key), context.getString(R.string.pref_med_time_default));
 
         SimpleDateFormat formatter = new SimpleDateFormat(TIME_FORMAT, Locale.getDefault());
         try {

@@ -103,6 +103,9 @@
     <string name="toast_fill_all_fields">Please ensure all fields have been filled.</string>
     <string name="dialog_startDate_in_past">Please ensure the Start Date is not in the past.</string>
     <string name="dialog_startDate_in_past_title">Invalid starting date</string>
+    <string name="dialog_dates_unavailable_title">Dates not available</string>
+    <string name="dialog_dates_unavailable_msg">Another dosage plan already occupies one or more of the dates. You must delete this other plan or choose a different starting date.</string>
+
 
     <!-- Generate Dosage-->
     <string name="dg_newINR_title">Generate a new dosage</string>
@@ -112,7 +115,7 @@
     <string name="dg_starting_txt">Dosage starting date:</string>
     <string name="dg_inr_today_hint">INR as tested today</string>
     <string name="dg_noDAG_title">Automatic Dosage Generation is unavailable</string>
-    <string name="dg_noDAG_msg">Unfortunately, we don\'t posess the data required to generate dosage plans for your specific medication or treatment parameters. See \"About\" in the options menu for more information.</string>
+    <string name="dg_noDAG_msg">Unfortunately, we don\'t possess the data required to generate dosage plans for your specific medication or treatment parameters. See \"About\" in the options menu for more information.</string>
     <string name="dg_DAG_errormsg">Could not generate a dosage plan automatically.</string>
     <string name="dg_addinfo_required_title">Additional Information Required</string>
     <string name="dg_addinfo_required_msg">A previous dosage plan is needed to generate a new one. You may enter your first plan manually or, alternatively, provide here the sum of milligrams that you have taken in the past week.</string>

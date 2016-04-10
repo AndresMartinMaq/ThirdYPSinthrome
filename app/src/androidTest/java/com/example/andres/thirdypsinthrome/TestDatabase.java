@@ -161,7 +161,7 @@ public class TestDatabase extends AndroidTestCase{
         long startDate = (new Date(2014 - 1900, 2, 2).getTime() / 1000);
         Log.d(TAG, "startDate in secs int: " + startDate);
         double[] intakes = {3d, 3.5, 3, 2.5, 2, 2.5, 3};
-        long endDate = MyUtils.addDays(startDate, intakes.length);
+        long endDate = MyUtils.addDays(startDate, intakes.length -1);
         Log.d(TAG, "endDate in secs int: " + endDate);
 
         //User creation, required?
@@ -242,5 +242,37 @@ public class TestDatabase extends AndroidTestCase{
         cursor.moveToFirst();
         assertEquals(medName, cursor.getString(cursor.getColumnIndex(DBContract.MedicineTable.COL_COMMERCIAL_NAME)));
         assertEquals(mgPerTablet, cursor.getFloat(cursor.getColumnIndex(DBContract.MedicineTable.COL_MILLIGRAMS_PER_TABLET)));
+    }
+
+    public void testDateAvailability(){
+        DBHelper dbHelper = new DBHelper(mContext, "testSinthromeDatabase.db");
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        long startDate = MyUtils.dateParamsToLong(2014,5,12);
+        double[] intakes = {3d, 3.5, 3, 2.5, 2, 2.5, 3};
+        long endDate = MyUtils.addDays(startDate, intakes.length -1);
+
+        //User creation
+        ContentValues userValues = new ContentValues();
+        userValues.put(DBContract.UserTable.COL_TARGET_INR_MIN, 2.5d);
+        userValues.put(DBContract.UserTable.COL_TARGET_INR_MAX, 3.5d);
+        long userID = db.insert(DBContract.UserTable.TABLE_NAME, null, userValues);
+        assertTrue(userID != -1);
+
+        //Add dosage
+        dbHelper.addDosageManually(userID, startDate, endDate, intakes);
+
+        //isDatesAvailable method test.
+        assertFalse(dbHelper.isDatesAvailable(userID, startDate, endDate));
+        assertFalse(dbHelper.isDatesAvailable(userID, startDate, MyUtils.addDays(endDate, -2)));
+
+        assertTrue(dbHelper.isDatesAvailable(userID, MyUtils.addDays(startDate, 13), MyUtils.addDays(endDate, 13)));
+        assertTrue(dbHelper.isDatesAvailable(userID, MyUtils.addDays(startDate, -13), MyUtils.addDays(endDate, -13)));
+
+        assertFalse(dbHelper.isDatesAvailable(userID, MyUtils.addDays(startDate, 1), MyUtils.addDays(endDate, 2)));
+        assertFalse(dbHelper.isDatesAvailable(userID, MyUtils.addDays(startDate, 4), MyUtils.addDays(endDate, 23)));
+        assertFalse(dbHelper.isDatesAvailable(userID, MyUtils.addDays(startDate, -10), MyUtils.addDays(endDate, -2)));
+
+        db.close();
     }
 }

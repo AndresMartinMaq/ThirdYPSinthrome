@@ -12,13 +12,11 @@ import android.widget.TextView;
 
 import com.example.andres.thirdypsinthrome.MyUtils;
 import com.example.andres.thirdypsinthrome.R;
-
-import java.text.ParseException;
 //TODO small issue, the chosen inr values get set to the latest one on fragment recreation
 
 public class EnterDoseFragment extends Fragment {
 
-    private String selectedDateStr; //For restoring activity instance state.
+    private long selectedDate = -1; //For restoring activity instance state.
 
     public EnterDoseFragment() {
         // Required empty public constructor
@@ -30,15 +28,10 @@ public class EnterDoseFragment extends Fragment {
     }
 
     public long getSelectedStartDate() {
-        if (selectedDateStr == null){
-            selectedDateStr = MyUtils.getTodayStr();
+        if (selectedDate == -1l){
+            selectedDate = MyUtils.getTodayLong();
         }
-        try {
-            return MyUtils.dateStrToLong(selectedDateStr);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return 0;//This in theory will never happen.
-        }
+        return selectedDate;
     }
 
     @Override
@@ -50,13 +43,13 @@ public class EnterDoseFragment extends Fragment {
         EditText inrTxtF = (EditText) view.findViewById(R.id.txtF_new_INR);
         if (savedInstanceState != null) {
             // Restore value of members from saved state
-            selectedDateStr = savedInstanceState.getString("selectedDate");
+            selectedDate = savedInstanceState.getLong("selectedDate");
             updateUI(view, getSelectedStartDate());
             inrTxtF.setText(savedInstanceState.getString("newINRentered"));
         } else {
             //Default to today's date.
-            selectedDateStr = MyUtils.getTodayStr();
-            updateUI(view, MyUtils.getTodayLong());
+            selectedDate = MyUtils.getTodayLong();
+            updateUI(view, selectedDate);
             inrTxtF.setHint("INR at Start Date");
         }
 
@@ -65,30 +58,24 @@ public class EnterDoseFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        savedInstanceState.putString("selectedDate", selectedDateStr);
+        savedInstanceState.putLong("selectedDate", selectedDate);
         //savedInstanceState.putDoubleArray("weekOfIntakeValues", getWeekIntakeValues());
         savedInstanceState.putString("newINRentered", ((EditText) getView().findViewById(R.id.txtF_new_INR)).getText().toString());
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    /*//Checks whether input dates make sense. Currently, checks startDate is not in the past.
-    public static boolean areDoseDatesReasonable(long startDate, long endDate){
-        //TODO consider adding functionality for adding dosages that started in the past but have not yet ended.
-        return MyUtils.getTodayLong() < startDate;
-    }*/
-
     //The activity calls this method when the user selects a start date.
     public void onDateSelection(int year, int monthOfYear, int dayOfMonth){
         //Set the selected date field.
         long startDate = MyUtils.dateParamsToLong(year, monthOfYear, dayOfMonth);
-        selectedDateStr = MyUtils.dateLongToStr(startDate);
+        selectedDate = startDate;
         //Show in the UI.
         updateUI(getView(), startDate);
     }
 
     private void updateUI(View view, long selectedStartDate) {
         //Update button.
-        ((Button) view.findViewById(R.id.bttn_edit_startdate)).setText(selectedDateStr);
+        ((Button) view.findViewById(R.id.bttn_edit_startdate)).setText(MyUtils.dateLongToStr(selectedDate));
         //Update list of days.
         int[] txtFieldIDs = {R.id.enter_dose_item1,
                 R.id.enter_dose_item2, R.id.enter_dose_item3,

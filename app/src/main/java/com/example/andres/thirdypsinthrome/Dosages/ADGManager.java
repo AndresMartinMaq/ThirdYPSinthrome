@@ -110,9 +110,14 @@ public class ADGManager {
 
         Float[] intakesPlan = getXLongList(intakesPatternRefined, newDsgPlanLength);
 
-        //Create a Dosage(plan) int he database;
+        //Create a Dosage(plan) int the database;
         long endDate = MyUtils.addDays(startDate, intakesPlan.length - 1);
         long userID = PreferenceManager.getDefaultSharedPreferences(context).getLong(context.getString(R.string.userID_prefkey), -1);
+        //Check it won't overwrite another plan.
+        if (!DBHelper.getInstance(context).isDatesAvailable(userID, startDate, endDate)){
+            throw new Exception(context.getString(R.string.dialog_dates_unavailable_msg));
+        }
+        //Add to db
         long insertedRowID = DBHelper.getInstance(context).addDosage(userID, startDate, endDate, intakesPlan, newLevel);
         if (insertedRowID == -1){
             throw new Exception("Could not write new dosage to the database");

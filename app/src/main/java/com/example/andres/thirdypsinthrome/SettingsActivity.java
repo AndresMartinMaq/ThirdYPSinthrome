@@ -128,7 +128,9 @@ public class SettingsActivity extends PreferenceActivity
                             @Override
                             public void onClick(DialogInterface dialog, int i) {
                                 //Start the Clock Activity.
-                                startActivity(new Intent(AlarmClock.ACTION_SHOW_ALARMS));
+                                if (Build.VERSION.SDK_INT >= 19) {
+                                    startActivity(new Intent(AlarmClock.ACTION_SHOW_ALARMS));
+                                }
                             }
                         })
                         .setNegativeButton(getString(R.string.later), new DialogInterface.OnClickListener() {
@@ -144,8 +146,8 @@ public class SettingsActivity extends PreferenceActivity
         if(preference.getKey().equals(getString(R.string.pref_med_name_key))){
             //For the medicine, check and set whether automatic dosage generation will be possible with it.
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            String medName = stringValue;
-            prefs.edit().putString(preference.getKey(), medName.toLowerCase()).commit(); //Also, make sure only lowercase letters are stored.
+            String medName = stringValue.toLowerCase();
+            prefs.edit().putString(preference.getKey(), medName).commit(); //Also, make sure only lowercase letters are stored.
 
             float inrMin = Float.parseFloat(prefs.getString(getString(R.string.pref_mininr_key), ""));
             float inrMax = Float.parseFloat(prefs.getString(getString(R.string.pref_maxinr_key), ""));
@@ -198,38 +200,15 @@ public class SettingsActivity extends PreferenceActivity
             }
             //Only open the clock activity if this is the last alarm to be set.
             if (x.equals(strArr[strArr.length-1])){
-                i.putExtra(AlarmClock.EXTRA_SKIP_UI, true);
-                startActivity(i);
-            } else {
                 i.putExtra(AlarmClock.EXTRA_SKIP_UI, false);
                 startActivity(i);
-                try {Thread.sleep(2000);} catch (InterruptedException e) {}
+            } else {
+                i.putExtra(AlarmClock.EXTRA_SKIP_UI, true);
+                startActivity(i);
+                try {Thread.sleep(1000);} catch (InterruptedException e) {}
             }
             //Undo the change to the calendar, in case another alarm will be set.
             c.add(Calendar.MINUTE, +Integer.parseInt(x) );
         }
     }
-
-
-    /*private void seeAlarmsSet(){         //doesn't work, cursor is null TODO delete
-        final String tag_alarm = "tag_alarm";
-        Uri uri = Uri.parse("content://com.android.alarmclock/alarm");
-        Cursor c = getContentResolver().query(uri, null, null, null, null);
-        Log.i(tag_alarm, "no of records are " + c.getCount());
-        Log.i(tag_alarm, "no of columns are " + c.getColumnCount());
-        if (c != null) {
-            String names[] = c.getColumnNames();
-            for (String temp : names) {
-                System.out.println(temp);
-            }
-            if (c.moveToFirst()) {
-                do {
-                    for (int j = 0; j < c.getColumnCount(); j++) {
-                        Log.i(tag_alarm, c.getColumnName(j)
-                                + " which has value " + c.getString(j));
-                    }
-                } while (c.moveToNext());
-            }
-        }
-    }*/
 }

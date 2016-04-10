@@ -279,6 +279,14 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
                     .create().show();
             return;
         }
+        //Check dates are not occupied by another dosage plan
+        if (!DBHelper.getInstance(this).isDatesAvailable(userID, startDate, endDate)){
+            new AlertDialog.Builder(this).setMessage(getString(R.string.dialog_dates_unavailable_msg))
+                    .setTitle(getString(R.string.dialog_dates_unavailable_title))
+                    .setPositiveButton(R.string.ok, null)
+                    .create().show();
+            return;
+        }
 
         //Add new Dosage
         DBHelper.getInstance(this).addDosageManually(userID, startDate, endDate, intakes);
