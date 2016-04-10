@@ -15,11 +15,25 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:clipToPadding="false"
+            android:weightSum="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Contribute to ongoing research"
+                android:id="@+id/textView4"
+                android:layout_gravity="center_horizontal"
+                android:paddingTop="16dp"
+                android:paddingBottom="24dp" />
 
             <TextView android:text="@string/cit_sci_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:id="@+id/textView" />
 
             <TextView
@@ -28,20 +42,56 @@
                 android:text="What kinds of things should I make a note of?"
                 android:id="@+id/textView2"
                 android:textStyle="bold|italic"
-                android:textColor="#2233ff" />
+                android:textColor="#2233ff"
+                android:paddingTop="8sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="All Notes:"
+                android:text="Your Notes:"
                 android:id="@+id/textView3"
                 android:paddingTop="24dp" />
 
-            <CalendarView
+            <DatePicker
+                android:layout_width="match_parent"
+                android:layout_height="155dp"
+                android:id="@+id/datePicker"
+                android:calendarViewShown="false"
+                android:startYear="2015"
+                android:spinnersShown="true" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/noteEditTxt"
+                android:background="@color/background_floating_material_light"
+                android:elevation="4dp"
+                android:layout_marginRight="6dp"
+                android:layout_marginLeft="6dp"
+                android:gravity="start"
+                android:inputType="textMultiLine"
+                android:padding="4dp"
+                android:lines="6" />
+
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/calendarView" />
+                android:gravity="right">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cancel"
+                    android:id="@+id/bttn_cancel" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Edit"
+                    android:id="@+id/bttn_edit_or_save" />
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

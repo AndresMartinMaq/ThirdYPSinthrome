@@ -59,6 +59,14 @@ public class MyUtils {
         return answer;
     }
 
+    public static int getTodayField(int calendarField){
+        Calendar date = new GregorianCalendar();
+        long seconds = (date.getTimeInMillis() / 1000l);
+        if (TIME_SIMULATION_ON){ seconds = addDays(seconds, SIMULATION_DAY_OFFSET); }
+        date.setTimeInMillis(seconds*1000l);
+        return date.get(calendarField);
+    }
+
     public static long getNowLong(){
         long answer = Calendar.getInstance().getTimeInMillis() / 1000l;
         if (TIME_SIMULATION_ON){ answer = addDays(answer, SIMULATION_DAY_OFFSET); }

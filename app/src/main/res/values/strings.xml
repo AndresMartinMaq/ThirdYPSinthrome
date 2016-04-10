@@ -128,9 +128,9 @@
 
     <!-- Citizen Science-->
     <string name="title_activity_notes">Citizen Science Notes</string>
-    <string name="cit_sci_description">Contribute to ongoing research! Citizen Science is a novel concept which allows people to participate in scientific projects
-        regardless of educational background, profession or previous knowledge. In our case, we ask our users to help us gather information to better understand the interaction
-    between lifestyle and INR in patients such as yourself. You can help us by making a note of any lifestyle changes that might have caused your changes in INR.</string>
-    <string name="cit_sci_description2">asdf</string>
+    <string name="cit_sci_description">Citizen Science is a novel concept that allows people to participate in scientific projects
+        regardless of professional background or knowledge. \n\nIn our case, we ask our users to help us better understand the interaction
+    between lifestyle changes and INR in patients such as yourself. The way you can help is by making a note of any lifestyle changes you undergo that you think might have
+        caused your INR to fluctuate.</string>
 
 </resources>
