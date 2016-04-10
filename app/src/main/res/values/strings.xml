@@ -125,4 +125,12 @@
     <string name="err_msg_ADG_not_supported_1">"Unfortunately, automatic dosage generation for"</string>
     <string name="err_msg_ADG_not_supported_2">"is not currently supported due to lack of dosage adjustment tables."</string>
 
+
+    <!-- Citizen Science-->
+    <string name="title_activity_notes">Citizen Science Notes</string>
+    <string name="cit_sci_description">Contribute to ongoing research! Citizen Science is a novel concept which allows people to participate in scientific projects
+        regardless of educational background, profession or previous knowledge. In our case, we ask our users to help us gather information to better understand the interaction
+    between lifestyle and INR in patients such as yourself. You can help us by making a note of any lifestyle changes that might have caused your changes in INR.</string>
+    <string name="cit_sci_description2">asdf</string>
+
 </resources>

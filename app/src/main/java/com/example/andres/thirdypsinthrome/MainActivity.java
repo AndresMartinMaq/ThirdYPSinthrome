@@ -60,8 +60,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d("","History and Stats clicked, functionality not yet implemented.");
         }else
         if (id == R.id.bttn_cit_science) {
-            //startActivity(new Intent(this, SettingsActivity.class));
-            Log.d("","Citizen Science clicked, functionality not yet implemented.");
+            startActivity(new Intent(this, NotesActivity.class));
         }
     }
 }
