@@ -11,7 +11,7 @@
 
     <!-- Main Activity-->
     <string name="main_today_txt">Today,</string>
-    <string name="bttn_my_dosage">My Dosage</string>
+    <string name="bttn_my_dosage">My Dosage Plan</string>
     <string name="bttn_my_treatment">My Treatment</string>
     <string name="bttn_cit_science">Citizen Science</string>
     <string name="bttn_hist_and_stats">History &amp; Statistics</string>
@@ -83,7 +83,7 @@
     <string name="automode_prefkey">is_auto_dose_generation_available</string>
 
     <!-- DosageActivity Activity-->
-    <string name="title_activity_dosages">My Dosages</string>
+    <string name="title_activity_dosages">My Dosage Plan</string>
     <string name="msg_main_nodosage">You do not have a dose to take today. Click My Dosages to add a dosage plan.</string>
     <string name="dosages_str">The current dosage ends on</string>
     <string name="dosages_end_date">31st of February</string>
@@ -91,6 +91,12 @@
     <string name="msg_no_current_dosage">There is no dosage plan applicable to today. Introduce a new dosage plan manually or generate one automatically with a blood test result.</string>
     <string name="bttn_new_dosage_manually">Enter New Dosage Manually</string>
     <string name="bttn_new_dosage_auto">Generate New Dosage</string>
+    <!-- Abandon or edit current dosage plan-->
+    <string name="delete_plan">Abandon current plan</string>
+    <string name="edit_plan">Edit plans</string>
+    <string name="dg_abandon_plan_title">Abandon Plan?</string>
+    <string name="db_abandon_plan_msg">Information in the past will be kept while future dosages will be deleted.</string>
+    <string name="dg_abandon_plan_toast">Dosage plan abandoned</string>
 
     <!-- EnterDosage-->
     <string name="enter_dose_act_title">New Dosage - Input Manually</string>
@@ -124,6 +130,7 @@
     <string name="dg_addinfo_required_ok">Generate from sum</string>
     <string name="err_msg_ADG_not_supported_1">"Unfortunately, automatic dosage generation for"</string>
     <string name="err_msg_ADG_not_supported_2">"is not currently supported due to lack of dosage adjustment tables."</string>
+    <string name="err_msg_ADG_short_lastdosage">Your previous dosage has to be at least 3 days long for it to be used in the generation.</string>
 
 
     <!-- Citizen Science-->

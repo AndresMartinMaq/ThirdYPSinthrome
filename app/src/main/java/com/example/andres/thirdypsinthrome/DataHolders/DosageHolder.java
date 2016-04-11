@@ -11,23 +11,18 @@ import java.util.List;
 
 public class DosageHolder {
 
+    public final long id;
     public final long startDate;        //Refers to the date of the first day which includes an intake.
     public final long endDate;          //Refers to the date of the last day which includes an intake.
     public final List<DayHolder> days;
     public final int level;
-
-    public DosageHolder(long startDate, long endDate, List<DayHolder> days, int level) {
-        this.days = days;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.level = level;
-    }
 
     public DosageHolder(Cursor c, int level){
         days = new ArrayList<DayHolder>(MyUtils.MAX_DAYS_PER_DOSAGE);
         this.level = level;
 
         c.moveToFirst();
+        id = c.getLong(c.getColumnIndex(DBContract.DosageTable._ID));
         startDate = c.getLong(c.getColumnIndex(DBContract.DayTable.COL_DATE));
         do{
             DayHolder day =  new DayHolder(c.getLong(c.getColumnIndex(DBContract.DayTable._ID)),

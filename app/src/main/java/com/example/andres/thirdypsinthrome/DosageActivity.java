@@ -6,15 +6,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.InputType;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -70,11 +69,20 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_edit:
+                Log.d("SafetyTest", "Edit Plan plz");
+                return true;
+            case R.id.action_delete:
+                Log.d("SafetyTest", "Delete Plan plz");
+                try {
+                    DosagesFragment doseFragment = (DosagesFragment) getSupportFragmentManager().findFragmentById(R.id.dose_fragment_holder);
+                    showDeletePlanDialog(doseFragment.dosage);
+                } catch (ClassCastException e){}
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     public void buttonPressed(View v) {
@@ -302,8 +310,24 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
         Toast.makeText(this, getString(R.string.toast_confirmation), Toast.LENGTH_LONG).show();
     }
 
+    //To delete current plan
+    public void showDeletePlanDialog(final DosageHolder dosageHolder){
+        new AlertDialog.Builder(this).setMessage(getString(R.string.db_abandon_plan_msg))
+                .setTitle(getString(R.string.dg_abandon_plan_title))
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        DBHelper.getInstance(DosageActivity.this).deleteDosagePlan(dosageHolder.id);
+                        Toast.makeText(DosageActivity.this, R.string.dg_abandon_plan_toast, Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .create().show();
+    }
+
     //---------------------------------------------------------------------------------
-    public static class DosagesFragment extends Fragment implements LoaderManager.LoaderCallbacks<DosageHolder>{
+    public class DosagesFragment extends Fragment implements LoaderManager.LoaderCallbacks<DosageHolder>{
 
         private static final int LOADER_ID = 3;
         DosageHolder dosage;
@@ -325,7 +349,30 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
                 centerScrollViewOn(item4, (HorizontalScrollView) view.findViewById(R.id.horizontalScrollView), view.findViewById(R.id.scrollingLinearLayout));
             }*/
 
+            //Context Menu
+            registerForContextMenu(view.findViewById(R.id.scrollingLinearLayout));
+
             return view;
+        }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            super.onCreateContextMenu(menu, v, menuInfo);
+            getActivity().getMenuInflater().inflate(R.menu.menu_dosages, menu);
+        }
+
+        @Override
+        public boolean onContextItemSelected(MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.action_edit:
+                    Log.d("SafetyTest", "Edit Plan plz");//TODO
+                    return true;
+                case R.id.action_delete:
+                    DosageActivity.this.showDeletePlanDialog(dosage);
+                    return true;
+                default:
+                    return super.onContextItemSelected(item);
+            }
         }
 
         //To set the scrollView to scroll to the middle of an item

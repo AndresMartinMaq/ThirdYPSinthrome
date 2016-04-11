@@ -1,5 +1,5 @@
 
-<!-- A menu variation for testing and evaluation pruposes that will include a button to advance time by 1 day -->
+<!-- A menu variation for testing and evaluation purposes that will include a button to advance time by 1 day -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"

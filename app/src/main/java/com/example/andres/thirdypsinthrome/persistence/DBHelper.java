@@ -232,7 +232,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public long addDosageManually(long userID, long startDate, long endDate, double[] intakes){
-        return addDosage( userID,  startDate,  endDate,  intakes, -1);//Before calling this method, call isDatesAvailable.
+        return addDosage(userID, startDate, endDate, intakes, -1);//Before calling this method, call isDatesAvailable.
     }
 
     public long addDosage(long userID, long startDate, long endDate, Float[] intakes, int level) {
@@ -281,6 +281,53 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(DayTable.COL_NOTES, note);
 
         return db.update(DayTable.TABLE_NAME, values, DayTable._ID+"="+dayID,null);
+    }
+
+    //---
+    //Deletes whatever in the current dosage plan is in the future.
+    public void deleteDosagePlan(long currentDosageID){
+        SQLiteDatabase db = this.getWritableDatabase();
+        long todayStart = MyUtils.getTodayLong();
+        boolean todayDeleted = false;
+
+        //Delete things in the future.
+        Cursor c = db.rawQuery("SELECT "+DayTable._ID+" FROM "+DayTable.TABLE_NAME
+                + " WHERE " + DayTable.COL_DOSAGE_FK+"="+currentDosageID
+                + " AND " + DayTable.COL_DATE +">"+todayStart, null);
+        if (c.moveToFirst()) {
+            do{
+                long dayID = c.getLong(c.getColumnIndex(DayTable._ID));
+                db.delete(DayTable.TABLE_NAME, DayTable._ID+"="+dayID, null);
+            } while (c.moveToNext());
+        }
+
+        //Only delete today if medicine not taken.
+        c = db.rawQuery("SELECT "+DayTable._ID+", "+DayTable.COL_TAKEN+" FROM "+DayTable.TABLE_NAME
+                + " WHERE " + DayTable.COL_DOSAGE_FK+"="+currentDosageID
+                + " AND " + DayTable.COL_DATE +"="+todayStart, null);
+        if (c.moveToFirst()) {
+            long dayID = c.getLong(c.getColumnIndex(DayTable._ID));
+            int taken = c.getInt(c.getColumnIndex(DayTable.COL_TAKEN));
+            if (taken == 0) {
+                db.delete(DayTable.TABLE_NAME, DayTable._ID + "=" + dayID, null);
+                todayDeleted = true;
+            }
+        }
+
+        //Modify the Dosage's endDate to reflect the premature end.
+        c = db.rawQuery("SELECT "+DosageTable._ID+" FROM "+DosageTable.TABLE_NAME
+                + " WHERE " + DosageTable._ID+"="+currentDosageID, null);
+        if (c.moveToFirst()) {
+            long newEndDate;
+            if (todayDeleted){
+                newEndDate = MyUtils.addDays(todayStart, -1);
+            } else {
+                newEndDate = todayStart;
+            }
+            ContentValues values = new ContentValues();
+            values.put(DosageTable.COL_END, newEndDate);
+            db.update(DosageTable.TABLE_NAME, values, DosageTable._ID+"="+currentDosageID, null);
+        }
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------------

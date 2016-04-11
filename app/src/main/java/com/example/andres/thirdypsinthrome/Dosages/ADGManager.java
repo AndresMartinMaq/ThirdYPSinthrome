@@ -37,6 +37,7 @@ public class ADGManager {
             currentLevel = lastDosagePlan.level;
         } else {
             //Calculate the mg intake from lastDosagePlan
+            if (lastDosagePlan.days.size() < 3){ throw new Exception(context.getString(R.string.err_msg_ADG_short_lastdosage)); }
             double mgSum = 0;
             List<DayHolder> weekDosagePlan = getXLongList(lastDosagePlan.days, 7);
             for (DayHolder day : weekDosagePlan) {
