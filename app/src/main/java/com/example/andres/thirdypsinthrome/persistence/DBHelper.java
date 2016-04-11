@@ -16,9 +16,8 @@ import com.example.andres.thirdypsinthrome.MyUtils;
 import com.example.andres.thirdypsinthrome.R;
 import com.example.andres.thirdypsinthrome.persistence.DBContract.*;
 
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 //NOTE: as SQLite doesn't have date or time data types, time is stored as string HH:MM
 //TODO: Consider: AUTOINCREMENT.
@@ -267,27 +266,24 @@ public class DBHelper extends SQLiteOpenHelper {
         db.update(DayTable.TABLE_NAME, values, DayTable._ID + "=" + dayID, null);
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------------
-    //TODO should return recent past or recent future dosage
-    public DosageHolder getSomeRelevantDosage(long userID){
+    public long addNote(long dosageID, long date, String note){
         SQLiteDatabase db = this.getWritableDatabase();
-        long now = MyUtils.getNowLong();
 
-        Cursor c = db.rawQuery("SELECT "+DosageTable._ID+" ,"+DosageTable.COL_LEVEL+" FROM "+DosageTable.TABLE_NAME
-                +" WHERE "+DosageTable.COL_USER_FK+"="+userID
-                +" ORDER BY "+DosageTable.COL_START+" DESC LIMIT 1", null);
-        if (c.moveToFirst()){
-            int dosageID = c.getInt(c.getColumnIndex(DosageTable._ID));
-            int level = -1;
-            if (!c.isNull(c.getColumnIndex(DosageTable.COL_LEVEL))){
-                level = c.getInt(c.getColumnIndex(DosageTable.COL_LEVEL));
-            }
-            String[] columns = {DayTable._ID, DayTable.COL_DATE, DayTable.COL_MILLIGRAMS, DayTable.COL_TAKEN};
-            c = db.query(DayTable.TABLE_NAME, columns,DayTable.COL_DOSAGE_FK+"="+dosageID,null,null,null,null);
-            return new DosageHolder(c, level);
-        } else { return null; }
+        ContentValues values = new ContentValues();
+        values.put(DayTable.COL_NOTES, note);
+
+        return db.update(DayTable.TABLE_NAME, values, DayTable.COL_DOSAGE_FK+"="+dosageID+" AND "+DayTable.COL_DATE+"="+date,null);
+    }
+    public long addNote(long dayID, String note){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(DayTable.COL_NOTES, note);
+
+        return db.update(DayTable.TABLE_NAME, values, DayTable._ID+"="+dayID,null);
     }
 
+    //--------------------------------------------------------------------------------------------------------------------------------------------
     //Returns the dosage that starts in the past and finishes is the future, if it exists.
     public DosageHolder getCurrentDosage(long userID){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -336,15 +332,15 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     //Returns today's information
-    public DayHolder getToday(long userID){ //TODO consider keeping today's ID in sharedPreferences and updating it at the beginning of the app isntead.
+    public DayHolder getToday(long userID){
         SQLiteDatabase db = this.getWritableDatabase();
         long todayStart = MyUtils.getTodayLong();
         long tomorrowStart = MyUtils.addDays(todayStart, 1);
 
-        String[] columns = {DayTable._ID, DayTable.COL_DATE, DayTable.COL_MILLIGRAMS, DayTable.COL_TAKEN};
-        Cursor c = db.query(DayTable.TABLE_NAME, columns,
-                DayTable.COL_DATE + ">=" + todayStart + " AND " + DayTable.COL_DATE + " < " + tomorrowStart,
-                null, null, null, null);
+        Cursor c = db.rawQuery("SELECT "+DayTable.TABLE_NAME+"."+DayTable._ID+", "+DayTable.COL_DATE+", "+DayTable.COL_MILLIGRAMS+", "+DayTable.COL_TAKEN
+        +" FROM "+DayTable.TABLE_NAME+" INNER JOIN "+DosageTable.TABLE_NAME+" ON "+DayTable.COL_DOSAGE_FK+"="+DosageTable.TABLE_NAME+"."+DosageTable._ID
+                +" WHERE "+DosageTable.COL_USER_FK+"="+userID
+                +" AND "+DayTable.COL_DATE + ">=" + todayStart + " AND " + DayTable.COL_DATE + " < " + tomorrowStart,null);
         if (c.moveToFirst()){
             long dayID = c.getLong(c.getColumnIndex(DayTable._ID));
             long date = c.getLong(c.getColumnIndex(DayTable.COL_DATE));
@@ -372,6 +368,36 @@ public class DBHelper extends SQLiteOpenHelper {
             float mgDay4 = c.getFloat(c.getColumnIndex(DBContract.DosageAdjustmentTable.COL_DAY4));
 
             return new DsgAdjustHolder(level,incrOrDecr, mgDay1, mgDay2, mgDay3, mgDay4);
+        } else {
+            return null;
+        }
+    }
+
+    //Returns a list of days with their notes, of size up to the 'limit', date descending.
+    public List<DayHolder> getNotes(long userID, int limit){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        long tomorrowStart = MyUtils.addDays(MyUtils.getTodayLong(), 1);
+
+        Cursor c = db.rawQuery("SELECT " + DayTable.COL_DATE + ", " + DayTable.COL_NOTES + ", " + DayTable.TABLE_NAME + "." + DayTable._ID
+                + " FROM " + DayTable.TABLE_NAME + " INNER JOIN " + DosageTable.TABLE_NAME + " ON " + DayTable.COL_DOSAGE_FK + "=" + DosageTable.TABLE_NAME + "." + DosageTable._ID
+                + " WHERE " + DosageTable.COL_USER_FK + "=" + userID
+                + " AND " + DayTable.COL_DATE + "<=" + tomorrowStart
+                + " ORDER BY " + DayTable.COL_DATE + " DESC"
+                + " LIMIT " + limit, null);
+        if (c.moveToFirst()){
+            List<DayHolder> list = new ArrayList<>();
+            do {
+                String note = null;
+                if (!c.isNull(c.getColumnIndex(DayTable.COL_NOTES))){
+                    note = c.getString(c.getColumnIndex(DayTable.COL_NOTES));
+                }
+                long id = c.getLong(c.getColumnIndex(DayTable._ID));
+                long date = c.getLong(c.getColumnIndex(DayTable.COL_DATE));
+
+                list.add(new DayHolder(id, date, note));
+            } while (c.moveToNext());
+            return list;
         } else {
             return null;
         }

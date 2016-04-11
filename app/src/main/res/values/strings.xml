@@ -132,5 +132,11 @@
         regardless of professional background or knowledge. \n\nIn our case, we ask our users to help us better understand the interaction
     between lifestyle changes and INR in patients such as yourself. The way you can help is by making a note of any lifestyle changes you undergo that you think might have
         caused your INR to fluctuate.</string>
+    <string name="dg_citsci_unrecorded_day_msg">You cannot make notes on days which we have no record of.
+        Notes can be written for days associated with a dosage plan or INR test result.</string>
+    <string name="citsci_title">Contribute to ongoing research</string>
+    <string name="citsci_question1">What kinds of things should I make a note of?</string>
+    <string name="citsci_your_notes">Your Notes:</string>
+    <string name="edit">Edit</string>
 
 </resources>
