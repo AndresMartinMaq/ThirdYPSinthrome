@@ -285,12 +285,12 @@ public class DBHelper extends SQLiteOpenHelper {
 
     //---
     //Deletes whatever in the current dosage plan is in the future.
-    public void deleteDosagePlan(long currentDosageID){
+    public void deleteCurrentDosagePlan(long currentDosageID){
         SQLiteDatabase db = this.getWritableDatabase();
         long todayStart = MyUtils.getTodayLong();
         boolean todayDeleted = false;
 
-        //Delete things in the future.
+        //Delete days in the future.
         Cursor c = db.rawQuery("SELECT "+DayTable._ID+" FROM "+DayTable.TABLE_NAME
                 + " WHERE " + DayTable.COL_DOSAGE_FK+"="+currentDosageID
                 + " AND " + DayTable.COL_DATE +">"+todayStart, null);
@@ -315,12 +315,19 @@ public class DBHelper extends SQLiteOpenHelper {
         }
 
         //Modify the Dosage's endDate to reflect the premature end.
-        c = db.rawQuery("SELECT "+DosageTable._ID+" FROM "+DosageTable.TABLE_NAME
+        //Do not delete dosage plans with days in the past, only delete if today was the startDate and it was too deleted.
+        c = db.rawQuery("SELECT "+DosageTable._ID+", "+DosageTable.COL_START+" FROM "+DosageTable.TABLE_NAME
                 + " WHERE " + DosageTable._ID+"="+currentDosageID, null);
         if (c.moveToFirst()) {
             long newEndDate;
             if (todayDeleted){
                 newEndDate = MyUtils.addDays(todayStart, -1);
+                long startDate = c.getLong(c.getColumnIndex(DosageTable.COL_START));
+                if (startDate == todayStart || startDate < newEndDate){//This second clause won't happen unless a dosage plan has length 1 or we have messed with TIME_SIMULATION_ON.
+                    db.delete(DosageTable.TABLE_NAME, DosageTable._ID+"="+currentDosageID, null);
+                    Log.d("DBtag", "deletus maximus");
+                    return;
+                }
             } else {
                 newEndDate = todayStart;
             }
@@ -328,6 +335,13 @@ public class DBHelper extends SQLiteOpenHelper {
             values.put(DosageTable.COL_END, newEndDate);
             db.update(DosageTable.TABLE_NAME, values, DosageTable._ID+"="+currentDosageID, null);
         }
+    }
+
+    //Should only be called on dosages with startDate in the future. Past dosages shouldn't be deleted and for present ones use deleteCurrentDosagePLan above.
+    public void deleteFutureDosage(long dosageID){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.delete(DosageTable.TABLE_NAME, DosageTable._ID + "=" + dosageID, null);
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------------
@@ -424,6 +438,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public List<DayHolder> getNotes(long userID, int limit){
         SQLiteDatabase db = this.getWritableDatabase();
 
+        List<DayHolder> list = new ArrayList<>();
         long tomorrowStart = MyUtils.addDays(MyUtils.getTodayLong(), 1);
 
         Cursor c = db.rawQuery("SELECT " + DayTable.COL_DATE + ", " + DayTable.COL_NOTES + ", " + DayTable.TABLE_NAME + "." + DayTable._ID
@@ -433,7 +448,6 @@ public class DBHelper extends SQLiteOpenHelper {
                 + " ORDER BY " + DayTable.COL_DATE + " DESC"
                 + " LIMIT " + limit, null);
         if (c.moveToFirst()){
-            List<DayHolder> list = new ArrayList<>();
             do {
                 String note = null;
                 if (!c.isNull(c.getColumnIndex(DayTable.COL_NOTES))){
@@ -446,7 +460,7 @@ public class DBHelper extends SQLiteOpenHelper {
             } while (c.moveToNext());
             return list;
         } else {
-            return null;
+            return list;
         }
     }
 
@@ -475,12 +489,15 @@ public class DBHelper extends SQLiteOpenHelper {
     public boolean isDatesAvailable(long userID, long startDate, long endDate){
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT "+DosageTable.COL_START+","+DosageTable.COL_END+" FROM "+ DosageTable.TABLE_NAME
+        Cursor cursor = db.rawQuery("SELECT "+DosageTable.COL_START+","+DosageTable.COL_END+","+DosageTable._ID+" FROM "+ DosageTable.TABLE_NAME
                 + " WHERE " + DosageTable.COL_USER_FK + "=" + userID
                 + " AND ((" + startDate + " <= " + DosageTable.COL_START+ " AND " + DosageTable.COL_START + " <= " + endDate +")"
                 + " OR (" + startDate + " <= " + DosageTable.COL_END+ " AND " + DosageTable.COL_END + " <= " + endDate+")"
                 + " OR (" + DosageTable.COL_START + " <= " + startDate+ " AND " + endDate + " <= " + DosageTable.COL_END+"))", null);
         if(cursor.moveToFirst()) {
+            cursor.getLong(cursor.getColumnIndex(DosageTable._ID));//TODO these are here for debugging
+            cursor.getLong(cursor.getColumnIndex(DosageTable.COL_START));
+            cursor.getLong(cursor.getColumnIndex(DosageTable.COL_END));
             cursor.close();
             return false;
         } else {

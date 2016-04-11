@@ -145,5 +145,6 @@
     <string name="citsci_question1">What kinds of things should I make a note of?</string>
     <string name="citsci_your_notes">Your Notes:</string>
     <string name="edit">Edit</string>
+    <string name="toast_no_plan_to_abandon">No current plan to abandon</string>
 
 </resources>

@@ -25,7 +25,7 @@ public class NotesActivityFragment extends Fragment implements DatePicker.OnDate
     private static final int DAYS_TO_LOAD_LIMIT = 300;
     private Map<Long, DayHolder> days;                //Addressed by date.
     private EditText txtArea;
-    private DayHolder selectedDay;
+    private DayHolder selectedDay;                   //Will only be not null when this day is in the db because of some previous dosage plan or inr input.
 
     public NotesActivityFragment() {
         days = new HashMap<>();
@@ -100,16 +100,21 @@ public class NotesActivityFragment extends Fragment implements DatePicker.OnDate
             DBHelper.getInstance(getContext()).addNote(selectedDay.id, note);
         } else {
             //Show dialog explaining the day should be in a dosage to have it get a note.
-            new AlertDialog.Builder(getContext()).setTitle("")
-                    .setMessage(getString(R.string.dg_citsci_unrecorded_day_msg))
-                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int i) {
-                            dialog.dismiss();
-                        }
-                    })
-                    .show();
+            showUneditableErrDialog();
         }
+    }
+
+    private void showUneditableErrDialog(){
+        //Show dialog explaining the day should be in a dosage to have it get a note.
+        new AlertDialog.Builder(getContext()).setTitle("")
+                .setMessage(getString(R.string.dg_citsci_unrecorded_day_msg))
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
     }
 
     private class EditingButtonsListener implements View.OnClickListener {
@@ -129,6 +134,9 @@ public class NotesActivityFragment extends Fragment implements DatePicker.OnDate
         public void onClick(View v) {
             if (v.equals(editBttn)){
                 if (!editing) {
+                    if (selectedDay == null) {
+                        showUneditableErrDialog(); return;
+                    }
                     txtArea.setFocusable(true);  txtArea.setClickable(true);
                     txtArea.setFocusableInTouchMode(true);
                     editBttn.setText("Save");

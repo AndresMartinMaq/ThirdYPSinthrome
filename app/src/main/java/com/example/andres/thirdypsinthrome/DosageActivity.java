@@ -312,13 +312,22 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
 
     //To delete current plan
     public void showDeletePlanDialog(final DosageHolder dosageHolder){
+        if (dosageHolder == null){
+            Toast.makeText(this, R.string.toast_no_plan_to_abandon, Toast.LENGTH_SHORT).show();
+            return;
+        }
         new AlertDialog.Builder(this).setMessage(getString(R.string.db_abandon_plan_msg))
                 .setTitle(getString(R.string.dg_abandon_plan_title))
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        DBHelper.getInstance(DosageActivity.this).deleteDosagePlan(dosageHolder.id);
+                        //Delete dosage plan.
+                        DBHelper.getInstance(DosageActivity.this).deleteCurrentDosagePlan(dosageHolder.id);
                         Toast.makeText(DosageActivity.this, R.string.dg_abandon_plan_toast, Toast.LENGTH_SHORT).show();
+                        //Return to an updated main activity.
+                        Intent intent = new Intent(DosageActivity.this, MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
                         finish();
                     }
                 })
@@ -327,7 +336,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
     }
 
     //---------------------------------------------------------------------------------
-    public class DosagesFragment extends Fragment implements LoaderManager.LoaderCallbacks<DosageHolder>{
+    public static class DosagesFragment extends Fragment implements LoaderManager.LoaderCallbacks<DosageHolder>{
 
         private static final int LOADER_ID = 3;
         DosageHolder dosage;
@@ -368,7 +377,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
                     Log.d("SafetyTest", "Edit Plan plz");//TODO
                     return true;
                 case R.id.action_delete:
-                    DosageActivity.this.showDeletePlanDialog(dosage);
+                    ((DosageActivity)this.getActivity()).showDeletePlanDialog(dosage);
                     return true;
                 default:
                     return super.onContextItemSelected(item);
