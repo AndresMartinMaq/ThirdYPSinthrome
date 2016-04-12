@@ -98,7 +98,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
             // Could add the transaction to the back stack so the user can navigate back
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.dose_fragment_holder, enterDoseFragment);
-            //transaction.addToBackStack(null);
+            transaction.addToBackStack(null);
             transaction.commit();
         }
         if (id == R.id.btt_enter_INR) {
@@ -121,7 +121,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
             getSupportActionBar().setTitle("Dosage Plans");
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.dose_fragment_holder, new DosagePlansFragment());
-            transaction.addToBackStack(null);
+            //transaction.addToBackStack(null);
             transaction.commit();
         }
     }
@@ -249,6 +249,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
                 EnterDoseFragment enterDoseFragment = new EnterDoseFragment();
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.dose_fragment_holder, enterDoseFragment);
+                //transaction.addToBackStack(null);
                 transaction.commit();
             }
         });
@@ -366,30 +367,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
                 centerScrollViewOn(item4, (HorizontalScrollView) view.findViewById(R.id.horizontalScrollView), view.findViewById(R.id.scrollingLinearLayout));
             }*/
 
-            //Context Menu
-            registerForContextMenu(view.findViewById(R.id.scrollingLinearLayout));
-
             return view;
-        }
-
-        @Override
-        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-            super.onCreateContextMenu(menu, v, menuInfo);
-            getActivity().getMenuInflater().inflate(R.menu.menu_dosages, menu);
-        }
-
-        @Override
-        public boolean onContextItemSelected(MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.action_edit:
-                    Log.d("SafetyTest", "Edit Plan plz");//TODO
-                    return true;
-                case R.id.action_delete:
-                    ((DosageActivity)this.getActivity()).showDeletePlanDialog(dosage);
-                    return true;
-                default:
-                    return super.onContextItemSelected(item);
-            }
         }
 
         //To set the scrollView to scroll to the middle of an item

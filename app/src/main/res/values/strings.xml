@@ -93,7 +93,7 @@
     <string name="bttn_new_dosage_auto">Generate New Plan</string>
     <!-- Abandon or edit current dosage plan-->
     <string name="delete_plan">Abandon current plan</string>
-    <string name="edit_plan">Edit plans</string>
+    <string name="edit_plans">Edit plans</string>
     <string name="dg_abandon_plan_title">Abandon Plan?</string>
     <string name="db_abandon_plan_msg">Information in the past will be kept while future dosages will be deleted.</string>
     <string name="dg_abandon_plan_toast">Dosage plan abandoned</string>
@@ -151,5 +151,7 @@
     <string name="bttn_all_plans">All Dosage Plans</string>
     <string name="manually_input">Manually Input</string>
     <string name="auto_generated">Automatically Generated</string>
+    <string name="delete">Delete</string>
+    <string name="ctxt_option_delete_last_day">Shorten by 1 day</string>
 
 </resources>
