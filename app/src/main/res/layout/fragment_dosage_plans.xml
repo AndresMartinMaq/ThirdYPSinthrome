@@ -1,0 +1,21 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.andres.thirdypsinthrome.Dosages.DosagePlansFragment"
+    android:orientation="vertical"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="Tap and hold to edit or delete future dosages."
+        android:gravity="center_horizontal" />
+
+    <ExpandableListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/expandableListView" />
+
+</LinearLayout>

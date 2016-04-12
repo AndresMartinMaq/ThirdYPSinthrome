@@ -64,7 +64,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         //Day table
         final String sqlSmtDay = "CREATE TABLE " + DayTable.TABLE_NAME + " (" +
-                DayTable._ID + " INTEGER PRIMARY KEY," +//TODO Consider Necessity: consider making date the PK
+                DayTable._ID + " INTEGER PRIMARY KEY," +//Needed for the CursorTreeAdapter
                 DayTable.COL_DATE + " INTEGER NOT NULL, " +
                 DayTable.COL_DOSAGE_FK + " INTEGER NOT NULL, " +
                 DayTable.COL_MILLIGRAMS + " REAL NOT NULL, " +
@@ -93,7 +93,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 //A combination of Medicine and Type translates to the paper-printed tables used.
                 "PRIMARY KEY (" +DosageAdjustmentTable.COL_MEDICINE_FK+", "+DosageAdjustmentTable.COL_INCR_OR_DECR+", "+DosageAdjustmentTable.COL_LEVEL+")); ";
 
-        //Dosage table
+        //Backlog table TODO use this.
         final String sqlSmtINRBacklog = "CREATE TABLE " + INRBacklogTable.TABLE_NAME + " (" +
                 INRBacklogTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 INRBacklogTable.COL_USER_FK + " INTEGER NOT NULL, " +
@@ -390,6 +390,28 @@ public class DBHelper extends SQLiteOpenHelper {
 
             return new DosageHolder(c, level);
         } else { return null; }
+    }
+
+    //Returns all dosage plans in a cursor, optionally since a certain date.
+    public Cursor getAllDosagesSince(long userID, long date){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String[] columns = {DosageTable._ID, DosageTable.COL_START, DosageTable.COL_END, DosageTable.COL_LEVEL};
+        String whereClause;
+        if (date > 0) {
+            whereClause = DosageTable.COL_USER_FK + "=" + userID + " AND " + DosageTable.COL_START + ">" + date;
+        } else {
+            whereClause = DosageTable.COL_USER_FK + "=" + userID;
+        }
+        return db.query(DosageTable.TABLE_NAME, columns,whereClause,null,null,null,null);
+    }
+
+    //Used by the ExpDosageListAdapter exclusively.
+    public Cursor getDosageChildrensCursor(long dosageID){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String[] columns = {DayTable._ID, DayTable.COL_DATE, DayTable.COL_MILLIGRAMS};
+        return db.query(DayTable.TABLE_NAME, columns,DayTable.COL_DOSAGE_FK+"="+dosageID,null,null,null,null);
     }
 
     //Returns today's information

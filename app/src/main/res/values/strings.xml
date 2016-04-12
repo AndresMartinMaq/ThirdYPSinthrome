@@ -88,9 +88,9 @@
     <string name="dosages_str">The current dosage ends on</string>
     <string name="dosages_end_date">31st of February</string>
     <string name="dosages_str_new">A new INR value or manually input dosage will be required.</string>
-    <string name="msg_no_current_dosage">There is no dosage plan applicable to today. Introduce a new dosage plan manually or generate one automatically with a blood test result.</string>
-    <string name="bttn_new_dosage_manually">Enter New Dosage Manually</string>
-    <string name="bttn_new_dosage_auto">Generate New Dosage</string>
+    <string name="msg_no_current_dosage">There is no dosage plan applicable to today. Enter a new plan manually or generate one automatically using a recent blood test result.</string>
+    <string name="bttn_new_dosage_manually">Enter New Plan Manually</string>
+    <string name="bttn_new_dosage_auto">Generate New Plan</string>
     <!-- Abandon or edit current dosage plan-->
     <string name="delete_plan">Abandon current plan</string>
     <string name="edit_plan">Edit plans</string>
@@ -146,5 +146,10 @@
     <string name="citsci_your_notes">Your Notes:</string>
     <string name="edit">Edit</string>
     <string name="toast_no_plan_to_abandon">No current plan to abandon</string>
+
+    <!-- View Dosage Plans-->
+    <string name="bttn_all_plans">All Dosage Plans</string>
+    <string name="manually_input">Manually Input</string>
+    <string name="auto_generated">Automatically Generated</string>
 
 </resources>

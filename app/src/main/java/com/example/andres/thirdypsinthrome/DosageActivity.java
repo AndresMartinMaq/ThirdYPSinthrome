@@ -32,7 +32,9 @@ import com.example.andres.thirdypsinthrome.DataHolders.DayHolder;
 import com.example.andres.thirdypsinthrome.DataHolders.DosageHolder;
 import com.example.andres.thirdypsinthrome.Dosages.ADGManager;
 import com.example.andres.thirdypsinthrome.Dosages.DateFragmentDialog;
+import com.example.andres.thirdypsinthrome.Dosages.DosagePlansFragment;
 import com.example.andres.thirdypsinthrome.Dosages.EnterDoseFragment;
+import com.example.andres.thirdypsinthrome.LoadersAndAdapters.DosageLoader;
 import com.example.andres.thirdypsinthrome.persistence.DBHelper;
 
 public class DosageActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
@@ -86,7 +88,6 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
     }
 
     public void buttonPressed(View v) {
-        Log.d("DosageActivity", "ButtonPressed on DosageActivity called.");
         int id = v.getId();
 
         if (id == R.id.btt_enter_dosage) {
@@ -115,6 +116,13 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
                     })
                         .show();
             }
+        }
+        if (id == R.id.btt_dosage_callendar) {
+            getSupportActionBar().setTitle("Dosage Plans");
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.dose_fragment_holder, new DosagePlansFragment());
+            transaction.addToBackStack(null);
+            transaction.commit();
         }
     }
 

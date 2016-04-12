@@ -146,8 +146,9 @@
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Dosage Callendar"
+        android:text="@string/bttn_all_plans"
         android:id="@+id/btt_dosage_callendar"
+        android:onClick="buttonPressed"
         android:layout_gravity="bottom|center_horizontal" />
 
     <Button

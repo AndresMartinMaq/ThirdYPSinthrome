@@ -84,7 +84,7 @@ public class EnterDoseFragment extends Fragment {
         for (int i = 0; i < txtFieldIDs.length; i++) {
             View item = view.findViewById(txtFieldIDs[i]);
             String dateStr = MyUtils.dateLongToStr(MyUtils.addDays(selectedStartDate, i));
-            ((TextView) item.findViewById(R.id.date)).setText(dateStr);
+            ((TextView) item.findViewById(R.id.date_label)).setText(dateStr);
         }
     }
 
@@ -98,7 +98,7 @@ public class EnterDoseFragment extends Fragment {
                 R.id.enter_dose_item6, R.id.enter_dose_item7,};
         View view = getView();
         for (int i = 0; i < size ; i++) {
-            String str = ((EditText)view.findViewById(txtFieldIDs[i]).findViewById(R.id.entered_day_intake)).getText().toString();
+            String str = ((EditText)view.findViewById(txtFieldIDs[i]).findViewById(R.id.day_intake)).getText().toString();
             try {
                 double number = Double.parseDouble(str);
                 if (number < 0) {throw new NumberFormatException("All intake values must be filled and non-negative."); }

@@ -17,6 +17,7 @@ public class DosageHolder {
     public final List<DayHolder> days;
     public final int level;
 
+    //Takes a cursor with the days.
     public DosageHolder(Cursor c, int level){
         days = new ArrayList<DayHolder>(MyUtils.MAX_DAYS_PER_DOSAGE);
         this.level = level;

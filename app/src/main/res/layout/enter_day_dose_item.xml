@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="34th February"
-        android:id="@+id/date"
+        android:id="@+id/date_label"
         android:layout_weight="1"
         android:paddingLeft="32dp" />
 
@@ -20,7 +20,8 @@
         android:layout_height="wrap_content"
         android:inputType="numberDecimal"
         android:ems="10"
-        android:id="@+id/entered_day_intake" />
+        android:id="@+id/day_intake"
+        android:gravity="center_horizontal" />
 
     <TextView
         android:layout_width="wrap_content"

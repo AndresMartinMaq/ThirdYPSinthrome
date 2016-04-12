@@ -1,4 +1,4 @@
-package com.example.andres.thirdypsinthrome;
+package com.example.andres.thirdypsinthrome.LoadersAndAdapters;
 
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;

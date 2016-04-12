@@ -123,6 +123,8 @@ public class ADGManager {
         if (insertedRowID == -1){
             throw new Exception("Could not write new dosage to the database");
         }
+        //Record INR
+        DBHelper.getInstance(context).addINRValue(context, recordedINR, startDate);
         //}
         //For the case in which we have to extend the current Dosage Plan. This is very specific to the tables we have (for all we know, for sinthrome).
         /*else {
