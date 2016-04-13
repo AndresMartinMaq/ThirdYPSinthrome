@@ -84,7 +84,7 @@
 
     <!-- DosageActivity Activity-->
     <string name="title_activity_dosages">My Dosage Plan</string>
-    <string name="msg_main_nodosage">You do not have a dose to take today. Click My Dosages to add a dosage plan.</string>
+    <string name="msg_main_nodosage">You do not have a dose to take today. Click My Dosage Plan to add a dosage plan.</string>
     <string name="dosages_str">The current dosage ends on</string>
     <string name="dosages_end_date">31st of February</string>
     <string name="dosages_str_new">A new INR value or manually input dosage will be required.</string>

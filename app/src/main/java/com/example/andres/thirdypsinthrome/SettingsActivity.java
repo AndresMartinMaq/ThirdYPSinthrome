@@ -120,7 +120,8 @@ public class SettingsActivity extends PreferenceActivity
             preference.setSummary(name);
         }else
         if (preference.getKey().equals(getString(R.string.pref_alarm_enabled_key))) {
-            if (stringValue.equals("false")) {
+            boolean firstTimeOpened = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("first_time_opened", true);
+            if (stringValue.equals("false") && !firstTimeOpened) {
                 //If trying to disable alarms, show a dialog to inform that already set alarms will need to be deleted manually.
                 new AlertDialog.Builder(this).setTitle(getString(R.string.notice))
                         .setMessage(getString(R.string.dg_past_alarms_not_deleted))

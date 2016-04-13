@@ -340,7 +340,17 @@ public class DBHelper extends SQLiteOpenHelper {
     //Should only be called on dosages with startDate in the future. Past dosages shouldn't be deleted and for present ones use deleteCurrentDosagePLan above.
     public void deleteFutureDosage(long dosageID){
         SQLiteDatabase db = this.getWritableDatabase();
-        //TODO delete also the days... Check app by creating, deleting, and creating another with overlapping but not same days, see if it marges up or not.
+
+        //Delete information on the days of this dosage
+        String[] column = {DayTable._ID};
+        Cursor c = db.query(DayTable.TABLE_NAME, column ,DayTable.COL_DOSAGE_FK+"="+dosageID,null,null,null,null);
+        if (c.moveToFirst()){
+            do{
+                long id = c.getLong(c.getColumnIndex(DayTable._ID));
+                db.delete(DayTable.TABLE_NAME, DayTable._ID+"="+id, null);
+            }while (c.moveToNext());
+        }
+        //Delete record of the dosage itself.
         db.delete(DosageTable.TABLE_NAME, DosageTable._ID + "=" + dosageID, null);
     }
 

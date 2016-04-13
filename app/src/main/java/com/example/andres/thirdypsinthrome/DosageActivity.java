@@ -65,6 +65,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        if (getSupportFragmentManager().findFragmentById(R.id.dose_fragment_holder).getId() == R.id.fragment_enter_dose){}//TODO!!
         getMenuInflater().inflate(R.menu.menu_dosages, menu);
         return true;
     }
