@@ -20,6 +20,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
@@ -395,7 +396,6 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
                 parentLayout = (LinearLayout) view.findViewById(R.id.scrollingLinearLayout);
             } catch (NullPointerException e){
                 //This happens when going back from this activity.
-                //e.printStackTrace();
                 return;
             }
             View item1 = parentLayout.findViewById(R.id.dsg_item1);
@@ -423,7 +423,11 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
                 ((TextView)view.findViewById(R.id.dosage_txt1)).setText("");
                 ((TextView)view.findViewById(R.id.dosage_txt2)).setText("");
                 ((TextView)view.findViewById(R.id.dosage_txt3)).setText(R.string.msg_no_current_dosage);
+
+                view.findViewById(R.id.btt_dosage_callendar).setEnabled(false);
                 return;
+            } else {
+                view.findViewById(R.id.btt_dosage_callendar).setEnabled(true);
             }
 
             //Iterate the views in the linear layout, modifying their values

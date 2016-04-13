@@ -155,5 +155,7 @@
     <string name="ctxt_option_delete_last_day">Shorten by 1 day</string>
     <string name="enter_int_hint">INR at Start Date</string>
     <string name="nonapplicable">N/A</string>
+    <string name="toast_plan_modified">Dosage plan modified</string>
+    <string name="modify">Modify</string>
 
 </resources>

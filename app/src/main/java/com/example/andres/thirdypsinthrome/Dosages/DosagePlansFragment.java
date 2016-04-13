@@ -9,13 +9,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
+import android.text.InputType;
 import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.andres.thirdypsinthrome.LoadersAndAdapters.ExpDosageListAdapter;
 import com.example.andres.thirdypsinthrome.LoadersAndAdapters.ManyDosagesLoader;
@@ -30,7 +34,7 @@ public class DosagePlansFragment extends Fragment implements LoaderManager.Loade
     private ExpDosageListAdapter adapter;
     private static final int DAY_OFFSET = -2;   //Will show dosage plans starting after today + this offset (intended to be <= 0).
 
-    private View selectedViewItem = null;
+    private String inputStrChache;              //To store what the user inputs in dialogs.
 
     public DosagePlansFragment() {
     }
@@ -70,17 +74,35 @@ public class DosagePlansFragment extends Fragment implements LoaderManager.Loade
         final View dosageItemView;
         switch (item.getItemId()) {
             case R.id.action_edit:
-                Log.d("SafetyTest", "Edit Plan plz");//TODO
-                View dayItemView = info.targetView;
-
+                String mgShown = ((EditText)info.targetView.findViewById(R.id.day_intake)).getText().toString();
+                showModifyIntakeDialog((Long)info.targetView.getTag(), mgShown);
                 return true;
-            case R.id.action_edit_plan:
+            case R.id.action_edit_planINR:
                 dosageItemView = info.targetView;
-
+                String inrShown = ((TextView)dosageItemView.findViewById(R.id.txtv_inr)).getText().toString();
+                showModifyINRDialog((Long) dosageItemView.getTag(),inrShown);
                 return true;
             case R.id.action_delete_last_day:
                 dosageItemView = info.targetView;
-
+                new AlertDialog.Builder(getContext()).setTitle("Delete Last Day?")
+                        .setMessage("This action is irreversible.")
+                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int i) {
+                                long id = (long) dosageItemView.getTag();
+                                //Delete last day.
+                                int rowsAffected = DBHelper.getInstance(getContext()).deleteDosageLastDay(id);
+                                if (rowsAffected < 1){
+                                    Toast.makeText(getContext(), getString(R.string.error_txt), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getContext(), R.string.toast_plan_modified, Toast.LENGTH_SHORT).show();
+                                }
+                                //Update UI
+                                getLoaderManager().restartLoader(LOADER_ID, null, DosagePlansFragment.this);
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, null)
+                        .show();
                 return true;
             case R.id.action_delete:
                 dosageItemView = info.targetView;
@@ -103,6 +125,64 @@ public class DosagePlansFragment extends Fragment implements LoaderManager.Loade
             default:
                 return super.onContextItemSelected(item);
         }
+    }
+
+    //To modify the mg intake of a day.
+    private void showModifyIntakeDialog(final long dayID, String currentIntake){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Modify INR intake");
+
+        final EditText inputField = new EditText(getContext());
+        inputField.setHint(currentIntake);
+        inputField.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        inputField.setGravity(Gravity.CENTER_HORIZONTAL);
+        inputField.setPadding(50,30,50,30);
+        builder.setView(inputField);
+
+        builder.setPositiveButton(getContext().getString(R.string.modify), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                float modifiedIntake = Float.parseFloat(inputField.getText().toString());
+                int rowsAffected = DBHelper.getInstance(getContext()).modifyDayIntake(dayID, modifiedIntake);
+                if (rowsAffected == 1) {
+                    Toast.makeText(getContext(), R.string.toast_plan_modified, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), getString(R.string.error_txt), Toast.LENGTH_SHORT).show();
+                }
+                //Update UI
+                getLoaderManager().restartLoader(LOADER_ID, null, DosagePlansFragment.this);
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, null);
+        builder.show();
+    }
+
+    //To modify the INR reading of the beginning of a dosage.
+    private void showModifyINRDialog(final long dosageID, String currentINR){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Modify INR record");
+
+        final EditText inputField = new EditText(getContext());
+        inputField.setHint(currentINR);
+        inputField.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        inputField.setGravity(Gravity.CENTER_HORIZONTAL);
+        inputField.setPadding(50, 30, 50, 30);
+        builder.setView(inputField);
+
+        builder.setPositiveButton(getContext().getString(R.string.modify), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                float modifiedIntake = Float.parseFloat(inputField.getText().toString());
+                int rowsAffected = DBHelper.getInstance(getContext()).modifyDosageINR(dosageID, modifiedIntake);
+                if (rowsAffected != 1) {
+                    Toast.makeText(getContext(), getString(R.string.error_txt), Toast.LENGTH_SHORT).show();
+                }
+                //Update UI
+                getLoaderManager().restartLoader(LOADER_ID, null, DosagePlansFragment.this);
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, null);
+        builder.show();
     }
 
     //----Loader methods-----

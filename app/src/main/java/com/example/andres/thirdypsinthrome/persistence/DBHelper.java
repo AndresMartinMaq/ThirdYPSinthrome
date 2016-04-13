@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.preference.PreferenceManager;
@@ -263,7 +264,36 @@ public class DBHelper extends SQLiteOpenHelper {
         return db.update(DayTable.TABLE_NAME, values, DayTable._ID+"="+dayID,null);
     }
 
-    //---
+    //-------------------------------
+    public int modifyDayIntake(long dayID, float modifiedIntake){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(DayTable.COL_MILLIGRAMS, modifiedIntake);
+
+        int i = db.update(DayTable.TABLE_NAME, values, DayTable._ID + "=" + dayID, null);
+
+        //Update the Dosage plan, setting the level to -1 to signify this is to be considered a Manually Input dosage plan.
+        Cursor c = db.rawQuery("SELECT " + DayTable.COL_DOSAGE_FK + " FROM " + DayTable.TABLE_NAME + " WHERE " + DayTable._ID + "=" + dayID, null);//Could be optimised by having the method take the dosageID instead.
+        c.moveToFirst();
+        long dosageID = c.getLong(c.getColumnIndex(DayTable.COL_DOSAGE_FK));
+        values = new ContentValues();
+        values.put(DosageTable.COL_LEVEL, -1);
+        db.update(DosageTable.TABLE_NAME, values, DosageTable._ID + "=" + dosageID, null);
+
+        return i;
+    }
+
+    public int modifyDosageINR(long dosageID, float modifiedINR){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(DosageTable.COL_INR, modifiedINR);
+
+        return db.update(DosageTable.TABLE_NAME,values, DosageTable._ID+"="+dosageID,null);
+    }
+
+    //-------------------------------
     //Deletes whatever in the current dosage plan is in the future.
     public void deleteCurrentDosagePlan(long currentDosageID){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -323,7 +353,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         //Delete information on the days of this dosage
         String[] column = {DayTable._ID};
-        Cursor c = db.query(DayTable.TABLE_NAME, column ,DayTable.COL_DOSAGE_FK+"="+dosageID,null,null,null,null);
+        Cursor c = db.query(DayTable.TABLE_NAME, column, DayTable.COL_DOSAGE_FK + "=" + dosageID, null, null, null, null);
         if (c.moveToFirst()){
             do{
                 long id = c.getLong(c.getColumnIndex(DayTable._ID));
@@ -332,6 +362,39 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         //Delete record of the dosage itself.
         db.delete(DosageTable.TABLE_NAME, DosageTable._ID + "=" + dosageID, null);
+    }
+
+    //Will delete the dosage as well if it was only 1 day long. Returns number of rows updated (or deleted).
+    public int deleteDosageLastDay(long dosageID){
+        SQLiteDatabase db = this.getWritableDatabase();
+        boolean deleteDosage = false;
+
+        Cursor c = db.rawQuery("SELECT "+DosageTable.COL_START+", "+DosageTable.COL_END+" FROM "+DosageTable.TABLE_NAME
+                + " WHERE "+DosageTable._ID+"="+dosageID,null);
+        c.moveToFirst();
+        long endDate = c.getLong(c.getColumnIndex(DosageTable.COL_END));
+        long startDate = c.getLong(c.getColumnIndex(DosageTable.COL_START));
+        //Check the size of the dosage plan is not too small
+        if (MyUtils.addDays(endDate, -1) == startDate){ deleteDosage = true; }
+
+        String[] column = {DayTable._ID};
+        c = db.query(DayTable.TABLE_NAME, column ,DayTable.COL_DOSAGE_FK+"="+dosageID+" AND "+DayTable.COL_DATE+"="+endDate,null,null,null,null);
+        if (c.moveToFirst()){
+            //Delete the day
+            long id = c.getLong(c.getColumnIndex(DayTable._ID));
+            db.delete(DayTable.TABLE_NAME, DayTable._ID + "=" + id, null);
+            //Update the Dosage(plan).
+            if (deleteDosage) {
+                return db.delete(DosageTable.TABLE_NAME, DosageTable._ID + "=" + dosageID, null);
+            } else {
+                ContentValues values = new ContentValues();
+                values.put(DosageTable.COL_END, endDate);
+                values.put(DosageTable.COL_LEVEL, -1);//This indicates this is now considered a Manually Input dosage plan.
+
+                return db.update(DosageTable.TABLE_NAME, values, DosageTable._ID + "=" + dosageID, null);
+            }
+        }
+        return 0;
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------------
