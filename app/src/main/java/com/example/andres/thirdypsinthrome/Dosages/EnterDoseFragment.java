@@ -53,7 +53,7 @@ public class EnterDoseFragment extends Fragment {
             //Default to today's date.
             selectedDate = MyUtils.getTodayLong();
             updateUI(view, selectedDate);
-            inrTxtF.setHint(R.string.enter_int_hint);
+            inrTxtF.setHint(R.string.new_dosage_INR_hint);
         }
 
         return view;
@@ -97,7 +97,7 @@ public class EnterDoseFragment extends Fragment {
             inrEditTxt.setHint(R.string.nonapplicable);
             inrEditTxt.setFocusableInTouchMode(false);
         } else {
-            inrEditTxt.setHint(R.string.enter_int_hint);
+            inrEditTxt.setHint(R.string.new_dosage_INR_hint);
             inrEditTxt.setClickable(true);
             inrEditTxt.setFocusableInTouchMode(true);
         }

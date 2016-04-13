@@ -10,6 +10,7 @@
     </style>
     <style name="Buttons_Font" parent="@android:style/TextAppearance.Medium">
         <item name="android:textSize">20sp</item>
+        <item name="android:textAllCaps">false</item>
     </style>
 
     <!-- DatePickerDialog, this will make datepicker show spinner and not calendar -->

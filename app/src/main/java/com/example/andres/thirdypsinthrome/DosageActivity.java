@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -13,14 +14,12 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
@@ -47,6 +46,8 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dosages);
+        getSupportActionBar().setElevation(0f);
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         //Set Fragment up
         if (findViewById(R.id.dose_fragment_holder) != null) {
@@ -59,7 +60,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
             DosagesFragment firstFragment = new DosagesFragment();
             // Add the fragment to the 'dose_fragment_holder' FrameLayout
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.dose_fragment_holder, firstFragment).commit();
+                    .add(R.id.dose_fragment_holder, firstFragment, DosagesFragment.TAG).commit();
         }
 
     }
@@ -98,7 +99,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
             getSupportActionBar().setTitle("Dosage Plans");
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.dose_fragment_holder, new DosagePlansFragment());
-            //transaction.addToBackStack(null);
+            transaction.addToBackStack(null);
             transaction.commit();
         }
     }
@@ -286,9 +287,10 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
         DBHelper.getInstance(this).addDosageManually(userID, startDate, endDate, intakes, newINR);
 
         //Go back to DosagesFragment, with updated UI.
-        DosagesFragment dosagesFmt = new DosagesFragment();
+        DosagesFragment dosagesFmt = (DosagesFragment) getSupportFragmentManager().findFragmentByTag(DosagesFragment.TAG);//Could also just create a new one here and not restart the loader, this seems more elegant.
+        getSupportLoaderManager().restartLoader(DosageActivity.DosagesFragment.LOADER_ID, null, dosagesFmt);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.dose_fragment_holder, dosagesFmt).commit();
+                .replace(R.id.dose_fragment_holder, dosagesFmt, DosagesFragment.TAG).commit();
 
         //Display a confirmatory message
         Toast.makeText(this, getString(R.string.toast_confirmation), Toast.LENGTH_LONG).show();
@@ -322,7 +324,8 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
     //---------------------------------------------------------------------------------
     public static class DosagesFragment extends Fragment implements LoaderManager.LoaderCallbacks<DosageHolder>{
 
-        private static final int LOADER_ID = 3;
+        public static final int LOADER_ID = 3;
+        public static String TAG = "DosagesFragment";
         DosageHolder dosage;
 
         public DosagesFragment() {
@@ -374,10 +377,13 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
         public boolean onOptionsItemSelected(MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.action_edit:
-                    Log.d("SafetyTest", "Edit Plan plz");
+                    ((DosageActivity)getActivity()).getSupportActionBar().setTitle(R.string.title_all_dosage_plans);
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.dose_fragment_holder, new DosagePlansFragment());
+                    transaction.addToBackStack(null);
+                    transaction.commit();
                     return true;
                 case R.id.action_delete:
-                    Log.d("SafetyTest", "Delete Plan plz");
                     try {
                         ((DosageActivity) getActivity()).showDeletePlanDialog(dosage);
                     } catch (ClassCastException e){}

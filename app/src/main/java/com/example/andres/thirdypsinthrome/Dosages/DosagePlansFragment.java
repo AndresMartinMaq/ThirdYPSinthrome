@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
@@ -21,6 +22,7 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.andres.thirdypsinthrome.DosageActivity;
 import com.example.andres.thirdypsinthrome.LoadersAndAdapters.ExpDosageListAdapter;
 import com.example.andres.thirdypsinthrome.LoadersAndAdapters.ManyDosagesLoader;
 import com.example.andres.thirdypsinthrome.MyUtils;
@@ -151,6 +153,9 @@ public class DosagePlansFragment extends Fragment implements LoaderManager.Loade
                 }
                 //Update UI
                 getLoaderManager().restartLoader(LOADER_ID, null, DosagePlansFragment.this);
+                //Update underlying DosagesFragment UI too.
+                getActivity().getSupportLoaderManager().restartLoader(DosageActivity.DosagesFragment.LOADER_ID, null,
+                        (DosageActivity.DosagesFragment)getActivity().getSupportFragmentManager().findFragmentByTag(DosageActivity.DosagesFragment.TAG));
             }
         });
         builder.setNegativeButton(R.string.cancel, null);

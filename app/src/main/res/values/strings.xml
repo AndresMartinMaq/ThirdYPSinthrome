@@ -8,6 +8,7 @@
     <string name="ok">OK</string>
     <string name="error_txt">Error</string>
     <string name="action_timetravel">Simulate passage of 1 day</string>
+    <string name="nonapplicable">N/A</string>
 
     <!-- Main Activity-->
     <string name="main_today_txt">Today,</string>
@@ -103,6 +104,7 @@
     <string name="start_date">31st February 2016</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="new_dosage_INR">New INR:</string>
+    <string name="new_dosage_INR_hint">INR at Start Date</string>
     <string name="start_date_txt">Start Date:</string>
     <string name="done_txt">Done</string>
     <string name="toast_confirmation">New Dosage recorded</string>
@@ -148,14 +150,14 @@
     <string name="toast_no_plan_to_abandon">No current plan to abandon</string>
 
     <!-- View Dosage Plans-->
+    <string name="title_all_dosage_plans">Dosage Plans</string>
     <string name="bttn_all_plans">All Dosage Plans</string>
     <string name="manually_input">Manually Input</string>
     <string name="auto_generated">Automatically Generated</string>
     <string name="delete">Delete</string>
     <string name="ctxt_option_delete_last_day">Shorten by 1 day</string>
-    <string name="enter_int_hint">INR at Start Date</string>
-    <string name="nonapplicable">N/A</string>
     <string name="toast_plan_modified">Dosage plan modified</string>
     <string name="modify">Modify</string>
+
 
 </resources>

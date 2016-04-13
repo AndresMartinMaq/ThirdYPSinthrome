@@ -17,9 +17,8 @@ import java.util.Locale;
 
 //TODO Cit. Science notes, Exporting, History.
 
-//TODO be able to delete dosages?
 //TODO be able to reset taken?
-//TODO check all fields are filled in settings. In onPreferenceChanged, just set them to their defaults if empty?
+//TODO check all fields are filled in settings. In onPreferenceChanged, just set them to their defaults if empty? I'm pretty sure this is kinda taken care of but not certain.
 //Consider using notifications for alarm.
 //Could make it possible to manually input shorter dosages at this point.
 

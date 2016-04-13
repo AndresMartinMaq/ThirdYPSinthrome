@@ -1,6 +1,7 @@
 package com.example.andres.thirdypsinthrome;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -15,6 +16,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().setElevation(0f);//This makes the action bar not have a shadow.
+
+        //Hide action bar if landscape.
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            getSupportActionBar().hide();
+        } else {
+            getSupportActionBar().show();
+        }
     }
 
     @Override
