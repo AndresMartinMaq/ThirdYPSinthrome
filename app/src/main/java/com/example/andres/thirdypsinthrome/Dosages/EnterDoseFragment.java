@@ -16,6 +16,7 @@ import com.example.andres.thirdypsinthrome.R;
 
 public class EnterDoseFragment extends Fragment {
 
+    public static final String TAG = "EnterDosgeFragmentTag";
     private long selectedDate = -1; //For restoring activity instance state.
 
     public EnterDoseFragment() {
@@ -38,6 +39,8 @@ public class EnterDoseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_enter_dose, container, false);
+
+        setHasOptionsMenu(false);
 
         //Set the Start Date and INR.
         EditText inrTxtF = (EditText) view.findViewById(R.id.txtF_new_INR);

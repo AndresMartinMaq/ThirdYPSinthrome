@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,32 +63,6 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        if (getSupportFragmentManager().findFragmentById(R.id.dose_fragment_holder).getId() == R.id.fragment_enter_dose){}//TODO!!
-        getMenuInflater().inflate(R.menu.menu_dosages, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_edit:
-                Log.d("SafetyTest", "Edit Plan plz");
-                return true;
-            case R.id.action_delete:
-                Log.d("SafetyTest", "Delete Plan plz");
-                try {
-                    DosagesFragment doseFragment = (DosagesFragment) getSupportFragmentManager().findFragmentById(R.id.dose_fragment_holder);
-                    showDeletePlanDialog(doseFragment.dosage);
-                } catch (ClassCastException e){}
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
     public void buttonPressed(View v) {
         int id = v.getId();
 
@@ -98,7 +73,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
             // Replace whatever is in the fragment_container view with this fragment,
             // Could add the transaction to the back stack so the user can navigate back
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.dose_fragment_holder, enterDoseFragment);
+            transaction.replace(R.id.dose_fragment_holder, enterDoseFragment, EnterDoseFragment.TAG);
             transaction.addToBackStack(null);
             transaction.commit();
         }
@@ -249,7 +224,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
             public void onClick(DialogInterface dialog, int which) {
                 EnterDoseFragment enterDoseFragment = new EnterDoseFragment();
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.dose_fragment_holder, enterDoseFragment);
+                transaction.replace(R.id.dose_fragment_holder, enterDoseFragment, EnterDoseFragment.TAG);
                 //transaction.addToBackStack(null);
                 transaction.commit();
             }
@@ -355,6 +330,12 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
         }
 
         @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setHasOptionsMenu(true);
+        }
+
+        @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             final View view = inflater.inflate(R.layout.fragment_dosages, container, false);
@@ -382,6 +363,29 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
                     hsv.scrollTo(hsv.getScrollX() + (hsv.getWidth() / 2) - extraScrollX, 0);
                 }
             });
+        }
+
+        @Override
+        public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+            menuInflater.inflate(R.menu.menu_dosages, menu);
+            super.onCreateOptionsMenu(menu, menuInflater);
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.action_edit:
+                    Log.d("SafetyTest", "Edit Plan plz");
+                    return true;
+                case R.id.action_delete:
+                    Log.d("SafetyTest", "Delete Plan plz");
+                    try {
+                        ((DosageActivity) getActivity()).showDeletePlanDialog(dosage);
+                    } catch (ClassCastException e){}
+                    return true;
+                default:
+                    return super.onOptionsItemSelected(item);
+            }
         }
 
         public void updateUI(DosageHolder dosage){
