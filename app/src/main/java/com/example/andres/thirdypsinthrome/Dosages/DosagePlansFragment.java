@@ -153,9 +153,6 @@ public class DosagePlansFragment extends Fragment implements LoaderManager.Loade
                 }
                 //Update UI
                 getLoaderManager().restartLoader(LOADER_ID, null, DosagePlansFragment.this);
-                //Update underlying DosagesFragment UI too.
-                getActivity().getSupportLoaderManager().restartLoader(DosageActivity.DosagesFragment.LOADER_ID, null,
-                        (DosageActivity.DosagesFragment)getActivity().getSupportFragmentManager().findFragmentByTag(DosageActivity.DosagesFragment.TAG));
             }
         });
         builder.setNegativeButton(R.string.cancel, null);

@@ -99,7 +99,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
             getSupportActionBar().setTitle("Dosage Plans");
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.dose_fragment_holder, new DosagePlansFragment());
-            transaction.addToBackStack(null);
+            //transaction.addToBackStack(null);
             transaction.commit();
         }
     }
@@ -380,7 +380,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
                     ((DosageActivity)getActivity()).getSupportActionBar().setTitle(R.string.title_all_dosage_plans);
                     FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.dose_fragment_holder, new DosagePlansFragment());
-                    transaction.addToBackStack(null);
+                    //transaction.addToBackStack(null);
                     transaction.commit();
                     return true;
                 case R.id.action_delete:
