@@ -153,5 +153,7 @@
     <string name="auto_generated">Automatically Generated</string>
     <string name="delete">Delete</string>
     <string name="ctxt_option_delete_last_day">Shorten by 1 day</string>
+    <string name="enter_int_hint">INR at Start Date</string>
+    <string name="nonapplicable">N/A</string>
 
 </resources>

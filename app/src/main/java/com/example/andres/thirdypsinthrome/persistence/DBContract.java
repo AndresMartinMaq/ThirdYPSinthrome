@@ -21,6 +21,7 @@ public class DBContract {
         public static final String TABLE_NAME = "dosage";
         public static final String COL_USER_FK = "user_id";
 
+        public static final String COL_INR = "inr_at_start";
         //These dates will be stored as Unix epoch integer seconds.
         public static final String COL_START = "start_date";
         public static final String COL_END = "end_date";
@@ -34,7 +35,7 @@ public class DBContract {
         public static final String COL_DATE = "date";
         //public static final String COL_USER_ID = "user";    //This is unnecessary if we have a FK to dosage
         public static final String COL_MILLIGRAMS = "milligrams";
-        public static final String COL_TAKEN = "med_taking_time";    //boolean, encoded as integer 0 or 1 TODO rename this to taken or something
+        public static final String COL_TAKEN = "today_taken_bool";    //boolean, encoded as integer 0 or 1
         public static final String COL_DEVIATION = "dev_minutes";   //Integer number of minutes.
         public static final String COL_NOTES = "patient_notes";      //string, can be null
     }
@@ -58,13 +59,5 @@ public class DBContract {
         public static final String COL_DAY2 = "day2";
         public static final String COL_DAY3 = "day3";
         public static final String COL_DAY4 = "day4";
-    }
-
-    public static final class INRBacklogTable implements BaseColumns{
-        public static final String TABLE_NAME = "inr_backlog";
-        public static final String COL_USER_FK = "user_id";
-
-        public static final String COL_DATE_OF_TEST = "date";//date will act as a key to relate it to days table?
-        public static final String COL_INR_VALUE = "inr";
     }
 }

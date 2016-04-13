@@ -119,12 +119,10 @@ public class ADGManager {
             throw new Exception(context.getString(R.string.dialog_dates_unavailable_msg));
         }
         //Add to db
-        long insertedRowID = DBHelper.getInstance(context).addDosage(userID, startDate, endDate, intakesPlan, newLevel);
+        long insertedRowID = DBHelper.getInstance(context).addDosageAuto(userID, startDate, endDate, intakesPlan, newLevel, recordedINR);
         if (insertedRowID == -1){
             throw new Exception("Could not write new dosage to the database");
         }
-        //Record INR
-        DBHelper.getInstance(context).addINRValue(context, recordedINR, startDate);
         //}
         //For the case in which we have to extend the current Dosage Plan. This is very specific to the tables we have (for all we know, for sinthrome).
         /*else {

@@ -46,9 +46,13 @@ public class ExpDosageListAdapter extends CursorTreeAdapter {
         long id = cursor.getLong(cursor.getColumnIndex(DBContract.DosageTable._ID));
         long dateStart = cursor.getLong(cursor.getColumnIndex(DBContract.DosageTable.COL_START));
         long dateEnd = cursor.getLong(cursor.getColumnIndex(DBContract.DosageTable.COL_END));
+        float inr = -1;
         int level = -1;
         if (!cursor.isNull(cursor.getColumnIndex(DBContract.DosageTable.COL_LEVEL))){
             level = cursor.getInt(cursor.getColumnIndex(DBContract.DosageTable.COL_LEVEL));
+        }
+        if (!cursor.isNull(cursor.getColumnIndex(DBContract.DosageTable.COL_INR))){
+            inr = cursor.getFloat(cursor.getColumnIndex(DBContract.DosageTable.COL_INR));
         }
         //Tag it with it's database id (useful later).
         view.setTag(id);
@@ -59,6 +63,13 @@ public class ExpDosageListAdapter extends CursorTreeAdapter {
             txtViewAGorMI.setText(R.string.manually_input);
         } else {
             txtViewAGorMI.setText(R.string.auto_generated);
+        }
+        //INR number label
+        TextView txtViewINR = (TextView) view.findViewById(R.id.txtv_inr);
+        if (inr < 0){
+            txtViewINR.setText("--");
+        } else {
+            txtViewINR.setText(String.valueOf(inr));
         }
 
         //Date range title label

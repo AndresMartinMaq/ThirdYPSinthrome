@@ -163,6 +163,7 @@ public class TestDatabase extends AndroidTestCase{
         double[] intakes = {3d, 3.5, 3, 2.5, 2, 2.5, 3};
         long endDate = MyUtils.addDays(startDate, intakes.length -1);
         Log.d(TAG, "endDate in secs int: " + endDate);
+        float inrAtStart = 2.78f;
 
         //User creation, required?
         ContentValues userValues = new ContentValues();
@@ -172,7 +173,7 @@ public class TestDatabase extends AndroidTestCase{
         assertTrue(insertedRowID != -1);
 
         //Method to be tested
-        dbHelper.addDosageManually(0, startDate, endDate, intakes);
+        dbHelper.addDosageManually(0, startDate, endDate, intakes, inrAtStart);
 
         //Dosage Table
         Cursor cursor = db.rawQuery("SELECT * FROM " + DBContract.DosageTable.TABLE_NAME + ";", null);
@@ -260,7 +261,7 @@ public class TestDatabase extends AndroidTestCase{
         assertTrue(userID != -1);
 
         //Add dosage
-        dbHelper.addDosageManually(userID, startDate, endDate, intakes);
+        dbHelper.addDosageManually(userID, startDate, endDate, intakes, -1);
 
         //isDatesAvailable method test.
         assertFalse(dbHelper.isDatesAvailable(userID, startDate, endDate));

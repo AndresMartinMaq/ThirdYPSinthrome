@@ -57,6 +57,7 @@ public class DBHelper extends SQLiteOpenHelper {
         final String sqlSmtDosage = "CREATE TABLE " + DosageTable.TABLE_NAME + " (" +
                 DosageTable._ID + " INTEGER PRIMARY KEY," +
                 DosageTable.COL_USER_FK + " INTEGER NOT NULL, " +
+                DosageTable.COL_INR + " REAL, " +
                 DosageTable.COL_START + " INTEGER NOT NULL, " +
                 DosageTable.COL_END + " INTEGER NOT NULL, " +
                 DosageTable.COL_LEVEL + " INTEGER, " +
@@ -93,21 +94,12 @@ public class DBHelper extends SQLiteOpenHelper {
                 //A combination of Medicine and Type translates to the paper-printed tables used.
                 "PRIMARY KEY (" +DosageAdjustmentTable.COL_MEDICINE_FK+", "+DosageAdjustmentTable.COL_INCR_OR_DECR+", "+DosageAdjustmentTable.COL_LEVEL+")); ";
 
-        //Backlog table TODO use this.
-        final String sqlSmtINRBacklog = "CREATE TABLE " + INRBacklogTable.TABLE_NAME + " (" +
-                INRBacklogTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                INRBacklogTable.COL_USER_FK + " INTEGER NOT NULL, " +
-                INRBacklogTable.COL_DATE_OF_TEST + " INTEGER UNIQUE NOT NULL, " +
-                INRBacklogTable.COL_INR_VALUE + " REAL NOT NULL, " +
-                " FOREIGN KEY (" + INRBacklogTable.COL_USER_FK + ") REFERENCES " + UserTable.TABLE_NAME + " (" + UserTable._ID + "));";
-
         //Execute the statements, creating the tables. Order matters, as tables with FKs need to created after.
         db.execSQL(sqlSmtMedicine);
             db.execSQL(sqlSmtDosageAdjust);
         db.execSQL(sqlStatementUserTable);
             db.execSQL(sqlSmtDosage);
                 db.execSQL(sqlSmtDay);
-        db.execSQL(sqlSmtINRBacklog);
     }
 
     @Override
@@ -119,7 +111,6 @@ public class DBHelper extends SQLiteOpenHelper {
         * This is currently out of this project's scope. */
         db.execSQL("DROP TABLE IF EXISTS " + DosageAdjustmentTable.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + DayTable.TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + INRBacklogTable.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + DosageTable.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + MedicineTable.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + UserTable.TABLE_NAME);
@@ -209,7 +200,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     //Takes dates in epoch seconds.
-    private long addDosage(long userID, long startDate, long endDate, double[] intakes, int level){
+    private long addDosage(long userID, long startDate, long endDate, double[] intakes, int level, float inr){
         SQLiteDatabase db = this.getWritableDatabase();
 
         //Put values for Dosage
@@ -218,6 +209,7 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(DosageTable.COL_START, startDate);
         values.put(DosageTable.COL_END, endDate);
         values.put(DosageTable.COL_LEVEL, level);
+        values.put(DosageTable.COL_INR, inr);
         long insertedRowID = db.insert(DBContract.DosageTable.TABLE_NAME, null, values);
         //Put values for the Dosage's Days.
         for (int i = 0; i < intakes.length; i++) {
@@ -231,28 +223,16 @@ public class DBHelper extends SQLiteOpenHelper {
         return insertedRowID;
     }
 
-    public long addDosageManually(long userID, long startDate, long endDate, double[] intakes){
-        return addDosage(userID, startDate, endDate, intakes, -1);//Before calling this method, call isDatesAvailable.
+    public long addDosageManually(long userID, long startDate, long endDate, double[] intakes, float inr){
+        return addDosage(userID, startDate, endDate, intakes, -1, inr);//Before calling this method, call isDatesAvailable.
     }
 
-    public long addDosage(long userID, long startDate, long endDate, Float[] intakes, int level) {
+    public long addDosageAuto(long userID, long startDate, long endDate, Float[] intakes, int level, float inr) {
         double[] intakesDoubles = new double[intakes.length];
         for (int i = 0; i < intakes.length; i++) {
             intakesDoubles[i] = intakes[i];
         }
-        return addDosage(userID, startDate, endDate, intakesDoubles, level);
-    }
-
-    public long addINRValue(Context context, float inr, long date){
-        SQLiteDatabase db = this.getWritableDatabase();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        long userID = prefs.getLong(context.getString(R.string.userID_prefkey), -1);
-
-        ContentValues values = new ContentValues();
-        values.put(INRBacklogTable.COL_USER_FK, userID);
-        values.put(INRBacklogTable.COL_DATE_OF_TEST, date);
-        values.put(INRBacklogTable.COL_INR_VALUE, inr);
-        return db.insert(INRBacklogTable.TABLE_NAME, null, values);
+        return addDosage(userID, startDate, endDate, intakesDoubles, level, inr);
     }
 
     //Set as medicine taken for this day, record deviation between now and the medicine taking time.
@@ -406,7 +386,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public Cursor getAllDosagesSince(long userID, long date){
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String[] columns = {DosageTable._ID, DosageTable.COL_START, DosageTable.COL_END, DosageTable.COL_LEVEL};
+        String[] columns = {DosageTable._ID, DosageTable.COL_START, DosageTable.COL_END, DosageTable.COL_LEVEL, DosageTable.COL_INR};
         String whereClause;
         if (date > 0) {
             whereClause = DosageTable.COL_USER_FK + "=" + userID + " AND " + DosageTable.COL_START + ">" + date;

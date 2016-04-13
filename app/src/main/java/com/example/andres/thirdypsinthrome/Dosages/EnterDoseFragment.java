@@ -53,7 +53,7 @@ public class EnterDoseFragment extends Fragment {
             //Default to today's date.
             selectedDate = MyUtils.getTodayLong();
             updateUI(view, selectedDate);
-            inrTxtF.setHint("INR at Start Date");
+            inrTxtF.setHint(R.string.enter_int_hint);
         }
 
         return view;
@@ -89,6 +89,18 @@ public class EnterDoseFragment extends Fragment {
             String dateStr = MyUtils.dateLongToStr(MyUtils.addDays(selectedStartDate, i));
             ((TextView) item.findViewById(R.id.date_label)).setText(dateStr);
         }
+        //If startDate isn't fairly close, don't allow INR input.
+        EditText inrEditTxt = ((EditText) view.findViewById(R.id.txtF_new_INR));
+        if (selectedStartDate > MyUtils.addDays(MyUtils.getTodayLong(), 2)) {
+            inrEditTxt.setText("");
+            inrEditTxt.setClickable(false);
+            inrEditTxt.setHint(R.string.nonapplicable);
+            inrEditTxt.setFocusableInTouchMode(false);
+        } else {
+            inrEditTxt.setHint(R.string.enter_int_hint);
+            inrEditTxt.setClickable(true);
+            inrEditTxt.setFocusableInTouchMode(true);
+        }
     }
 
     //Get the values in textFields and return them as an array of doubles.
@@ -120,9 +132,9 @@ public class EnterDoseFragment extends Fragment {
 
     //Get the inr value input
     public float getINRInput(){
-        EditText inrTxtF = (EditText) getView().findViewById(R.id.txtF_new_INR);
+
         String inrStr = ((EditText) getView().findViewById(R.id.txtF_new_INR)).getText().toString();
-        if (inrStr.equals("")){ return 0f; }
+        if (inrStr.equals("")){ return -1f; }
 
         float inrF = Float.parseFloat(inrStr);
         if (inrF < 0){ return 0f; }

@@ -61,7 +61,7 @@ public class TestADG extends AndroidTestCase {
         prefs.edit().putLong(mContext.getString(R.string.userID_prefkey), userID).commit();
 
         //Add past dosage to db.
-        DBHelper.getInstance(mContext).addDosageManually(userID, startDate, endDate, intakes);
+        DBHelper.getInstance(mContext).addDosageManually(userID, startDate, endDate, intakes, recordedINR);
 
         //Get the past dosage
         DosageHolder lastDosagePlan = DBHelper.getInstance(mContext).getDosagePlanEndingOn(1, endDate);
