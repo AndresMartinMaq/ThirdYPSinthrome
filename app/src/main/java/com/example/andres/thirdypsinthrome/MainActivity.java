@@ -64,8 +64,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, SettingsActivity.class));
         }else
         if (id == R.id.bttn_hist_and_stats) {
-            //startActivity(new Intent(this, SettingsActivity.class));
-            Log.d("","History and Stats clicked, functionality not yet implemented.");
+            startActivity(new Intent(this, StatsActivity.class));
         }else
         if (id == R.id.bttn_cit_science) {
             startActivity(new Intent(this, NotesActivity.class));

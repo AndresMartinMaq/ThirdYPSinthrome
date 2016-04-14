@@ -7,22 +7,36 @@ import android.support.v4.content.AsyncTaskLoader;
 import com.example.andres.thirdypsinthrome.DataHolders.DosageHolder;
 import com.example.andres.thirdypsinthrome.persistence.DBHelper;
 
-//Will get the information for the DosagePlansFragment asynchronously.
+//Will get the information for the DosagePlansFragment asynchronously. Can be initialised to work by getting either past dosage plans or present and future ones.
 public class ManyDosagesLoader extends AsyncTaskLoader<Cursor> {
 
     private Cursor dosages;
     private long userID;
     private long sinceDate; //Will only get dosage plans that start after this date.
+    private String limit;
 
+    //Use this constructor to get present and future dosages.
     public ManyDosagesLoader(Context context, long userID, long sinceDate) {
         super(context);
         this.userID = userID;
         this.sinceDate = sinceDate;
+        limit = null;
+    }
+    //Use this to get past dosages.
+    public ManyDosagesLoader(Context context, long userID, String limit) {
+        super(context);
+        this.userID = userID;
+        this.sinceDate = -1;
+        this.limit = limit;
     }
 
     @Override
     public Cursor loadInBackground() {
-        return DBHelper.getInstance(getContext()).getAllDosagesSince(userID, sinceDate);
+        if (limit == null) {
+            return DBHelper.getInstance(getContext()).getAllDosagesSince(userID, sinceDate);
+        } else {
+            return DBHelper.getInstance(getContext()).getAllPastDosages(userID, limit);
+        }
     }
 
     @Override
