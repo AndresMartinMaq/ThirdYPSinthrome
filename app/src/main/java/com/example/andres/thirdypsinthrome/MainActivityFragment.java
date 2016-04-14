@@ -69,9 +69,9 @@ public class MainActivityFragment extends Fragment {
             tick.setVisibility(View.INVISIBLE);
             return;
         }
-        datetxtv.setText(getString(R.string.main_today_txt)+" "+MyUtils.dateLongToStr(today.date));
+        datetxtv.setText(getString(R.string.main_today_txt) + " " + MyUtils.dateLongToStr(today.date));
         datetxtv.setTextSize(24);
-        Log.d("April", "Day mg in DayHolder is: "+today.mg);
+        Log.d("April", "Day mg in DayHolder is: " + today.mg);
         amounttxtv.setText(String.valueOf(today.mg));
         amounttxtv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 72f);
         //Set the icon.
@@ -103,6 +103,8 @@ public class MainActivityFragment extends Fragment {
                 DBHelper.getInstance(getContext()).setDayAsTaken(today.id, MyUtils.getDevFromMedTakingTime(getContext()));
                 thisView.findViewById(R.id.main_tick).setVisibility(View.VISIBLE);
                 today.taken = true;
+                //TODO
+                NotesActivity.showAskForNotesDialog(getContext(), "");
             }
         });
         AlertDialog dialog = builder.show();

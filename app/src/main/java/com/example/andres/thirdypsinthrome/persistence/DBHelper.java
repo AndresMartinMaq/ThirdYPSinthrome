@@ -466,7 +466,7 @@ public class DBHelper extends SQLiteOpenHelper {
         String[] columns = {DosageTable._ID, DosageTable.COL_START, DosageTable.COL_END, DosageTable.COL_LEVEL, DosageTable.COL_INR};
         String whereClause = DosageTable.COL_USER_FK + "=" + userID + " AND " + DosageTable.COL_END + "<" + todayStart;
 
-        return db.query(DosageTable.TABLE_NAME, columns,whereClause,null,null,null,DosageTable.COL_END + "DESC", limit);
+        return db.query(DosageTable.TABLE_NAME, columns,whereClause,null,null,null,DosageTable.COL_END + " DESC", limit);
     }
 
     //Used by the ExpDosageListAdapter exclusively.

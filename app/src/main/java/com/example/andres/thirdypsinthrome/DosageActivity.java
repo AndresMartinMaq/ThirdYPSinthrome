@@ -287,10 +287,9 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
         DBHelper.getInstance(this).addDosageManually(userID, startDate, endDate, intakes, newINR);
 
         //Go back to DosagesFragment, with updated UI.
-        DosagesFragment dosagesFmt = (DosagesFragment) getSupportFragmentManager().findFragmentByTag(DosagesFragment.TAG);//Could also just create a new one here and not restart the loader, this seems more elegant.
-        getSupportLoaderManager().restartLoader(DosageActivity.DosagesFragment.LOADER_ID, null, dosagesFmt);
+        DosagesFragment dosagesFmt = new DosagesFragment();
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.dose_fragment_holder, dosagesFmt, DosagesFragment.TAG).commit();
+                .replace(R.id.dose_fragment_holder, dosagesFmt).commit();
 
         //Display a confirmatory message
         Toast.makeText(this, getString(R.string.toast_confirmation), Toast.LENGTH_LONG).show();

@@ -4,13 +4,13 @@ import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ScrollView;
 
 import com.example.andres.thirdypsinthrome.DataHolders.DayHolder;
 import com.example.andres.thirdypsinthrome.persistence.DBHelper;
@@ -25,7 +25,9 @@ public class NotesActivityFragment extends Fragment implements DatePicker.OnDate
     private static final int DAYS_TO_LOAD_LIMIT = 300;
     private Map<Long, DayHolder> days;                //Addressed by date.
     private EditText txtArea;
+    private Button editOrSaveBttn;
     private DayHolder selectedDay;                   //Will only be not null when this day is in the db because of some previous dosage plan or inr input.
+    private boolean focusTxtArea = false;
 
     public NotesActivityFragment() {
         days = new HashMap<>();
@@ -44,7 +46,7 @@ public class NotesActivityFragment extends Fragment implements DatePicker.OnDate
         datePicker.init(year, month, day, this);
         //Buttons listener
         final Button cancelBttn = (Button)view.findViewById(R.id.bttn_cancel);
-        final Button editOrSaveBttn = (Button)view.findViewById(R.id.bttn_edit_or_save);
+        editOrSaveBttn = (Button)view.findViewById(R.id.bttn_edit_or_save);
         txtArea = (EditText) view.findViewById(R.id.noteEditTxt);
         EditingButtonsListener listener = new EditingButtonsListener(editOrSaveBttn,cancelBttn,txtArea);
         editOrSaveBttn.setOnClickListener(listener);
@@ -56,6 +58,24 @@ public class NotesActivityFragment extends Fragment implements DatePicker.OnDate
         long today = MyUtils.getTodayLong();
         datePicker.setMaxDate(MyUtils.addDays(today, 1) * 1000l);
         datePicker.setMinDate(MyUtils.addDays(today, -DAYS_TO_LOAD_LIMIT) * 1000l);
+
+        //If started from a prompt asking the user to input a note, scroll down directly to the relevant area.
+        if (getArguments() != null) {
+            focusTxtArea = getArguments().getBoolean("LaunchedFromPrompt", false);
+            if (focusTxtArea) {
+                final ScrollView scrollView = ((ScrollView) view.findViewById(R.id.scrollview));
+                scrollView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        //Focus text area
+                        editOrSaveBttn.performClick();
+                        //txtArea.performClick();
+                        //txtArea.requestFocus();
+                        scrollView.fullScroll(View.FOCUS_DOWN);
+                    }
+                });
+            }
+        }
 
         //Get notes from db in case the user will browse them.
         fetchNotes();
@@ -145,6 +165,7 @@ public class NotesActivityFragment extends Fragment implements DatePicker.OnDate
                     editing = true;
                 } else {
                     txtArea.setFocusable(false);  txtArea.setClickable(false);
+                    txtArea.setFocusableInTouchMode(false);
                     editBttn.setText("Edit");
                     cancelBttn.setVisibility(View.GONE);
                     cancelBttn.setClickable(false);
@@ -153,6 +174,7 @@ public class NotesActivityFragment extends Fragment implements DatePicker.OnDate
                 }
             } else {
                 txtArea.setFocusable(false);  txtArea.setClickable(false);
+                txtArea.setFocusableInTouchMode(false);
                 editBttn.setText("Edit");
                 cancelBttn.setVisibility(View.GONE);
                 editing = false;
