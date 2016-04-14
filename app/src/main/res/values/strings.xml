@@ -155,9 +155,12 @@
     <string name="dismiss">Dismiss</string>
     <string-array name="lifestyle_questions_array">
         <item>Did you eat many leafy vegetables?</item>
-        <item>Did you not update this list?</item>
-        <item>Earth?</item>
-        <item>Mars?</item>
+        <item>Did you take any analgesics, for example, aspirin? Particularly, any that aren’t Paracetamol?</item>
+        <item>Did you start taking vitamins or supplements?</item>
+        <item>Did you take some new drug?</item>
+        <item>Are you taking any herbal, natural or alternative health products?</item>
+        <item>Did you have sudden changes in your diet?</item>
+        <item>Did you eat unusually large or small amounts of food?</item>
     </string-array>
 
 

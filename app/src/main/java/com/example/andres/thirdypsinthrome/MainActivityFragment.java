@@ -103,8 +103,8 @@ public class MainActivityFragment extends Fragment {
                 DBHelper.getInstance(getContext()).setDayAsTaken(today.id, MyUtils.getDevFromMedTakingTime(getContext()));
                 thisView.findViewById(R.id.main_tick).setVisibility(View.VISIBLE);
                 today.taken = true;
-                //TODO
-                NotesActivity.showAskForNotesDialog(getContext(), "");
+                //Show a dialog to encourage the user to note something for citizen science.
+                NotesActivity.showAskForNotesDialog(getActivity(), getString(R.string.prompt_msg1));
             }
         });
         AlertDialog dialog = builder.show();

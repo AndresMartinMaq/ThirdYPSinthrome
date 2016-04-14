@@ -69,4 +69,12 @@ public class TestUtils extends AndroidTestCase{
             fail();
         }
     }
+
+    public void testgetLifestyleQuestion(){
+
+        for (int i = 0; i < 33; i++) {
+            String question = NotesActivity.getLifestyleQuestion(mContext);
+            Log.d("TAG", "Iteration "+i+"; "+question);
+        }
+    }
 }

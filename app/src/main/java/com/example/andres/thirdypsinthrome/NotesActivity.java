@@ -1,5 +1,6 @@
 package com.example.andres.thirdypsinthrome;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,13 +15,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.andres.thirdypsinthrome.DataHolders.DayHolder;
 import com.example.andres.thirdypsinthrome.persistence.DBHelper;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 public class NotesActivity extends AppCompatActivity {
@@ -56,44 +60,51 @@ public class NotesActivity extends AppCompatActivity {
     }
 
     //Dialog that encourages the user to input citizen science notes.
-    public static void showAskForNotesDialog(final Context context, String msgStart){
-        String message = context.getString(R.string.prompt_msg1)+" "+getLifestyleQuestion(context);
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage(message)
-                .setTitle(context.getString(R.string.prompt_dg_title));
-        //On confirmation, take the user to the Citizen Science notes section.
-        builder.setPositiveButton(context.getString(R.string.prompt_dg_make_notes), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                Intent intent = new Intent(context, NotesActivity.class);
-                intent.putExtra("LaunchedFromPrompt", true);//As opposed to being launched by the user going through the app.
-                context.startActivity(intent);
+    public static void showAskForNotesDialog(final Activity activity, final String msgStart){
+        //Small time delay, for aesthetics. (Ironically, it makes this code aesthetically awful).
+        new Thread(new Runnable() {
+            public void run() {
+                try {Thread.sleep(1000);} catch (InterruptedException e) {}
+
+                String message = msgStart+" "+getLifestyleQuestion(activity);
+                final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                builder.setMessage(message)
+                        .setTitle(activity.getString(R.string.prompt_dg_title));
+                //On confirmation, take the user to the Citizen Science notes section.
+                builder.setPositiveButton(activity.getString(R.string.prompt_dg_make_notes), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent intent = new Intent(activity, NotesActivity.class);
+                        intent.putExtra("LaunchedFromPrompt", true);//As opposed to being launched by the user going through the app.
+                        activity.startActivity(intent);
+                    }
+                });
+                builder.setNegativeButton(activity.getString(R.string.dismiss), null);
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        builder.create().show();
+                    }
+                });
             }
-        });
-        builder.setNegativeButton(context.getString(R.string.dismiss), null);
-        AlertDialog dialog = builder.show();
-        TextView messageText = (TextView) dialog.findViewById(android.R.id.message);
-        dialog.show();
+        }).start();
     }
 
     public static String getLifestyleQuestion(Context context){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
         Set<String> questions = prefs.getStringSet(context.getString(R.string.questions_to_ask_prefkey), null);
-        if (questions == null){//If questions have run out (or this is being called for the first time)
-            //Fill the preference with all questions, randomly ordered.
-            List<String> questionsList = Arrays.asList(context.getResources().getStringArray(R.array.lifestyle_questions_array));
-            Collections.shuffle(questionsList);
+        List<String> questionsList;
+
+        if (questions == null || questions.size() == 0){//If questions have run out (or this is being called for the first time)
+            //Fill the preference with all questions.
+            questionsList = Arrays.asList(context.getResources().getStringArray(R.array.lifestyle_questions_array));
             questions = new HashSet<>(questionsList);
-            prefs.edit().putStringSet(context.getString(R.string.questions_to_ask_prefkey), questions).commit();
+        } else {
+            questionsList = new ArrayList<String>(questions);
         }
         //Get a random question and remove it from the set of remaining ones.
-        Iterator<String> iterator = questions.iterator();
-        if (iterator.hasNext()) {
-            String s = iterator.next();
-            questions.remove(s);
-            prefs.edit().putStringSet(context.getString(R.string.questions_to_ask_prefkey), questions).commit();
-            return s;
-        }
-        return ""; //This shouldn't happen
+        String randomQuestion = questionsList.get(new Random().nextInt(questionsList.size()));
+        questions.remove(randomQuestion);
+        prefs.edit().putStringSet(context.getString(R.string.questions_to_ask_prefkey), questions).commit();
+        return randomQuestion;
     }
 }
