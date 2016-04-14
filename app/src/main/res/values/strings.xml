@@ -148,6 +148,18 @@
     <string name="citsci_your_notes">Your Notes:</string>
     <string name="edit">Edit</string>
     <string name="toast_no_plan_to_abandon">No current plan to abandon</string>
+    <!-- Citizen Science Prompt-->
+    <string name="prompt_dg_title">Add note?</string>
+    <string name="prompt_msg1">Have there been any noteworthy changes in your lifestyle that could affect INR?\n\nFor example: </string>
+    <string name="prompt_dg_make_notes">Make a note</string>
+    <string name="dismiss">Dismiss</string>
+    <string-array name="lifestyle_questions_array">
+        <item>Did you eat many leafy vegetables?</item>
+        <item>Did you not update this list?</item>
+        <item>Earth?</item>
+        <item>Mars?</item>
+    </string-array>
+
 
     <!-- View Dosage Plans-->
     <string name="title_all_dosage_plans">Dosage Plans</string>
@@ -158,7 +170,9 @@
     <string name="ctxt_option_delete_last_day">Shorten by 1 day</string>
     <string name="toast_plan_modified">Dosage plan modified</string>
     <string name="modify">Modify</string>
-    <string name="title_activity_stats">StatsActivity</string>
 
+    <!-- StatsActivity-->
+    <string name="title_activity_stats">StatsActivity</string>
+    <string name="questions_to_ask_prefkey">questionsNotYetAskedByPrompt</string>
 
 </resources>

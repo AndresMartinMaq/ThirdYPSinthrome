@@ -70,6 +70,7 @@ public class NotesActivityFragment extends Fragment implements DatePicker.OnDate
                         //Focus text area
                         editOrSaveBttn.performClick();
                         //txtArea.performClick();
+                        //txtArea.requestFocusFromTouch();
                         //txtArea.requestFocus();
                         scrollView.fullScroll(View.FOCUS_DOWN);
                     }
