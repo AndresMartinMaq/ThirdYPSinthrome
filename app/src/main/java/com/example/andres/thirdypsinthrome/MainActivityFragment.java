@@ -60,7 +60,6 @@ public class MainActivityFragment extends Fragment {
         ImageView tick = (ImageView) view.findViewById(R.id.main_tick);
 
         if(today == null){
-            Log.d("4Abril", "today was null");
             datetxtv.setText(R.string.msg_main_nodosage);
             datetxtv.setTextSize(20);
             amounttxtv.setText("");
@@ -71,7 +70,7 @@ public class MainActivityFragment extends Fragment {
         }
         datetxtv.setText(getString(R.string.main_today_txt) + " " + MyUtils.dateLongToStr(today.date));
         datetxtv.setTextSize(24);
-        Log.d("April", "Day mg in DayHolder is: " + today.mg);
+
         amounttxtv.setText(String.valueOf(today.mg));
         amounttxtv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 72f);
         //Set the icon.

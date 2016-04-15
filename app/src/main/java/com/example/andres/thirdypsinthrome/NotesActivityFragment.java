@@ -160,14 +160,14 @@ public class NotesActivityFragment extends Fragment implements DatePicker.OnDate
                     }
                     txtArea.setFocusable(true);  txtArea.setClickable(true);
                     txtArea.setFocusableInTouchMode(true);
-                    editBttn.setText("Save");
+                    editBttn.setText(R.string.save);
                     cancelBttn.setVisibility(View.VISIBLE);
                     cancelBttn.setClickable(true);
                     editing = true;
                 } else {
                     txtArea.setFocusable(false);  txtArea.setClickable(false);
                     txtArea.setFocusableInTouchMode(false);
-                    editBttn.setText("Edit");
+                    editBttn.setText(getContext().getString(R.string.edit));
                     cancelBttn.setVisibility(View.GONE);
                     cancelBttn.setClickable(false);
                     editing = false;
@@ -176,7 +176,7 @@ public class NotesActivityFragment extends Fragment implements DatePicker.OnDate
             } else {
                 txtArea.setFocusable(false);  txtArea.setClickable(false);
                 txtArea.setFocusableInTouchMode(false);
-                editBttn.setText("Edit");
+                editBttn.setText(getContext().getString(R.string.edit));
                 cancelBttn.setVisibility(View.GONE);
                 editing = false;
             }

@@ -12,7 +12,7 @@ public class DsgAdjustHolder {
 
     //This indicates for which medication we can do automatic dosage generation (ADG). For each, there shall be
     //static methods in this class with the information required for ADG.
-    public static String[] KNOWN_MEDS = {"sinthrome"};
+    public static String[] KNOWN_MEDS = {"sinthrome", "sintrón", "sintrom", "acenocoumarol", "acenocumarol"};
 
     //public float inrRangeBottom;
     //public float inrRangeTop;
@@ -46,6 +46,18 @@ public class DsgAdjustHolder {
 
         switch (medName) {
             case "sinthrome":
+                table = getSinthromeDATable();
+                break;
+            case "sintrón":
+                table = getSinthromeDATable();
+                break;
+            case "sintrom":
+                table = getSinthromeDATable();
+                break;
+            case "acenocoumarol":
+                table = getSinthromeDATable();
+                break;
+            case "acenocumarol":
                 table = getSinthromeDATable();
                 break;
             default:

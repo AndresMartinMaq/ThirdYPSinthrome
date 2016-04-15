@@ -8,7 +8,7 @@
     android:paddingTop="16dp">
 
     <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:text="Tap and hold to edit or delete future dosages."
+        android:text="@string/all_dosages_instruction"
         android:gravity="center_horizontal" />
 
     <ExpandableListView

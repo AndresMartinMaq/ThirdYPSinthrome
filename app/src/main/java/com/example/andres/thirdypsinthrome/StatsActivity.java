@@ -17,7 +17,7 @@ public class StatsActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_stats, menu);
+        //getMenuInflater().inflate(R.menu.menu_stats, menu); TODO delete this or use it.
         return true;
     }
 

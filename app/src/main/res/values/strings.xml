@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Project Sinthrome</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="hello_world" translatable="false">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="action_continue">Continue</string>
     <string name="weight_units">mg</string>
@@ -16,7 +16,6 @@
     <string name="bttn_my_treatment">My Treatment</string>
     <string name="bttn_cit_science">Citizen Science</string>
     <string name="bttn_hist_and_stats">History &amp; Statistics</string>
-    <string name="title_activity_welcome">Welcome</string>
 
     <string name="dialog_mark_as_taken_title">Mark today\'s dose as \'taken\'?</string>
     <string name="dialog_mark_as_taken_msg">Be sure to mark this only after taking your medication. Do this with as small a delay as possible to ensure the accuracy of your statistics.</string>
@@ -28,43 +27,49 @@
     <string name="bttn_begin">Begin</string>
 
     <!-- Settings Activity-->
-    <string name="pref_catg_INR">Your Target Range</string>
-    <string name="pref_mininr_key">mininr</string>
-    <string name="pref_mininr_title">Minimum INR</string>
-    <string name="pref_mininr_default">2.5</string>
-    <string name="pref_maxinr_key">maxinr</string>
-    <string name="pref_maxinr_title">Maximum INR</string>
-    <string name="pref_maxinr_default">3.5</string>
+    <string name="pref_catg_INR" translatable="false">Your Target Range</string>
+    <string name="pref_mininr_key" translatable="false">mininr</string>
+    <string name="pref_mininr_title" translatable="false">Minimum INR</string>
+    <string name="pref_mininr_default" translatable="false">2.5</string>
+    <string name="pref_maxinr_key" translatable="false">maxinr</string>
+    <string name="pref_maxinr_title" translatable="false">Maximum INR</string>
+    <string name="pref_maxinr_default" translatable="false">3.5</string>
 
-    <string name="pref_catg_time_title">Daily Intakes</string>
-    <string name="pref_med_time_key">medTime</string>
-    <string name="pref_med_time_title">Time of medicine intake</string>
-    <string name="pref_med_time_default">18:30</string>
+    <string name="pref_catg_time_title" translatable="false">Daily Intakes</string>
+    <string name="pref_med_time_key" translatable="false">medTime</string>
+    <string name="pref_med_time_title" translatable="false">Time of medicine intake</string>
+    <string name="pref_med_time_default" translatable="false">18:30</string>
 
-    <string name="pref_catg_med">Your Medication</string>
-    <string name="pref_med_name_key">medName</string>
-    <string name="pref_med_name_title">Medicine Name</string>
+    <string name="pref_catg_med" translatable="false">Your Medication</string>
+    <string name="pref_med_name_key" translatable="false">medName</string>
+    <string name="pref_med_name_title" translatable="false">Medicine Name</string>
     <string name="pref_med_name_default">sinthrome</string>
-    <string name="pref_mg_per_tablet_key">mgPerTablet</string>
-    <string name="pref_mg_per_tablet_title">Milligrams per medicine tablet</string>
+    <string name="pref_mg_per_tablet_key" translatable="false">mgPerTablet</string>
+    <string name="pref_mg_per_tablet_title" translatable="false">Milligrams per medicine tablet</string>
 
     <!-- Settings Activity, alarm -->
-    <string name="pref_alarm_enabled_key">alarmsEnabled</string>
-    <string name="pref_alarm_enabled_title">Set recurring alarms</string>
-    <string name="pref_alarmtone_key">alarmTone</string>
-    <string name="pref_alarmtone_title">Alarm tone</string>
-    <string name="pref_alarmtone_default">content://settings/system/alarm_alert</string>
-    <string name="pref_alarm_timing_key">alarmTiming</string>
-    <string name="pref_alarm_timing_title">Alarm time</string>
-    <string name="pref_alarm_timing_default">15,1</string>
+    <string name="pref_alarm_enabled_key" translatable="false">alarmsEnabled</string>
+    <string name="pref_alarm_enabled_title" translatable="false">Set recurring alarms</string>
+    <string name="pref_alarmtone_key" translatable="false">alarmTone</string>
+    <string name="pref_alarmtone_title" translatable="false">Alarm tone</string>
+    <string name="pref_alarmtone_default" translatable="false">content://settings/system/alarm_alert</string>
+    <string name="pref_alarm_timing_key" translatable="false">alarmTiming</string>
+    <string name="pref_alarm_timing_title" translatable="false">Alarm time</string>
+    <string name="pref_alarm_timing_default" translatable="false">15,1</string>
     <string-array name="pref_alarm_times_titles">
-        <item>5 minutes prior</item>
-        <item>10 minutes prior</item>
-        <item>15 and 1 minutes prior</item>
-        <item>20 and 1 minutes prior</item>
-        <item>30 and 1 minutes prior</item>
-        <item>30 and 5 minutes prior</item>
+        <item>@string/strArr1_1</item>
+        <item>@string/strArr1_2</item>
+        <item>@string/strArr1_3</item>
+        <item>@string/strArr1_4</item>
+        <item>@string/strArr1_5</item>
+        <item>@string/strArr1_6</item>
     </string-array>
+    <string name="strArr1_1">5 minutes prior</string>
+    <string name="strArr1_2">10 minutes prior</string>
+    <string name="strArr1_3">15 and 1 minutes prior</string>
+    <string name="strArr1_4">20 and 1 minutes prior</string>
+    <string name="strArr1_5">30 and 1 minutes prior</string>
+    <string name="strArr1_6">30 and 5 minutes prior</string>
     <string-array name="pref_alarm_times_values">
         <item>5</item>
         <item>10</item>
@@ -80,14 +85,14 @@
     <string name="later">Later</string>
 
     <!-- Special values stored in shared preferences-->
-    <string name="userID_prefkey">db_userID</string>
-    <string name="automode_prefkey">is_auto_dose_generation_available</string>
+    <string name="userID_prefkey" translatable="false">db_userID</string>
+    <string name="automode_prefkey" translatable="false">is_auto_dose_generation_available</string>
 
     <!-- DosageActivity Activity-->
     <string name="title_activity_dosages">My Dosage Plan</string>
     <string name="msg_main_nodosage">You do not have a dose to take today. Click My Dosage Plan to add a dosage plan.</string>
     <string name="dosages_str">The current dosage ends on</string>
-    <string name="dosages_end_date">31st of February</string>
+    <string name="dosages_end_date" translatable="false">31st of February</string>
     <string name="dosages_str_new">A new INR value or manually input dosage will be required.</string>
     <string name="msg_no_current_dosage">There is no dosage plan applicable to today. Enter a new plan manually or generate one automatically using a recent blood test result.</string>
     <string name="bttn_new_dosage_manually">Enter New Plan Manually</string>
@@ -101,8 +106,8 @@
 
     <!-- EnterDosage-->
     <string name="enter_dose_act_title">New Dosage - Input Manually</string>
-    <string name="start_date">31st February 2016</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="start_date" translatable="false">31st February 2016</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="new_dosage_INR">New INR:</string>
     <string name="new_dosage_INR_hint">INR at Start Date</string>
     <string name="start_date_txt">Start Date:</string>
@@ -130,8 +135,8 @@
     <string name="dg_addinfo_required_hint">Past week intake sum (mg)</string>
     <string name="dg_addinfo_required_manu">Add manually</string>
     <string name="dg_addinfo_required_ok">Generate from sum</string>
-    <string name="err_msg_ADG_not_supported_1">"Unfortunately, automatic dosage generation for"</string>
-    <string name="err_msg_ADG_not_supported_2">"is not currently supported due to lack of dosage adjustment tables."</string>
+    <string name="err_msg_ADG_not_supported_1">Unfortunately, automatic dosage generation for</string>
+    <string name="err_msg_ADG_not_supported_2">is not currently supported due to lack of dosage adjustment tables.</string>
     <string name="err_msg_ADG_short_lastdosage">Your previous dosage has to be at least 3 days long for it to be used in the generation.</string>
 
 
@@ -142,7 +147,7 @@
     between lifestyle changes and INR in patients such as yourself. The way you can help is by making a note of any lifestyle changes you undergo that you think might have
         caused your INR to fluctuate.</string>
     <string name="dg_citsci_unrecorded_day_msg">You cannot make notes on days which we have no record of.
-        Notes can be written for days associated with a dosage plan or INR test result.</string>
+        Notes can be written for days associated with a dosage plan.</string>
     <string name="citsci_title">Contribute to ongoing research</string>
     <string name="citsci_question1">What kinds of things should I make a note of?</string>
     <string name="citsci_your_notes">Your Notes:</string>
@@ -167,15 +172,23 @@
     <!-- View Dosage Plans-->
     <string name="title_all_dosage_plans">Dosage Plans</string>
     <string name="bttn_all_plans">All Dosage Plans</string>
+    <string name="all_dosages_instruction">Tap and hold to edit or delete future dosages.</string>
     <string name="manually_input">Manually Input</string>
     <string name="auto_generated">Automatically Generated</string>
     <string name="delete">Delete</string>
     <string name="ctxt_option_delete_last_day">Shorten by 1 day</string>
     <string name="toast_plan_modified">Dosage plan modified</string>
     <string name="modify">Modify</string>
+    <string name="delete_last_day_title">Delete Last Day?</string>
+    <string name="irreversible_action_msg">This action is irreversible.</string>
+    <string name="dg_delete_dosage_plan_title">Delete Dosage Plan?</string>
+    <string name="dg_modifymg_title">Modify milligram intake</string>
+    <string name="dg_modifyinr_title">Modify INR record</string>
 
     <!-- StatsActivity-->
-    <string name="title_activity_stats">StatsActivity</string>
-    <string name="questions_to_ask_prefkey">questionsNotYetAskedByPrompt</string>
+    <string name="title_activity_stats">History and Stats</string>
+    <string name="questions_to_ask_prefkey" translatable="false">questionsNotYetAskedByPrompt</string>
+
+    <string name="save">Save</string>
 
 </resources>

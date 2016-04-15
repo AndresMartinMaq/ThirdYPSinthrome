@@ -96,7 +96,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
             }
         }
         if (id == R.id.btt_dosage_callendar) {
-            getSupportActionBar().setTitle("Dosage Plans");
+            getSupportActionBar().setTitle(R.string.title_all_dosage_plans);
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.dose_fragment_holder, new DosagePlansFragment());
             //transaction.addToBackStack(null);
@@ -179,7 +179,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
                     finish(); //finish the current activity.
                 } catch (Exception e) {
                     //Display error dialog if generation fails.
-                    new AlertDialog.Builder(this).setTitle("Error")
+                    new AlertDialog.Builder(this).setTitle(getString(R.string.error_txt))
                             .setMessage(getString(R.string.dg_DAG_errormsg)+" "+e.getMessage())
                             .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                 @Override
@@ -414,7 +414,6 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
 
             //If no dosage should be displayed, instead show a message to inform the user.
             if (dosage == null){
-                Log.d("DosagesFmt", "No current dosage found to display");
                 //Remove dosage views' contents
                 for (int i = 0; i < itemViews.length; i++){
                     View item = itemViews[i];

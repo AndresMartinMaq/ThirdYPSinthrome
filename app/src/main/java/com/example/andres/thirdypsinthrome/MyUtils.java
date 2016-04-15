@@ -24,7 +24,8 @@ import java.util.Locale;
 
 public class MyUtils {
 
-    public static String DATE_FORMAT = "d 'of' MMMM ";//TODO make spanish not say "of".
+    private static String DATE_FORMAT_ENG = "d 'of' MMMM ";
+    private static String DATE_FORMAT_SPA = "d 'de' MMMM ";
     public static String TIME_FORMAT = "HH:mm";
     public static int MAX_DAYS_PER_DOSAGE = 7;
 
@@ -32,11 +33,22 @@ public class MyUtils {
     public static final boolean TIME_SIMULATION_ON = true;//To be modified manually in code only.
     public static int SIMULATION_DAY_OFFSET = 0;
 
+    public static String getDateFormat(){
+        switch (Locale.getDefault().getISO3Language()) {
+            case "eng":
+                return DATE_FORMAT_ENG;
+            case "spa":
+                return DATE_FORMAT_SPA;
+            default:
+                return DATE_FORMAT_ENG;
+        }
+    }
+
     public static String formatDate(Calendar c){
-        return new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(c.getTime());
+        return new SimpleDateFormat(getDateFormat(), Locale.getDefault()).format(c.getTime());
     }
     public static String formatDate(long dayInSecs){
-        return new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(dayInSecs * 1000l);
+        return new SimpleDateFormat(getDateFormat(), Locale.getDefault()).format(dayInSecs * 1000l);
     }
 
     public static String getTodayStr(){
@@ -73,7 +85,7 @@ public class MyUtils {
     }
 
     public static String dateLongToStr(long dateInSeconds){
-        return new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(dateInSeconds * 1000l);
+        return new SimpleDateFormat(getDateFormat(), Locale.getDefault()).format(dateInSeconds * 1000l);
     }
 
     //Takes a date in the string format DATE_FORMAT. Works with dates within this year.TODO
@@ -81,7 +93,7 @@ public class MyUtils {
         //Set date on a calendar
         Calendar c = Calendar.getInstance();
         int thisYear = c.get(Calendar.YEAR);
-        SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
+        SimpleDateFormat formatter = new SimpleDateFormat(getDateFormat(), Locale.getDefault());
         Date date = formatter.parse(dateStr);
         c.setTime(date);
         c.set(Calendar.YEAR, thisYear);
