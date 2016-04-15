@@ -159,14 +159,21 @@
     <string name="prompt_dg_make_notes">Make a note</string>
     <string name="dismiss">Dismiss</string>
     <string-array name="lifestyle_questions_array">
-        <item>Did you eat many leafy vegetables?</item>
-        <item>Did you take any analgesics, for example, aspirin? Particularly, any that aren’t Paracetamol?</item>
-        <item>Did you start taking vitamins or supplements?</item>
-        <item>Did you take some new drug?</item>
-        <item>Are you taking any herbal, natural or alternative health products?</item>
-        <item>Did you have sudden changes in your diet?</item>
-        <item>Did you eat unusually large or small amounts of food?</item>
+        <item>@string/strArr2_1</item>
+        <item>@string/strArr2_2</item>
+        <item>@string/strArr2_3</item>
+        <item>@string/strArr2_4</item>
+        <item>@string/strArr2_5</item>
+        <item>@string/strArr2_6</item>
+        <item>@string/strArr2_7</item>
     </string-array>
+    <string name="strArr2_1">Did you eat many leafy vegetables?</string>
+    <string name="strArr2_2">Did you take any analgesics, for example, aspirin? Particularly, any that aren’t Paracetamol?</string>
+    <string name="strArr2_3">Did you start taking vitamins or supplements?</string>
+    <string name="strArr2_4">Did you take some new drug?</string>
+    <string name="strArr2_5">Are you taking any herbal, natural or alternative health products?</string>
+    <string name="strArr2_6">Did you have sudden changes in your diet?</string>
+    <string name="strArr2_7">Did you eat unusually large or small amounts of food?</string>
 
 
     <!-- View Dosage Plans-->

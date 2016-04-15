@@ -101,4 +101,14 @@
     <string name="strArr1_5">30 y 1 minutos antes</string>
     <string name="strArr1_6">30 y 5 minutos antes</string>
     <string name="all_dosages_instruction">Pulsa y mantén para editar pautas y dosis.</string>
+    <string name="strArr2_1">¿Has consumido muchos vegetales de hoja (lechuga, repollo, espinacas, etc.)?</string>
+    <string name="strArr2_2">¿Has consumido analgésicos (por ejemplo, aspirina), en particular si no eran Paracetamol?</string>
+    <string name="strArr2_3">¿Has empezado a consumir vitaminas o suplementos alimenticios?</string>
+    <string name="strArr2_4">¿Has consumido medicamentos nuevos?</string>
+    <string name="strArr2_5">¿Has usado productos de hierbas, naturales o de medicinal alternativa?</string>
+    <string name="strArr2_6">¿Has comido cosas fuera de tu dieta habitual?</string>
+    <string name="strArr2_7">¿Has comido cantidades inusualmente grandes o pequeñas?</string><string name="cit_sci_description">Ciencia de Ciudadanía es un concepto que permite a ciudadanos normales, sin importar su formación o conocimientos previos, participar en proyectos de investigación científica.
+\n\nEn nuestro caso, pedimos a nuestros usuarios que nos ayuden a mejorar nuestro entendimiento sobre las interacciones entre el INR y cambios en el estilo de vida de pacientes como tú.
+La manera en la que nos puedes ayudar es a través de estas anotaciones, en las que puedes incluir cualquier observación o cambio en tu estilo de vida que creas que podría causar
+fluctuaciones en tu INR.</string>
 </resources>
