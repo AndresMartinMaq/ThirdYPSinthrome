@@ -197,5 +197,8 @@
     <string name="questions_to_ask_prefkey" translatable="false">questionsNotYetAskedByPrompt</string>
 
     <string name="save">Save</string>
+    <string name="adg_excpt_INR7">An INR above 7 is highly dangerous. Repeat the blood test and if the result is indeed this high, please contact your doctor immediately.</string>
+    <string name="adg_excp_INR1">Recorded INR value cannot be under 1</string>
+    <string name="adg_excp_mgOutOfBounds">Miligrams should be between 0 and 59 non-inclusive.</string>
 
 </resources>

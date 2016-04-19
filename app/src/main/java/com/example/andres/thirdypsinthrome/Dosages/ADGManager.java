@@ -19,10 +19,10 @@ public class ADGManager {
 
     public static long generateDosage(Context context, String medName, float mgSum, long startDate, float minINR, float maxINR, float recordedINR) throws Exception{
         if (!medName.equals(DsgAdjustHolder.KNOWN_MEDS[0])){
-            throw new Exception("Adjustment tables for "+medName+" are not available.");
+            throw new Exception(context.getString(R.string.err_msg_ADG_not_supported_1)+" "+medName+" "+context.getString(R.string.err_msg_ADG_not_supported_2));
         }
         //Calculate level from mg intake.
-        int currentLevel = mgWeekSumToLevelSinthrome(mgSum);
+        int currentLevel = mgWeekSumToLevelSinthrome(context, mgSum);
         //Generate using this level
         return generateDosage(context, medName, currentLevel, startDate, minINR, maxINR, recordedINR);
     }
@@ -44,7 +44,7 @@ public class ADGManager {
                 mgSum+= day.mg;
             }
             //Calculate level from mg intake.
-            currentLevel = mgWeekSumToLevelSinthrome(mgSum);
+            currentLevel = mgWeekSumToLevelSinthrome(context, mgSum);
         }
         return generateDosage(context, medName, currentLevel, startDate, minINR, maxINR, recordedINR);
     }
@@ -56,9 +56,9 @@ public class ADGManager {
         int incrOrDecr = 0;
         int newDsgPlanLength = 0;
         if (recordedINR < 1){
-            throw new Exception("Recorded INR value cannot be under 1");
+            throw new Exception(context.getString(R.string.adg_excp_INR1));
         }else if (recordedINR < 1.5){
-            //Repeat. Increase 2 levels.//TODO "repeat"
+            //Increase 2 levels.
             incrOrDecr = 1;
             newLevel = currentLevel+2;
             newDsgPlanLength = 3;
@@ -78,14 +78,13 @@ public class ADGManager {
             newLevel = currentLevel-1;
             newDsgPlanLength = 7;
         } else if (recordedINR <= 7){
-            //Repeat. Don't take sinthrome for 1 day. Decrease 2 levels.
+            //Don't take sinthrome for 1 day. Decrease 2 levels.
             incrOrDecr = 0;
             newLevel = currentLevel-2;
             newDsgPlanLength = 4;
         } else if (recordedINR > 7){
             //Repeat. Contact your doctor.
-            //TODO.
-            return -1;
+            throw new Exception(context.getString(R.string.adg_excpt_INR7));
         }
 
         //if (incrOrDecr != -1 || lastDosagePlan.days.size() < 4){//4 is the max size of DsgAdjustment patterns.
@@ -110,6 +109,16 @@ public class ADGManager {
         Float[] intakesPatternRefined = list.toArray(new Float[list.size()]);
 
         Float[] intakesPlan = getXLongList(intakesPatternRefined, newDsgPlanLength);
+
+        //If level had to go down by 2, the first day should be 0 mg, while the other days are shifted to the right.
+        if (newLevel == currentLevel - 2){
+            Float[] modifiedPlan = new Float[intakesPlan.length];
+            modifiedPlan[0] = 0f;
+            for (int i = 1; i < intakesPlan.length; i++){
+                modifiedPlan[i] = intakesPlan[i-1];
+            }
+            intakesPlan = modifiedPlan;
+        }
 
         //Create a Dosage(plan) int the database;
         long endDate = MyUtils.addDays(startDate, intakesPlan.length - 1);
@@ -194,8 +203,8 @@ public class ADGManager {
     }
 
     //Calculates a Dosage Level when one isn't available using a past dosage's mg/week intake.
-    public static int mgWeekSumToLevelSinthrome(double mgSum) throws Exception {
-        if (mgSum > 58 || 0 >= mgSum){ throw new Exception("Miligrams should be between 0 and 59 non-inclusive.");}
+    public static int mgWeekSumToLevelSinthrome(Context context, double mgSum) throws Exception {
+        if (mgSum > 58 || 0 >= mgSum){ throw new Exception(context.getString(R.string.adg_excp_mgOutOfBounds));}
         int level = -1;
         if (mgSum < 1.5){
             level = 1;

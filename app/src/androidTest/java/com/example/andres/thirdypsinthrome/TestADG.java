@@ -22,19 +22,19 @@ public class TestADG extends AndroidTestCase {
                         {27, 28}, {28, 29}, {30, 30}, {31,31}, {35,35}};
         try {
             for (int i = 0; i < mgToLvl.length; i++) {
-                assertEquals("For "+mgToLvl[i][0]+"mg, level was:",mgToLvl[i][1], ADGManager.mgWeekSumToLevelSinthrome((double)mgToLvl[i][0]));
+                assertEquals("For "+mgToLvl[i][0]+"mg, level was:",mgToLvl[i][1], ADGManager.mgWeekSumToLevelSinthrome(mContext, (double)mgToLvl[i][0]));
             }
 
             double[] mgs = {36d,29d, 12d, 12.2, 12.5, 12.8};
             int[] desired = {35,29, 15, 16, 16, 16};
             for (int i = 0; i <mgs.length; i++) {
-                Log.d(TAG, "For "+mgs[i]+"mg, level: "+ADGManager.mgWeekSumToLevelSinthrome(mgs[i]));
-                assertEquals(desired[i], ADGManager.mgWeekSumToLevelSinthrome(mgs[i]));
+                Log.d(TAG, "For "+mgs[i]+"mg, level: "+ADGManager.mgWeekSumToLevelSinthrome(mContext, mgs[i]));
+                assertEquals(desired[i], ADGManager.mgWeekSumToLevelSinthrome(mContext, mgs[i]));
             }
 
             double[] smallMgs = {1,2, 2.3, 2.5, 2.6, 4, 6, 15.5};
             for (int i = 0; i <smallMgs.length; i++) {
-                Log.d(TAG, "For " + smallMgs[i] + "mg, level: " + ADGManager.mgWeekSumToLevelSinthrome(smallMgs[i]));
+                Log.d(TAG, "For " + smallMgs[i] + "mg, level: " + ADGManager.mgWeekSumToLevelSinthrome(mContext, smallMgs[i]));
             }
 
         } catch (Exception e) {
@@ -68,7 +68,7 @@ public class TestADG extends AndroidTestCase {
         long newStartDate = MyUtils.getTodayLong();
         //Minor check, "level" should be unavailable (encoded as -1) but calculated as 18.
         assertEquals(-1, lastDosagePlan.level);
-        try {assertEquals(18, ADGManager.mgWeekSumToLevelSinthrome(15.5));} catch (Exception e) {fail();}
+        try {assertEquals(18, ADGManager.mgWeekSumToLevelSinthrome(mContext, 15.5));} catch (Exception e) {fail();}
 
         //Try to generate.
         try {

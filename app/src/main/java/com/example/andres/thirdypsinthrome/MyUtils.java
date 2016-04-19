@@ -15,7 +15,7 @@ import java.util.Locale;
 //TODO IMPORTANT DosageAdjustmenttables need to have an associated therapeutic range they are good for.
 //TODO 1 dia sin acenocoumarl.
 
-//TODO Cit. Science notes, Exporting, History.
+//TODO Exporting, History.
 
 //TODO be able to reset taken?
 //TODO check all fields are filled in settings. In onPreferenceChanged, just set them to their defaults if empty? I'm pretty sure this is kinda taken care of but not certain.
