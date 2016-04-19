@@ -422,6 +422,7 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
                     ImageView imgView = (ImageView) item.findViewById(R.id.dsg_item_icon);
                     ((TextView) item.findViewById(R.id.dsg_item_mgs)).setText("");
                     ((TextView) item.findViewById(R.id.dsg_item_units)).setText("");
+                    imgView.setVisibility(View.INVISIBLE);
                 }
                 //Update message below
                 ((TextView)view.findViewById(R.id.dosage_txt1)).setText("");

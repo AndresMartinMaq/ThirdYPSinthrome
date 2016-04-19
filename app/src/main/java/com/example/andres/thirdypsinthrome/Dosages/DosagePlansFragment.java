@@ -136,7 +136,13 @@ public class DosagePlansFragment extends Fragment implements LoaderManager.Loade
         inputField.setHint(currentIntake);
         inputField.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         inputField.setGravity(Gravity.CENTER_HORIZONTAL);
-        inputField.setPadding(50,30,50,30);
+        inputField.setPadding(50, 30, 50, 30);
+        inputField.setOnClickListener(new View.OnClickListener() {//On click, remove hint, for clarity.
+            @Override
+            public void onClick(View v) {
+                inputField.setHint("");
+            }
+        });
         builder.setView(inputField);
 
         builder.setPositiveButton(getContext().getString(R.string.modify), new DialogInterface.OnClickListener() {
@@ -167,6 +173,12 @@ public class DosagePlansFragment extends Fragment implements LoaderManager.Loade
         inputField.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         inputField.setGravity(Gravity.CENTER_HORIZONTAL);
         inputField.setPadding(50, 30, 50, 30);
+        inputField.setOnClickListener(new View.OnClickListener() {//On click, remove hint, for clarity.
+            @Override
+            public void onClick(View v) {
+                inputField.setHint("");
+            }
+        });
         builder.setView(inputField);
 
         builder.setPositiveButton(getContext().getString(R.string.modify), new DialogInterface.OnClickListener() {
