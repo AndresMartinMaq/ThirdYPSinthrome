@@ -6,12 +6,12 @@
     <string name="action_timetravel">Simulación: Hacer pasar 1 día</string>
     <string name="alarm_message">Alarma de toma de medicación</string>
     <string name="auto_generated">Pauta Generada Automáticamente</string>
-    <string name="bttn_all_plans">Pautas de medicación</string>
+    <string name="bttn_all_plans">Ver y Editar Pautas</string>
     <string name="bttn_begin">Comenzar</string>
     <string name="bttn_cit_science">Ciencia de Ciudadanía</string>
     <string name="bttn_hist_and_stats">Dosis Pasadas</string>
     <string name="bttn_my_dosage">Pautas de Dosis</string>
-    <string name="bttn_my_treatment">Mi tratamiento</string>
+    <string name="bttn_my_treatment">Ajustes del tratamiento</string>
     <string name="bttn_new_dosage_auto">Generar nueva pauta</string>
     <string name="bttn_new_dosage_manually">Introducir pauta manualmente</string>
     <string name="cancel">Cancelar</string>

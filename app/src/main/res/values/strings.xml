@@ -12,8 +12,8 @@
 
     <!-- Main Activity-->
     <string name="main_today_txt">Today,</string>
-    <string name="bttn_my_dosage">My Dosage Plan</string>
-    <string name="bttn_my_treatment">My Treatment</string>
+    <string name="bttn_my_dosage">My Dosage Plans</string>
+    <string name="bttn_my_treatment">Treatment Settings</string>
     <string name="bttn_cit_science">Citizen Science</string>
     <string name="bttn_hist_and_stats">History &amp; Statistics</string>
 
@@ -178,7 +178,7 @@
 
     <!-- View Dosage Plans-->
     <string name="title_all_dosage_plans">Dosage Plans</string>
-    <string name="bttn_all_plans">All Dosage Plans</string>
+    <string name="bttn_all_plans">Edit Dosage Plans</string>
     <string name="all_dosages_instruction">Tap and hold to edit or delete future dosages.</string>
     <string name="manually_input">Manually Input</string>
     <string name="auto_generated">Automatically Generated</string>
