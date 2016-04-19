@@ -53,6 +53,7 @@ public class NotesActivityFragment extends Fragment implements DatePicker.OnDate
         cancelBttn.setOnClickListener(listener);
 
         //Initial state
+        selectedDay = days.get(MyUtils.getTodayLong());
         cancelBttn.setVisibility(View.GONE);
         txtArea.setFocusable(false);  txtArea.setClickable(false);
         long today = MyUtils.getTodayLong();
@@ -92,7 +93,6 @@ public class NotesActivityFragment extends Fragment implements DatePicker.OnDate
                 for (DayHolder day : list) {
                     days.put(day.date, day);
                 }
-                selectedDay = days.get(MyUtils.getTodayLong());
                 updateNoteUI();
             }
         }).start();

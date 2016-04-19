@@ -6,7 +6,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_healing"
+        android:icon="@mipmap/ic_3q_orange"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
