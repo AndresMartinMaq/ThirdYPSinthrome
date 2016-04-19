@@ -93,6 +93,7 @@ public class DataExporter {
             }
             exporter.endDbExport();
             exporter.close();
+            db.close();
         }
         catch (IOException e) {
             e.printStackTrace();

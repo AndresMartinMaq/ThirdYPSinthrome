@@ -417,7 +417,7 @@ public class DBHelper extends SQLiteOpenHelper {
             String[] columns = {DayTable._ID, DayTable.COL_DATE, DayTable.COL_MILLIGRAMS, DayTable.COL_TAKEN};
             c = db.query(DayTable.TABLE_NAME, columns,DayTable.COL_DOSAGE_FK+"="+dosageID,null,null,null,null);
 
-            return new DosageHolder(c, level);
+            return new DosageHolder(c, dosageID, level);
         } else { return null; }
     }
 
@@ -441,7 +441,7 @@ public class DBHelper extends SQLiteOpenHelper {
             String[] columns = {DayTable._ID, DayTable.COL_DATE, DayTable.COL_MILLIGRAMS, DayTable.COL_TAKEN};
             c = db.query(DayTable.TABLE_NAME, columns,DayTable.COL_DOSAGE_FK+"="+dosageID,null,null,null,null);
 
-            return new DosageHolder(c, level);
+            return new DosageHolder(c, dosageID, level);
         } else { return null; }
     }
 

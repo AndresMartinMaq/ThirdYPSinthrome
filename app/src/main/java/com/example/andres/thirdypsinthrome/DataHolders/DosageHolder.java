@@ -18,12 +18,12 @@ public class DosageHolder {
     public final int level;
 
     //Takes a cursor with the days.
-    public DosageHolder(Cursor c, int level){
+    public DosageHolder(Cursor c, int id, int level){
         days = new ArrayList<DayHolder>(MyUtils.MAX_DAYS_PER_DOSAGE);
         this.level = level;
 
         c.moveToFirst();
-        id = c.getLong(c.getColumnIndex(DBContract.DosageTable._ID));
+        this.id = id;
         startDate = c.getLong(c.getColumnIndex(DBContract.DayTable.COL_DATE));
         do{
             DayHolder day =  new DayHolder(c.getLong(c.getColumnIndex(DBContract.DayTable._ID)),
