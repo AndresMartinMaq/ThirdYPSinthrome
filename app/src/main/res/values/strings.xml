@@ -15,7 +15,7 @@
     <string name="bttn_my_dosage">My Dosage Plans</string>
     <string name="bttn_my_treatment">Treatment Settings</string>
     <string name="bttn_cit_science">Citizen Science</string>
-    <string name="bttn_hist_and_stats">History &amp; Statistics</string>
+    <string name="bttn_hist_and_stats">History &amp; Data</string>
 
     <string name="dialog_mark_as_taken_title">Mark today\'s dose as \'taken\'?</string>
     <string name="dialog_mark_as_taken_msg">Be sure to mark this only after taking your medication. Do this with as small a delay as possible to ensure the accuracy of your statistics.</string>
@@ -138,6 +138,9 @@
     <string name="err_msg_ADG_not_supported_1">Unfortunately, automatic dosage generation for</string>
     <string name="err_msg_ADG_not_supported_2">is not currently supported due to lack of dosage adjustment tables.</string>
     <string name="err_msg_ADG_short_lastdosage">Your previous dosage has to be at least 3 days long for it to be used in the generation.</string>
+    <string name="adg_excpt_INR7">An INR above 7 is highly dangerous. Repeat the blood test and if the result is indeed this high again, please contact your doctor immediately.</string>
+    <string name="adg_excp_INR1">Recorded INR value cannot be under 1</string>
+    <string name="adg_excp_mgOutOfBounds">Miligrams should be between 0 and 59 non-inclusive.</string>
 
 
     <!-- Citizen Science-->
@@ -193,12 +196,15 @@
     <string name="dg_modifyinr_title">Modify INR record</string>
 
     <!-- StatsActivity-->
-    <string name="title_activity_stats">History and Stats</string>
+    <string name="title_activity_stats">History and Data</string>
     <string name="questions_to_ask_prefkey" translatable="false">questionsNotYetAskedByPrompt</string>
+    <string name="past_dosages">Past Dosages</string>
+    <string name="bttn_export_title">Export data to XML</string>
+    <string name="export_success_location">Data successfully stored in: </string>
+    <string name="export_success_question">Would you like to open this file?</string>
+    <string name="open_file">Open File</string>
+    <string name="not_now">Not now</string>
 
     <string name="save">Save</string>
-    <string name="adg_excpt_INR7">An INR above 7 is highly dangerous. Repeat the blood test and if the result is indeed this high, please contact your doctor immediately.</string>
-    <string name="adg_excp_INR1">Recorded INR value cannot be under 1</string>
-    <string name="adg_excp_mgOutOfBounds">Miligrams should be between 0 and 59 non-inclusive.</string>
 
 </resources>

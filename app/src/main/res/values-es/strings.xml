@@ -9,7 +9,7 @@
     <string name="bttn_all_plans">Ver y Editar Pautas</string>
     <string name="bttn_begin">Comenzar</string>
     <string name="bttn_cit_science">Ciencia de Ciudadanía</string>
-    <string name="bttn_hist_and_stats">Dosis Pasadas</string>
+    <string name="bttn_hist_and_stats">Historial</string>
     <string name="bttn_my_dosage">Pautas de Dosis</string>
     <string name="bttn_my_treatment">Ajustes del tratamiento</string>
     <string name="bttn_new_dosage_auto">Generar nueva pauta</string>
@@ -111,4 +111,13 @@
 \n\nEn nuestro caso, pedimos a nuestros usuarios que nos ayuden a mejorar nuestro entendimiento sobre las interacciones entre el INR y cambios en el estilo de vida de pacientes como tú.
 La manera en la que nos puedes ayudar es a través de estas anotaciones, en las que puedes incluir cualquier observación o cambio en tu estilo de vida que creas que podría causar
 fluctuaciones en tu INR.</string>
+    <string name="adg_excp_INR1">El valor de INR no puede ser menor a 1.</string>
+    <string name="adg_excp_mgOutOfBounds">Los milligramos deben ser un mínimo de 0 y máximo de 59 (ambos no incluidos).</string>
+    <string name="adg_excpt_INR7">Un INR mayor a 7 es indicación de peligro. Repite el control y si el resultado vuelve a ser tan elvado, contacta con tu médico de inmediato.</string>
+    <string name="past_dosages">Pautas de dosis pasadas</string>
+    <string name="bttn_export_title">Exportar a archivo XML</string>
+    <string name="export_success_location">Datos exportados con éxito, localizados en:</string>
+    <string name="export_success_question">Ver el archivo ahora?</string>
+    <string name="not_now">Ahora no</string>
+    <string name="open_file">Abrir archivo</string>
 </resources>

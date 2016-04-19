@@ -11,6 +11,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Takes care of exporting data in a XML format to a file.
@@ -20,26 +23,31 @@ import java.io.IOException;
 public class DataExporter {
 
     private static final String EXPORT_FILE_NAME = "sinthromeDataExport.xml";
+    private static final boolean LOGGING = false;
+
     private String filePath;
+    private Set<String> tablesToExport;
 
     private Context context;
     private SQLiteDatabase db;
     private Exporter exporter;
+    private File file;
 
-    public DataExporter(Context ctx) {
+    public DataExporter(Context ctx, String[] tablesToExport) {
         context = ctx;
+        this.tablesToExport = new HashSet<String>(Arrays.asList(tablesToExport));
         db = DBHelper.getInstance(ctx).getWritableDatabase();
         //filePath = ctx.getApplicationInfo().dataDir +"/"+EXPORT_FILE_NAME;
-        //filePath = Environment.getExternalStorageDirectory().getPath() +"/"+EXPORT_FILE_NAME;
-        filePath = "/sdcard" +"/"+EXPORT_FILE_NAME;
+        filePath = Environment.getExternalStorageDirectory().getPath() +"/"+EXPORT_FILE_NAME;
+        //filePath = "/sdcard" +"/"+EXPORT_FILE_NAME;
         log("File Path: "+filePath);
 
         try {
             //Create a file on the sdcard to export the database contents to
-            File myFile = new File( filePath );
-            myFile.createNewFile();
+            file = new File( filePath );
+            file.createNewFile();
 
-            FileOutputStream fOut =  new FileOutputStream(myFile);
+            FileOutputStream fOut =  new FileOutputStream(file);
             BufferedOutputStream bos = new BufferedOutputStream( fOut );
 
             exporter = new Exporter( bos );
@@ -49,8 +57,19 @@ public class DataExporter {
         }
     }
 
-    public void exportData() {
-        log( "Exporting Data" );
+    public String getFilePath(){
+        return filePath;
+    }
+    public File getFile(){
+        return file;
+    }
+
+    private void log( String msg ) {
+        if (LOGGING) { Log.d("DatabaseAssistant", msg); }
+    }
+
+    public boolean exportData() {
+        log("Exporting Data");
 
         try {
             exporter.startDbExport(db.getPath());
@@ -65,8 +84,8 @@ public class DataExporter {
                 tableName = cur.getString( cur.getColumnIndex( "name" ) );
                 log( "table name " + tableName );
 
-                // don't process these two tables since they are used for metadata
-                if ( ! tableName.equals( "android_metadata" ) && ! tableName.equals( "sqlite_sequence" ) && !tableName.contains("autoindex")) {
+                //Only process tables we're interested in (will also filter out tables such as android_metadata).
+                if ( tablesToExport.contains(tableName) ) {
                     exportTable( tableName );
                 }
 
@@ -77,7 +96,9 @@ public class DataExporter {
         }
         catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     private void exportTable( String tableName ) throws IOException {
@@ -112,10 +133,6 @@ public class DataExporter {
         cur.close();
 
         exporter.endTable();
-    }
-
-    private void log( String msg ) {
-        Log.d( "DatabaseAssistant", msg );
     }
 
     class Exporter {

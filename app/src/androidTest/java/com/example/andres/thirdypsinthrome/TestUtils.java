@@ -4,6 +4,7 @@ package com.example.andres.thirdypsinthrome;
 import android.test.AndroidTestCase;
 import android.util.Log;
 
+import com.example.andres.thirdypsinthrome.persistence.DBContract;
 import com.example.andres.thirdypsinthrome.persistence.DataExporter;
 
 import java.text.ParseException;
@@ -82,7 +83,14 @@ public class TestUtils extends AndroidTestCase{
     }
 
     public void testExporting(){
-        DataExporter DA = new DataExporter(mContext);
+        String[] tableNames = new String[5];
+        tableNames[0] = DBContract.UserTable.TABLE_NAME;
+        tableNames[1] = DBContract.DosageTable.TABLE_NAME;
+        tableNames[2] = DBContract.DayTable.TABLE_NAME;
+        tableNames[3] = DBContract.MedicineTable.TABLE_NAME;
+        tableNames[4] = DBContract.DosageAdjustmentTable.TABLE_NAME;
+
+        DataExporter DA = new DataExporter(mContext, tableNames);
 
         DA.exportData();
 
