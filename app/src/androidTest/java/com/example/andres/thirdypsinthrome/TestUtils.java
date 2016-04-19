@@ -3,6 +3,9 @@ package com.example.andres.thirdypsinthrome;
 
 import android.test.AndroidTestCase;
 import android.util.Log;
+
+import com.example.andres.thirdypsinthrome.persistence.DataExporter;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -76,5 +79,12 @@ public class TestUtils extends AndroidTestCase{
             String question = NotesActivity.getLifestyleQuestion(mContext);
             Log.d("TAG", "Iteration "+i+"; "+question);
         }
+    }
+
+    public void testExporting(){
+        DataExporter DA = new DataExporter(mContext);
+
+        DA.exportData();
+
     }
 }
