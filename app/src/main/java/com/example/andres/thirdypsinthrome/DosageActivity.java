@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -288,8 +289,9 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
 
         //Go back to DosagesFragment, with updated UI.
         DosagesFragment dosagesFmt = new DosagesFragment();
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.dose_fragment_holder, dosagesFmt).commit();
+        FragmentManager manager = getSupportFragmentManager();
+        manager.popBackStack();//Popping backtack ensures the unupdated fragment is gone. Otherwise, on back, it will merge both into an uncanny fragment abomination.
+        manager.beginTransaction().replace(R.id.dose_fragment_holder, dosagesFmt).commit();
 
         //Display a confirmatory message
         Toast.makeText(this, getString(R.string.toast_confirmation), Toast.LENGTH_LONG).show();

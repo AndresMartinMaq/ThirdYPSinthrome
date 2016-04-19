@@ -71,7 +71,11 @@ public class SettingsActivity extends PreferenceActivity
         //Register the user's data in the database and open the main activity.
         try {
             DBHelper.getInstance(getApplicationContext()).registerUser(getApplicationContext());
-            startActivity(new Intent(SettingsActivity.this, MainActivity.class));
+
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);//Makes sure back button won't ever lead to this again.
+            startActivity(intent);
+            finish();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -68,6 +68,7 @@ public class NotesActivityFragment extends Fragment implements DatePicker.OnDate
                 scrollView.post(new Runnable() {
                     @Override
                     public void run() {
+                        selectedDay = days.get(MyUtils.getTodayLong());//Must be set before a click is made on edit button.
                         //Focus text area
                         editOrSaveBttn.performClick();
                         //txtArea.performClick();

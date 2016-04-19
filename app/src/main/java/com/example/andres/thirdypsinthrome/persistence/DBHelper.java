@@ -318,7 +318,7 @@ public class DBHelper extends SQLiteOpenHelper {
         if (c.moveToFirst()) {
             long dayID = c.getLong(c.getColumnIndex(DayTable._ID));
             int taken = c.getInt(c.getColumnIndex(DayTable.COL_TAKEN));
-            if (taken == 0) {
+            if (taken != 1) {
                 db.delete(DayTable.TABLE_NAME, DayTable._ID + "=" + dayID, null);
                 todayDeleted = true;
             }

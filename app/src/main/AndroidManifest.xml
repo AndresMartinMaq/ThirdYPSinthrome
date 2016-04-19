@@ -3,6 +3,7 @@
     package="com.example.andres.thirdypsinthrome" >
 
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
