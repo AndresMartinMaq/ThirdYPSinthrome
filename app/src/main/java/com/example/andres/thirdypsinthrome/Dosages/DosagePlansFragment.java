@@ -172,7 +172,9 @@ public class DosagePlansFragment extends Fragment implements LoaderManager.Loade
         builder.setPositiveButton(getContext().getString(R.string.modify), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                float modifiedIntake = Float.parseFloat(inputField.getText().toString());
+                String str = inputField.getText().toString();
+                if (str.equals("")){ return; }
+                float modifiedIntake = Float.parseFloat(str);
                 int rowsAffected = DBHelper.getInstance(getContext()).modifyDosageINR(dosageID, modifiedIntake);
                 if (rowsAffected != 1) {
                     Toast.makeText(getContext(), getString(R.string.error_txt), Toast.LENGTH_SHORT).show();
