@@ -22,7 +22,6 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.andres.thirdypsinthrome.DosageActivity;
 import com.example.andres.thirdypsinthrome.LoadersAndAdapters.ExpDosageListAdapter;
 import com.example.andres.thirdypsinthrome.LoadersAndAdapters.ManyDosagesLoader;
 import com.example.andres.thirdypsinthrome.MainActivity;
@@ -168,6 +167,7 @@ public class DosagePlansFragment extends Fragment implements LoaderManager.Loade
                     Toast.makeText(getContext(), getString(R.string.error_txt), Toast.LENGTH_SHORT).show();
                 }
                 //Update UI
+                //TODO if today is the day updated, update main screen.
                 getLoaderManager().restartLoader(LOADER_ID, null, DosagePlansFragment.this);
             }
         });

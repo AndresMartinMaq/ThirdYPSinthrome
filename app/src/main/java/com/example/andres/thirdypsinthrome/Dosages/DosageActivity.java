@@ -1,4 +1,4 @@
-package com.example.andres.thirdypsinthrome;
+package com.example.andres.thirdypsinthrome.Dosages;
 
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
@@ -14,7 +14,6 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,11 +31,10 @@ import android.widget.Toast;
 
 import com.example.andres.thirdypsinthrome.DataHolders.DayHolder;
 import com.example.andres.thirdypsinthrome.DataHolders.DosageHolder;
-import com.example.andres.thirdypsinthrome.Dosages.ADGManager;
-import com.example.andres.thirdypsinthrome.Dosages.DateFragmentDialog;
-import com.example.andres.thirdypsinthrome.Dosages.DosagePlansFragment;
-import com.example.andres.thirdypsinthrome.Dosages.EnterDoseFragment;
 import com.example.andres.thirdypsinthrome.LoadersAndAdapters.DosageLoader;
+import com.example.andres.thirdypsinthrome.MainActivity;
+import com.example.andres.thirdypsinthrome.MyUtils;
+import com.example.andres.thirdypsinthrome.R;
 import com.example.andres.thirdypsinthrome.persistence.DBHelper;
 
 public class DosageActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
