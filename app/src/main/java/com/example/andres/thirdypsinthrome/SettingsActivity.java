@@ -32,6 +32,8 @@ import java.util.Calendar;
 public class SettingsActivity extends PreferenceActivity
         implements Preference.OnPreferenceChangeListener {
 
+    private boolean changeDueToCreationOfView = false;
+
     //TODO consider enhancing ui using spinners and such personalised Preference xml units.
     //Note: With the default values, automode will be available.
 
@@ -42,12 +44,14 @@ public class SettingsActivity extends PreferenceActivity
         addPreferencesFromResource(R.xml.general_prefs);
 
         //For all preferences, attach an OnPreferenceChangeListener so the UI summary can be updated when the preference changes.
+        changeDueToCreationOfView = true;
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_mininr_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_maxinr_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_med_name_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_med_time_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_mg_per_tablet_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_alarmtone_key)));
+        changeDueToCreationOfView = false;
         //These are  here so they doesn't get triggered onCreation like the others.
         findPreference(getString(R.string.pref_alarm_timing_key)).setOnPreferenceChangeListener(this);
         findPreference(getString(R.string.pref_alarm_enabled_key)).setOnPreferenceChangeListener(this);
@@ -148,29 +152,35 @@ public class SettingsActivity extends PreferenceActivity
             }
             //Notice the lack of setSummary() here, due to it being a checkbox.
         }else
-        if(preference.getKey().equals(getString(R.string.pref_med_name_key))){
+        if(!changeDueToCreationOfView && preference.getKey().equals(getString(R.string.pref_med_name_key))){
             //For the medicine, check and set whether automatic dosage generation will be possible with it.
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             String medName = stringValue.toLowerCase();
             prefs.edit().putString(preference.getKey(), medName).commit(); //Also, make sure only lowercase letters are stored.
 
-            float inrMin = Float.parseFloat(prefs.getString(getString(R.string.pref_mininr_key), ""));
-            float inrMax = Float.parseFloat(prefs.getString(getString(R.string.pref_maxinr_key), ""));
-
-            boolean autoMode = DsgAdjustHolder.isAutoModePossible(this, medName, inrMin, inrMax);
-            prefs.edit().putBoolean(getString(R.string.automode_prefkey), autoMode).commit();
+            updateAutomodePref(prefs, medName);
 
             preference.setSummary(medName);
-        } /*if(preference.getKey().equals(getString(R.string.pref_mininr_key)) || preference.getKey().equals(getString(R.string.pref_maxinr_key))){
+        }if(!changeDueToCreationOfView && preference.getKey().equals(getString(R.string.pref_mininr_key))){
             //For this INR range, check and set whether automatic dosage generation will be possible with it.
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            String medName = prefs.getString(getString(R.string.pref_med_name_key), "");
-            float inrMin = Float.parseFloat(prefs.getString(getString(R.string.pref_mininr_key), ""));
             float inrMax = Float.parseFloat(prefs.getString(getString(R.string.pref_maxinr_key), ""));
+            float inrMin = Float.parseFloat(value.toString());
 
-            boolean autoMode = DsgAdjustHolder.isAutoModePossible(this, medName, inrMin, inrMax);
-            prefs.edit().putBoolean(getString(R.string.automode_prefkey), autoMode).commit();
-        }*/
+            updateAutomodePref(prefs, inrMin, inrMax);
+
+            preference.setSummary(stringValue);
+        }
+        if(preference.getKey().equals(getString(R.string.pref_maxinr_key))){
+            //For this INR range, check and set whether automatic dosage generation will be possible with it.
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            float inrMax = Float.parseFloat(value.toString());
+            float inrMin = Float.parseFloat(prefs.getString(getString(R.string.pref_maxinr_key), ""));
+
+            updateAutomodePref(prefs, inrMin, inrMax);
+
+            preference.setSummary(stringValue);
+        }
         else {
             // For other preferences, set the summary to the value's string representation.
             preference.setSummary(stringValue);
@@ -225,5 +235,21 @@ public class SettingsActivity extends PreferenceActivity
             //Undo the change to the calendar, in case another alarm will be set.
             c.add(Calendar.MINUTE, +Integer.parseInt(x) );
         }
+    }
+
+    private void updateAutomodePref(SharedPreferences prefs, float inrMin, float inrMax){
+
+        String medName = prefs.getString(getString(R.string.pref_med_name_key), "");
+
+        boolean autoMode = DsgAdjustHolder.isAutoModePossible(this, medName, inrMin, inrMax);
+        prefs.edit().putBoolean(getString(R.string.automode_prefkey), autoMode).commit();
+    }
+    private void updateAutomodePref(SharedPreferences prefs, String medName){
+
+        float inrMin = Float.parseFloat(prefs.getString(getString(R.string.pref_mininr_key), ""));
+        float inrMax = Float.parseFloat(prefs.getString(getString(R.string.pref_maxinr_key), ""));
+
+        boolean autoMode = DsgAdjustHolder.isAutoModePossible(this, medName, inrMin, inrMax);
+        prefs.edit().putBoolean(getString(R.string.automode_prefkey), autoMode).commit();
     }
 }
