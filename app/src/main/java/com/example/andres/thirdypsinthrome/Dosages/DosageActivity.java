@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import com.example.andres.thirdypsinthrome.DataHolders.DayHolder;
 import com.example.andres.thirdypsinthrome.DataHolders.DosageHolder;
+import com.example.andres.thirdypsinthrome.InfoActivity;
 import com.example.andres.thirdypsinthrome.LoadersAndAdapters.DosageLoader;
 import com.example.andres.thirdypsinthrome.MainActivity;
 import com.example.andres.thirdypsinthrome.MyUtils;
@@ -91,6 +92,12 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
                         @Override
                         public void onClick(DialogInterface dialog, int i) {dialog.dismiss();}
                     })
+                        .setNegativeButton(getString(R.string.more_information), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startActivity( new Intent(DosageActivity.this, InfoActivity.class));
+                            }
+                        })
                         .show();
             }
         }
@@ -402,6 +409,10 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
                     try {
                         ((DosageActivity) getActivity()).showDeletePlanDialog(dosage);
                     } catch (ClassCastException e){}
+                    return true;
+                case R.id.action_about:
+                    Intent intent = new Intent(getContext(), InfoActivity.class);
+                    startActivity(intent);
                     return true;
                 default:
                     return super.onOptionsItemSelected(item);

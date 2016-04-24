@@ -120,4 +120,5 @@ fluctuaciones en tu INR.</string>
     <string name="export_success_question">Ver el archivo ahora?</string>
     <string name="not_now">Ahora no</string>
     <string name="open_file">Abrir archivo</string>
+    <string name="action_about">Información Adicional</string>
 </resources>

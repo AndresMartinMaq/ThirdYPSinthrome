@@ -107,4 +107,11 @@ public class NotesActivity extends AppCompatActivity {
         prefs.edit().putStringSet(context.getString(R.string.questions_to_ask_prefkey), questions).commit();
         return randomQuestion;
     }
+
+    //For when the user clicks a question, will take them to the relevant answer.
+    public void onQuestionClicked(View v){
+        Intent intent = new Intent(this, InfoActivity.class);
+        intent.putExtra("scrollToViewWithID", R.id.infotxtv_factors_body);
+        startActivity(intent);
+    }
 }

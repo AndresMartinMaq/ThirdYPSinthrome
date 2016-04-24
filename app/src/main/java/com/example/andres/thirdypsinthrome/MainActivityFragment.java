@@ -31,7 +31,7 @@ public class MainActivityFragment extends Fragment {
         //Make the central panel display today's main information.
         bindTodaySummary();
 
-        //Attach listener for he today panel
+        //Attach listener for the today panel
         view.findViewById(R.id.today_panel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

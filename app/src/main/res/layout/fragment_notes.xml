@@ -41,6 +41,7 @@
                 android:id="@+id/textView2"
                 android:textStyle="bold|italic"
                 android:textColor="#2233ff"
+                android:onClick="onQuestionClicked"
                 android:paddingTop="8sp" />
 
             <TextView

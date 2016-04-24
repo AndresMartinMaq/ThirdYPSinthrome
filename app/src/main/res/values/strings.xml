@@ -3,6 +3,7 @@
     <string name="hello_world" translatable="false">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="action_continue">Continue</string>
+    <string name="action_about">About</string>
     <string name="weight_units">mg</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
@@ -215,14 +216,17 @@
     <string name="info_availability_title">Availability of Automatic Dosage Generation</string>
     <string name="info_availability_body">As the application stands right now, automatic dosage generation is only available for therapy based on acenocoumarol
         (commercially known as Sinthrome) and only under the specific INR therapeutic range of 2.5 to 3.5.
-        \n\nFor all other treatment parameters the application is useable through manually input dosage plans.
+        \n\nFor all other treatment parameters the application is usable through manually input dosage plans.
     </string>
     <string name="info_factors_title">What kind of things should I make a note of?</string>
     <string name="info_factors_body">You should aim to note down any factors that might have pushed your INR up or down. These will often be related to consumption
-        of Vitamin K (which thickens blood and thereby counteracts anticoagualnts), to your health, to other drugs or to lifestyle changes.
+        of Vitamin K (which thickens blood and thereby counteracts anticoagualnts), to your health, to other drugs or to lifestyle changes. Note that most of the
+        foods noted here will only pose a risk if consumed in large quantities and therefore it is not recommended to simply avoid them. If they form part of your routine,
+        and you have informed your doctor, it is generally advised to simply be consistent.
         \n\nFollowing we provide a non-exhaustive list of these factors: </string>
-
+    <string name="info_factors_list">Illness\nMedicines\nVitamin Supplements\nAlcohol, Fish Oil, Flax Seed Oil\nLeaf Vegentables, Cramberry Juice\nAniseed, Dandelion, Ginger, Parsley\n</string>
 
     <string name="save">Save</string>
+    <string name="more_information">More Information</string>
 
 </resources>
