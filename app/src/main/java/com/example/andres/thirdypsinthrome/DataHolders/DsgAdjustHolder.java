@@ -37,6 +37,9 @@ public class DsgAdjustHolder {
     }
 
     public static boolean isAutoModePossible(Context context, String medName, float inrRangeBottom, float inrRangeTop ){
+        //This first line is a product of the current information we have. When we gain more dosage adjustment tables, it should be deleted or replaced
+        if (inrRangeBottom != 2.5 || inrRangeTop != 3.5){ return false; }
+
         return DBHelper.getInstance(context).hasDoseTables(medName);
     }
 

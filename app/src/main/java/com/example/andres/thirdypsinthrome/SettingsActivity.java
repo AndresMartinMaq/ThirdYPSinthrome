@@ -161,7 +161,17 @@ public class SettingsActivity extends PreferenceActivity
             prefs.edit().putBoolean(getString(R.string.automode_prefkey), autoMode).commit();
 
             preference.setSummary(medName);
-        } else {
+        } /*if(preference.getKey().equals(getString(R.string.pref_mininr_key)) || preference.getKey().equals(getString(R.string.pref_maxinr_key))){
+            //For this INR range, check and set whether automatic dosage generation will be possible with it.
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            String medName = prefs.getString(getString(R.string.pref_med_name_key), "");
+            float inrMin = Float.parseFloat(prefs.getString(getString(R.string.pref_mininr_key), ""));
+            float inrMax = Float.parseFloat(prefs.getString(getString(R.string.pref_maxinr_key), ""));
+
+            boolean autoMode = DsgAdjustHolder.isAutoModePossible(this, medName, inrMin, inrMax);
+            prefs.edit().putBoolean(getString(R.string.automode_prefkey), autoMode).commit();
+        }*/
+        else {
             // For other preferences, set the summary to the value's string representation.
             preference.setSummary(stringValue);
         }
