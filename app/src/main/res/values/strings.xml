@@ -195,6 +195,7 @@
     <string name="dg_delete_dosage_plan_title">Delete Dosage Plan?</string>
     <string name="dg_modifymg_title">Modify milligram intake</string>
     <string name="dg_modifyinr_title">Modify INR record</string>
+    <string name="dg_modifyingINR_of_ADG_plan_msg">Modifying the INR on an automatically generated plan will not recalculate it\'s dosages. If you wish for this to be the case, delete this plan and generate one with the new INR value instead.</string>
 
     <!-- StatsActivity-->
     <string name="title_activity_stats">History and Data</string>
@@ -209,7 +210,7 @@
     <!-- Extra Information Screen-->
     <string name="info_about_title">About this application</string>
     <string name="info_about_body">The purpose of this application is twofold. Firstly, it helps patients like yourself manage your anticoagulation
-        therapy more effectively and offers you the posibility of trnasitioning into self-monitoring, an easier,
+        therapy more effectively and offers you the posibility of transitioning into self-monitoring, an easier,
         more comfortable and safer alternative to traditional treatment. \n\nSecondly, it offers you the possibility of contributing to the reaserch through Citizen Science,
     making you able to help doctors, other patients and yourself by increasing your awareness and understanding of all the interactions and external factors that cause dangerous
     INR fluctuations.</string>
@@ -224,9 +225,11 @@
         foods noted here will only pose a risk if consumed in large quantities and therefore it is not recommended to simply avoid them. If they form part of your routine,
         and you have informed your doctor, it is generally advised to simply be consistent.
         \n\nFollowing we provide a non-exhaustive list of these factors: </string>
-    <string name="info_factors_list">Illness\nMedicines\nVitamin Supplements\nAlcohol, Fish Oil, Flax Seed Oil\nLeaf Vegentables, Cramberry Juice\nAniseed, Dandelion, Ginger, Parsley\n</string>
+    <string name="info_factors_list">Illness\nMedicines\nVitamin Supplements\nAlcohol, Fish Oil, Flax Seed Oil\nLeaf Vegentables, Cramberry Juice\nAniseed, Dandelion, Ginger, Parsley</string>
 
     <string name="save">Save</string>
     <string name="more_information">More Information</string>
+    <string name="understood">Understood</string>
+
 
 </resources>

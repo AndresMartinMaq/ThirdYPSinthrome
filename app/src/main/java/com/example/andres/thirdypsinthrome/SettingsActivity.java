@@ -34,7 +34,6 @@ public class SettingsActivity extends PreferenceActivity
 
     private boolean changeDueToCreationOfView = false;
 
-    //TODO consider enhancing ui using spinners and such personalised Preference xml units.
     //Note: With the default values, automode will be available.
 
     @Override
@@ -62,7 +61,7 @@ public class SettingsActivity extends PreferenceActivity
         } else {
             //Remove continue button.
             Preference continueButton = findPreference("prefs_continue_bttn");
-            //TODO minor, consider changing all this stuff to instead add the continue button if first time, using newPreference.setLayoutResource.
+            //Could change all this stuff to instead add the continue button if first time, using newPreference.setLayoutResource.
             getPreferenceScreen().removePreference(continueButton);
         }
     }

@@ -151,15 +151,8 @@ public class ADGManager {
         return insertedRowID;
     }
 
-    public static String identifyPattern(float[] intakes){
-        if (intakes[0] == intakes[3] && intakes[0] == intakes[1]){
-            //TODO
-        }
-        return null;
-    }
-
     //Used to trim or extend Dosage Plans (takes a DosageHolder.days list).
-    public static List<DayHolder> getXLongList(List<DayHolder> original, int newSize){//TODO test
+    public static List<DayHolder> getXLongList(List<DayHolder> original, int newSize){
         int originalSize = original.size();
         List<DayHolder> newList = new ArrayList<DayHolder>(newSize);
 
@@ -180,7 +173,7 @@ public class ADGManager {
         }
         return newList;
     }
-    public static Float[] getXLongList(Float[] original, int newSize){//TODO test
+    public static Float[] getXLongList(Float[] original, int newSize){//Implementing a unit test for this wouln't be diffuclt.
         int originalSize = original.length;
         Float[] newList = new Float[newSize];
 

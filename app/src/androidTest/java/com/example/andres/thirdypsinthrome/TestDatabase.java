@@ -35,7 +35,7 @@ public class TestDatabase extends AndroidTestCase{
         assertTrue("Error: Tables were not created correctly", c.moveToNext());
 
         HashSet<String> tableNames = new HashSet<>(Arrays.asList(c.getColumnNames()));
-        //TODO: Minor: Assert that tableNames includes all required table names.
+        //Minor:Could assert that tableNames includes all required table names at this point.
         do {
             Log.d(TAG, "Tables found are named = "+c.getString(0));
         } while( c.moveToNext() );

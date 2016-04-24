@@ -12,10 +12,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-//TODO IMPORTANT DosageAdjustmenttables need to have an associated therapeutic range they are good for.
-//TODO Exporting, History.
-
-//TODO check all fields are filled in settings. In onPreferenceChanged, just set them to their defaults if empty? I'm pretty sure this is kinda taken care of but not certain.
 //Consider using notifications for alarm.
 //Could make it possible to manually input shorter dosages at this point.
 
@@ -85,7 +81,7 @@ public class MyUtils {
         return new SimpleDateFormat(getDateFormat(), Locale.getDefault()).format(dateInSeconds * 1000l);
     }
 
-    //Takes a date in the string format DATE_FORMAT. Works with dates within this year.TODO
+    //Takes a date in the string format DATE_FORMAT. Works with dates within this year.TODO consider expanding to a method that is year sensitive
     public static long dateStrToLong(String dateStr) throws ParseException {
         //Set date on a calendar
         Calendar c = Calendar.getInstance();

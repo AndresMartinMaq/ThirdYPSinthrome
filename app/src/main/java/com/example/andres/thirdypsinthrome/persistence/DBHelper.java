@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 //NOTE: as SQLite doesn't have date or time data types, time is stored as string HH:MM
-//TODO: Consider: AUTOINCREMENT.
 
 public class DBHelper extends SQLiteOpenHelper {
 
@@ -186,10 +185,12 @@ public class DBHelper extends SQLiteOpenHelper {
             c.close();
         } else {
             //Create new medicine (will not have DosageAdjustment tables)
-            //TODO check it hasn't been created already.
-            medName = medName.toLowerCase();
-            addMedicine(medName, mgPerTablet);
-
+            //check it hasn't been created already.
+            Cursor c = db.rawQuery("SELECT "+MedicineTable._ID+" FROM "+MedicineTable.TABLE_NAME+" WHERE "+MedicineTable.COL_COMMERCIAL_NAME+"= '"+medName+"';", null);
+            if (c.getCount() == 0) {
+                medName = medName.toLowerCase();
+                addMedicine(medName, mgPerTablet);
+            }
         }
         userValues.put(UserTable.COL_MEDICINE_FK, medID);
 
@@ -580,9 +581,6 @@ public class DBHelper extends SQLiteOpenHelper {
                 + " OR (" + startDate + " <= " + DosageTable.COL_END+ " AND " + DosageTable.COL_END + " <= " + endDate+")"
                 + " OR (" + DosageTable.COL_START + " <= " + startDate+ " AND " + endDate + " <= " + DosageTable.COL_END+"))", null);
         if(cursor.moveToFirst()) {
-            cursor.getLong(cursor.getColumnIndex(DosageTable._ID));//TODO these are here for debugging
-            cursor.getLong(cursor.getColumnIndex(DosageTable.COL_START));
-            cursor.getLong(cursor.getColumnIndex(DosageTable.COL_END));
             cursor.close();
             return false;
         } else {

@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.example.andres.thirdypsinthrome.MyUtils;
 import com.example.andres.thirdypsinthrome.R;
-//TODO small issue, the chosen inr values get set to the latest one on fragment recreation
+//TODO small aesthetic issue, the chosen inr values get set to the latest one on fragment recreation (due to, for example, screen roations).
 
 public class EnterDoseFragment extends Fragment {
 

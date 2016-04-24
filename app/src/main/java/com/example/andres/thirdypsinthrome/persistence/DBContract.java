@@ -4,7 +4,6 @@ import android.provider.BaseColumns;
 
 public class DBContract {
 
-    //TODO Consider: Maybe shouldn't be used, as this could better be used as user preferences? //Bah, keep it, it can make it maintain/scale/extens-ible
     //Implementing BaseColums will automatically generate a _id.
     public static final class UserTable implements BaseColumns{
         public static final String TABLE_NAME = "user";

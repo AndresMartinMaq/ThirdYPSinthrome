@@ -121,4 +121,14 @@ fluctuaciones en tu INR.</string>
     <string name="not_now">Ahora no</string>
     <string name="open_file">Abrir archivo</string>
     <string name="action_about">Información Adicional</string>
+    <string name="dg_modifyingINR_of_ADG_plan_msg">Modificar el valor INR de esta pauta no recalculará sus dosis generadas. Para recalcular la pauta es necesario borrarla y generar una nueva.</string>
+    <string name="understood">Entendido</string>
+    <string name="more_information">Más Información</string>
+    <string name="info_about_body">Esta aplicación tiene un objectivo doble. En primer lugar, ayudar a pacientes a organizarse en su tratamiento de anticoagulación y ofrecer la posibilidad de dar el paso hacia el autocontrol, una alternativa al método tradicional que ha demostrado ser notablemente más saludable, segura y cómoda.\n\nEn segundo lugar, ofrece al paciente la posibilidad de contribuir al ámbito científico, hacer "ciencia ciudadana". A través de ella, mejoramos el entendimeinto de los pacientes para que así puedan evitar fluctuaciones de INR que pondrían en riesgo su salud. De esta manera puedes ayudar a médicos, otros pacientes y a ti mismo/a.</string>
+    <string name="info_about_title">A acerca de la aplicación</string>
+    <string name="info_availability_title">Disponibilidad de la generación automática</string>
+    <string name="info_factors_title">¿Qué tipo de cosas podría anotar?</string>
+    <string name="info_factors_list">Enfermedad\nMedicación\nSuplementos vitamínicos\nAcohol, aceite de pescado, aceite de linaza\nVegetales de hoja verde, arándanos\nAnís, diente de león, gengibre, perejil</string>
+    <string name="info_factors_body">Intenta anotar cualquier factor que creas que podría haber afectado a tu INR. Éstos están a menudo relacionados con dieta, consumo de vitamina K, estado de salud, otras medicinas o cambios en tu estilo de vida. La mayor parte de lo que aquí se muestra son factores de riesgo solamente cuando se consumen en grandes cantidades y no es recomendado que simplemente se eviten. Si forman parte de tu rutina y tu médico está al tanto, se recomienda que se siga con la rutina.\n\nA continuación, una lista de algunos de estos factores</string>
+    <string name="info_availability_body">En este momento, la generación automática está disponible únicamente para el tratamiento con acenocoumarol (nombre comercial, Sintrom) con un rango de INR de 2.5 a 3.5.\n\nPara tratamientos con otros parámetros, la aplicación se sigue pudiendo usar a través la introduccion de pautas manual.</string>
 </resources>

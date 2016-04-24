@@ -20,8 +20,7 @@ public class DosageLoader extends AsyncTaskLoader<DosageHolder> {
     @Override
     public DosageHolder loadInBackground() {
         return DBHelper.getInstance(getContext()).getCurrentDosage(userID);
-        //TODO if this returns null, try getting a someRelevantDosage. Also, force reload if
-        //It seems it doesn't need to set dosageHolder here?
+        //It seems it doesn't need to set dosageHolder here
     }
 
     @Override
@@ -52,7 +51,7 @@ public class DosageLoader extends AsyncTaskLoader<DosageHolder> {
             // on the Loader, which will cause the next call to takeContentChanged()
             // to return true. If this is ever the case (or if the current data is
             // null), we force a new load.
-            forceLoad();//TODO should I manually call forceLoad?
+            forceLoad();
         }
     }
 }
