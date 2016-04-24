@@ -2,6 +2,7 @@ package com.example.andres.thirdypsinthrome.Dosages;
 
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -21,8 +22,10 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.andres.thirdypsinthrome.DosageActivity;
 import com.example.andres.thirdypsinthrome.LoadersAndAdapters.ExpDosageListAdapter;
 import com.example.andres.thirdypsinthrome.LoadersAndAdapters.ManyDosagesLoader;
+import com.example.andres.thirdypsinthrome.MainActivity;
 import com.example.andres.thirdypsinthrome.MyUtils;
 import com.example.andres.thirdypsinthrome.R;
 import com.example.andres.thirdypsinthrome.persistence.DBHelper;
@@ -106,7 +109,8 @@ public class DosagePlansFragment extends Fragment implements LoaderManager.Loade
                 return true;
             case R.id.action_delete:
                 dosageItemView = info.targetView;
-                //TODO check it is not today
+                //Checks whether it is the current dosage being deleted or another.
+                final long todayDosageID = getArguments().getLong("todayDosageID");
                 new AlertDialog.Builder(getContext()).setTitle(getContext().getString(R.string.dg_delete_dosage_plan_title))
                         .setMessage(getContext().getString(R.string.irreversible_action_msg))
                         .setPositiveButton(getContext().getString(R.string.delete), new DialogInterface.OnClickListener() {
@@ -114,9 +118,17 @@ public class DosagePlansFragment extends Fragment implements LoaderManager.Loade
                             public void onClick(DialogInterface dialog, int i) {
                                 long id = (long) dosageItemView.getTag();
                                 //Delete dosage.
-                                DBHelper.getInstance(getContext()).deleteFutureDosage(id);
-                                //Update UI
-                                getLoaderManager().restartLoader(LOADER_ID, null, DosagePlansFragment.this);
+                                if (id == todayDosageID){
+                                    DBHelper.getInstance(getContext()).deleteCurrentDosagePlan(id);
+                                    //Update all UI including main screen by returning to it.
+                                    Intent intent = new Intent(getContext(), MainActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(intent);
+                                } else {
+                                    DBHelper.getInstance(getContext()).deleteFutureDosage(id);
+                                    //Update UI
+                                    getLoaderManager().restartLoader(LOADER_ID, null, DosagePlansFragment.this);
+                                }
                             }
                         })
                         .setNegativeButton(R.string.cancel, null)

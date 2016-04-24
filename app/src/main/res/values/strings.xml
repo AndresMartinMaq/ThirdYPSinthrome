@@ -205,6 +205,24 @@
     <string name="open_file">Open File</string>
     <string name="not_now">Not now</string>
 
+    <!-- Extra Information Screen-->
+    <string name="info_about_title">About this application</string>
+    <string name="info_about_body">The purpose of this application is twofold. Firstly, it helps patients like yourself manage your anticoagulation
+        therapy more effectively and offers you the posibility of trnasitioning into self-monitoring, an easier,
+        more comfortable and safer alternative to traditional treatment. \n\nSecondly, it offers you the possibility of contributing to the reaserch through Citizen Science,
+    making you able to help doctors, other patients and yourself by increasing your awareness and understanding of all the interactions and external factors that cause dangerous
+    INR fluctuations.</string>
+    <string name="info_availability_title">Availability of Automatic Dosage Generation</string>
+    <string name="info_availability_body">As the application stands right now, automatic dosage generation is only available for therapy based on acenocoumarol
+        (commercially known as Sinthrome) and only under the specific INR therapeutic range of 2.5 to 3.5.
+        \n\nFor all other treatment parameters the application is useable through manually input dosage plans.
+    </string>
+    <string name="info_factors_title">What kind of things should I make a note of?</string>
+    <string name="info_factors_body">You should aim to note down any factors that might have pushed your INR up or down. These will often be related to consumption
+        of Vitamin K (which thickens blood and thereby counteracts anticoagualnts), to your health, to other drugs or to lifestyle changes.
+        \n\nFollowing we provide a non-exhaustive list of these factors: </string>
+
+
     <string name="save">Save</string>
 
 </resources>

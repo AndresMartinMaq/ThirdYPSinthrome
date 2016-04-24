@@ -98,8 +98,17 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
         }
         if (id == R.id.btt_dosage_callendar) {
             getSupportActionBar().setTitle(R.string.title_all_dosage_plans);
+            DosagePlansFragment fragment = new DosagePlansFragment();
+            Bundle args = new Bundle();
+            try {//Put the current dosage id as an argument for the fragment, if possible.
+                DosagesFragment doseFragment = (DosagesFragment) getSupportFragmentManager().findFragmentById(R.id.dose_fragment_holder);
+                long todayDosageID = doseFragment.dosage.id;
+                args.putLong("todayDosageID", todayDosageID);
+                fragment.setArguments(args);
+            } catch (Exception e){e.printStackTrace();}
+
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.dose_fragment_holder, new DosagePlansFragment());
+            transaction.replace(R.id.dose_fragment_holder, fragment);
             //transaction.addToBackStack(null);
             transaction.commit();
         }
@@ -379,8 +388,15 @@ public class DosageActivity extends AppCompatActivity implements DatePickerDialo
             switch (item.getItemId()) {
                 case R.id.action_edit:
                     ((DosageActivity)getActivity()).getSupportActionBar().setTitle(R.string.title_all_dosage_plans);
+                    DosagePlansFragment fragment = new DosagePlansFragment();
+                    Bundle args = new Bundle();
+                    try {//Put the current dosage id as an argument for the fragment, if possible.
+                        args.putLong("todayDosageID", dosage.id);
+                        fragment.setArguments(args);
+                    } catch (Exception e){e.printStackTrace();}
+
                     FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                    transaction.replace(R.id.dose_fragment_holder, new DosagePlansFragment());
+                    transaction.replace(R.id.dose_fragment_holder, fragment);
                     //transaction.addToBackStack(null);
                     transaction.commit();
                     return true;
